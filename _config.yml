@@ -13,7 +13,6 @@ url: https://daniel1820815.github.io # the base hostname & protocol for your sit
 header_pages:
   - about.md
   - privacy.md
-  - disclaimer.md
 
 minima:
   skin: dark
