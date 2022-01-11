@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Welcome to my Github pages blog with Jekyll!"
-date:   2022-01-11 20:52:40 +0100
+title:  "Welcome to my Github pages!"
+date:   2022-01-12 00:03:00 +0100
 categories: Personal
 ---
 Happy new year and welcome to my new blog page setup. Hope you like it! But why a new blog page? Here the short story with some technical description.
