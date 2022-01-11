@@ -4,7 +4,6 @@ title:  "All Hands and Eyes on Network Automation"
 date:   2021-11-29 00:11:00 +0100
 categories: Automation
 ---
-
 I did not write any blog post after I started this blog on the 1st January this year. Apologies for that! It was a real shame, because I was highly motivated to work on my CCIE studies and share my progress and experiences with the community. But then my priorities and my focus dramatically changed to 100% Network Automation. It was not only because of the customer requirements within a current project, there is also a huge request in the market. And I need to jump on it…
 
 The topics Network Automation & Programmability are already part of the [CCNP](https://learningnetwork.cisco.com/s/encor-exam-topics){:target="_blank"} and [CCIE](https://learningnetwork.cisco.com/s/ccie-enterprise){:target="_blank"} Enterprise Infrastructure with a separate sections containing 15% of the overall exam topics which shows how important it is nowadays. Together with the fact, that one of my customers did a really huge change to the network team and put a lot attention to Network Automation opened my mind much more than before. The speed and the passion the customers directors put into the transformation of a traditionally Network Engineering Team to a Network Engineering & Automation Team was impressive. It also let me thought of starting a new initiative for the tech team of my company. I will cover that topic separately in a later post.
