@@ -4,6 +4,7 @@ title:  "Passed the Cisco ENAUTO exam"
 date:   2021-12-30 11:33:00 +0100
 categories: Automation
 ---
+
 About four weeks ago I passed the Cisco ENAUTO (Automating and Programming Cisco Enterprise Solutions) exam. I have put together all materials which I used during my studies and would like to share them in a post together with some study tips. I appreciate any additional resources and would like to encourage you to add your recommendations in the comments.
 
 As it is described on the [Cisco Learning Network](https://learningnetwork.cisco.com/s){:target="_blank"} platform: “The Automating Cisco Enterprise Solutions v1.0 (ENAUTO 300-435) exam is a 90-minute exam associated with the CCNP Enterprise, Cisco Certified DevNet Professional, and Cisco Certified DevNet Specialist – Enterprise Automation and Programmability certifications.” That means that it is an exam for double usage and therefore a win-win situation for us. The exam counts as concentration exam for the CCNP Enterprise and for the Cisco Certified DevNet Professional as well.
