@@ -10,12 +10,11 @@ This is a personal blog hosted by 1&1 IONOS SE. All posts and opinions in this b
 
 Contact information of the operator according to § 5 of the German Telemedia Act (as follows named TMG):
 
-```none
-Daniel Kuhl
-Dieselstr. 22A
-61231 Bad Nauheim
+Name: Daniel Kuhl
+
+Address: Dieselstr. 22A, 61231 Bad Nauheim, Germany
+
 Email: <mailto:blog@kuhlcloud.de>
-```
 
 The operator of this website is responsible for any content.
 
