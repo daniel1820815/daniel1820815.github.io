@@ -19,4 +19,4 @@ Thank you for visiting my blog. Don’t hesitate to contact me in any case of in
 
 ## Achievements
 
-The most of my verified achievements are available on [credly.com](https://www.credly.com/users/daniel-kuhl/badges?sort=-state_updated_at&page=1){:target="_blank"}.
+The most of my verified achievements are available on [Credly](https://www.credly.com/users/daniel-kuhl/badges?sort=-state_updated_at&page=1){:target="_blank"}.
