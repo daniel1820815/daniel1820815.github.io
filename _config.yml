@@ -1,4 +1,5 @@
 title: Kuhlcloud - IT Networks and more
+tagline: A blog about IT Networks and more
 author:
   name: Daniel Kuhl
   email: blog@kuhlcloud.de
@@ -9,7 +10,16 @@ description: >- # this means to ignore newlines until "baseurl:"
   obtaining certifications, and sharing knowledge with the 
   community. Enjoy reading!
 baseurl: "" # the subpath of your site, e.g. /blog
-url: https://daniel1820815.github.io # the base hostname & protocol for your site, e.g. http://example.com
+url: https://blog.kuhlcloud.de # the base hostname & protocol for your site, e.g. http://example.com
+social:
+  name: Daniel Kuhl
+  links:
+    - https://twitter.com/daniel1820815
+    - https://www.linkedin.com/in/daniel-kuhl-b8b9603b
+    - https://github.com/daniel1820815
+twitter:
+  username: daniel1820815
+  card: summary
 
 header_pages:
   - about.md
@@ -28,6 +38,7 @@ theme: minima
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
+  - jekyll-sitemap
 
 # Exclude from processing.
 # The following items will not be processed, by default.
