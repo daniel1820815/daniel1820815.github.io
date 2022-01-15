@@ -4,11 +4,9 @@ author:
   name: Daniel Kuhl
   email: blog@kuhlcloud.de
 description: >- # this means to ignore newlines until "baseurl:"
-  Welcome to my personal blog about IT Networks and more. 
-  Currently it is very focused on IT Network Automation and 
-  Programmability including further evolving in this area, 
-  obtaining certifications, and sharing knowledge with the 
-  community. Enjoy reading!
+  Currently it is focused on IT Network Automation & Programmability 
+  including further evolving in this area, obtaining certifications, 
+  and knowledge sharing. Enjoy reading!
 baseurl: "" # the subpath of your site, e.g. /blog
 url: https://blog.kuhlcloud.de # the base hostname & protocol for your site, e.g. http://example.com
 social:
