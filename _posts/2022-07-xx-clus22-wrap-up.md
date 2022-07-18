@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "My personal Cisco Live US 2022 wrap-up"
-date:   2022-07-24 14:00:00 +0100
+date:   2022-07-22 14:00:00 +0100
 categories: Personal
 ---
 
