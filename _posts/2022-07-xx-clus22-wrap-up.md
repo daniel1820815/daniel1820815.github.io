@@ -7,6 +7,9 @@ categories: Personal
 
 TECCRT-3778 - DevNet Expert Techtorial
 
+The first session was an extra paid 4 hours session on Sunday for the DevNet Expert certification. 
+
+
 
 LTRCRT-2000 - Building Config Change Confidence with Cisco Modeling Labs and NetDevOps
 
