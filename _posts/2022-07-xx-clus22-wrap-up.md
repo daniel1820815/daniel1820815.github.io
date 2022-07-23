@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "My personal Cisco Live US 2022 wrap-up"
-date:   2022-07-22 14:00:00 +0100
+date:   2022-07-24 14:00:00 +0100
 categories: Personal
 ---
 
@@ -9,13 +9,16 @@ The Cisco Live 2022 in Las Vegas was my first in the US after nine attendances i
 
 I had the great pleasure to meet a lot of my Social Media connections from LinkedIn and Twitter, and of course from the Cisco Learning Network and from the Cisco Champion group. It was a lot of fun and a pleasure to built even more close relationships and friendships with many people I only knew virtual until then.
 
-My personal focus of technical sessions was pretty much dominated by topics around the DevNet Expert certification. 
+My personal focus of technical sessions was pretty much dominated by topics around the Cisco DevNet Expert certification. After achieving the Cisco Certified DevNet Professional in June I started collecting information about the lab exam for the preparation journey. Therefore I booked a dedicated techtorial session, a related hands-on lab session and I spent a lot of time in the DevNet zone attending various workshops. 
 
-## Sessions
+By the way if you are interested in achieving the Cisco Certified DevNet Professional I wrote a knowledge base article which was published in the Cisco Learning Network about my [Road to the Cisco Certified DevNet Professional](https://learningnetwork.cisco.com/s/article/Road-to-the-Cisco-DevNet-Professional){:target="_blank"}. 
+
+## My Sessions
+
 
 TECCRT-3778 - DevNet Expert Techtorial
 
-The first session was an extra paid 4 hours session on Sunday for the DevNet Expert certification. 
+The first session was an extra paid 4 hours session on Sunday dedicated for the DevNet Expert certification.
 
 
 
