@@ -9,7 +9,9 @@ The Cisco Live 2022 in Las Vegas was my first in the US after nine attendances i
 
 I had the great pleasure to meet a lot of my Social Media connections from LinkedIn and Twitter, and of course from the Cisco Learning Network and from the Cisco Champion group. It was a lot of fun and a pleasure to built even more close relationships and friendships with many people I only knew virtual until then.
 
-INSERT PIC (Jason & me?)
+<img src="/images/clus22_champions.jpg"
+    alt="Cisco Champions"
+    style="left; margin-right: 10px;" />
 
 My personal focus of technical sessions was pretty much dominated by topics around the Cisco DevNet Expert certification. After achieving the Cisco Certified DevNet Professional in June I started collecting information about the lab exam for the preparation journey. Therefore I booked a dedicated techtorial session, a related hands-on lab session and I spent a lot of time in the DevNet zone attending various workshops. 
 
@@ -42,9 +44,17 @@ The four hour techtorial session was very good to get additional insights of the
 
 The four hour lab session was so much fun. There was a lab environment in [Cisco Modeling Labs](https://www.cisco.com/c/en/us/products/cloud-systems-management/modeling-labs/index.html){:target="_blank"} prepared which contained a test and prod environment. You had to master different things like manage network configuration in the Git version control system, leverage network test scripts using the [pyATS framework](https://developer.cisco.com/docs/pyats/){:target="_blank"} and Cisco Modeling Labs APIs. After that you need to build a Continuous Integration / Continuous Deployment (CI/CD) pipeline definition that automatically deployed network changes using Ansible into the virtual network provided by CML. Final step was to tun the pyATS test scripts to validate the changes and deploy the same configuration into production.
 
+<img src="/images/clus22_lab_session.png"
+    alt="LTRCRT-2000"
+    style="left; margin-right: 10px;" />
+
 ## Cisco Learning Network VIP's
 
 One of my personal highlight aside the technical sessions was the VIP dinner of the Cisco Learning Network and Cisco Community. It was really a huge honor and a pleasure for me to be there. I had the chance to connect with the fellow VIP's and the community team who builds, maintains, and evolves this awesome community. We had a nice diner and some drinks at the House of Blues located in the Mandalay Bay Hotel. Thank you very much to whole community team!
+
+<img src="/images/clus22_vip_dinner.jpg"
+    alt="Cisco Learning Network VIP Dinner"
+    style="left; margin-right: 10px;" />
 
 ## Cisco Champion Group
 
