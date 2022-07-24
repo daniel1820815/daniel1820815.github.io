@@ -17,22 +17,22 @@ By the way if you are interested in achieving the Cisco Certified DevNet Profess
 
 ## My Sessions
 
-Here is the list of sessions I attended during Cisco Live  but missing some DevNet workshops I was just listening and not actively participating because I didn't get a seat:
+Here is the list of sessions I attended during Cisco Live but missing some DevNet workshops I was just listening and not actively participating because I didn't get a seat:
 
 - TECCRT-3778 - DevNet Expert Techtorial
 - LTRCRT-2000 - Building Config Change Confidence with Cisco Modeling Labs and NetDevOps
 - [BRKDEV-2014 - Introduction to the DevNet Expert Certification](https://www.ciscolive.com/on-demand/on-demand-library.html?search.event=1654953906132001zSK6&zid=pp&search=BRKDEV-2014#/session/1655424183286001Qsgv){:target="_blank"}
-- BRKMER-2003 - Meraki & Secure Network and Cloud Analytics: Threat Detection for the Rest of Us 
+- [BRKMER-2003 - Meraki & Secure Network and Cloud Analytics: Threat Detection for the Rest of Us](https://www.ciscolive.com/on-demand/on-demand-library.html?search.event=1654953906132001zSK6&zid=pp&search=BRKMER-2003#/session/1655424211189001Q2Rl){:target="_blank"}
 - IBOCRT-2003 - Everything You Wanted to Know About the Cisco Certified DevNet Expert but Were Afraid to Ask 
-- DEVWKS-1235 - Getting Started with IaC and Terraform
+- [DEVWKS-1235 - Getting Started with IaC and Terraform](https://developer.cisco.com/learning/labs/devwks-1235/introduction/){:target="_blank"}
 - DEVWKS-1955 - It Sounded Good on Paper: How To Avoid Common Pitfalls in Network Automation 
-- DEVWKS-1950 - Saturday Night and the Network's Alright - Network Automation Hacks to Keep Your Weekends Free!
-- DEVWKS-2252 - Standardize your Network: Building Roles for Device Compliance using Ansible 
-- DEVWKS-2295 - Next-Level Automation Using Sources of Truth
-- DEVWKS-2870 - Hands on with Model-Driven DevOps
+- [DEVWKS-1950 - Saturday Night and the Network's Alright - Network Automation Hacks to Keep Your Weekends Free!](https://developer.cisco.com/learning/labs/devwks-1950/introduction/){:target="_blank"}
+- [DEVWKS-2252 - Standardize your Network: Building Roles for Device Compliance using Ansible](https://developer.cisco.com/learning/labs/devwks-2252/introduction/){:target="_blank"}
+- [DEVWKS-2295 - Next-Level Automation Using Sources of Truth](https://developer.cisco.com/learning/labs/devwks-2295/introduction/){:target="_blank"}
+- [DEVWKS-2870 - Hands on with Model-Driven DevOps](https://developer.cisco.com/learning/labs/devwks-2870/introduction/){:target="_blank"}
 - VILCOL-2011 - Unified Communications - The Future of Provisioning Automation
 
-All sessions which are also available on the Cisco Live on-demand library are linked. I want to highlight some of the sessions I liked the most and had much fun attending.
+Most of sessions except the extra paid sessions are also available on the [Cisco Live on-demand library](https://www.ciscolive.com/on-demand/on-demand-library.html?search.event=1654953906132001zSK6&zid=pp&search=#/){:target="_blank"} or on the [Cisco Developer Network Learning Lab Center](https://developer.cisco.com/learning/){:target="_blank"}. The links on the list will take you to the session if it I was able to find and link it. I want to highlight the extra paid sessions I attended and share what was it about.
 
 ### TECCRT-3778 - DevNet Expert Techtorial
 
@@ -41,6 +41,13 @@ The four hour techtorial session was very good to get additional insights of the
 ### LTRCRT-2000 - Building Config Change Confidence with Cisco Modeling Labs and NetDevOps
 
 The four hour lab session was so much fun.
+
+Manage network configuration in the Git version control system.
+2. Leverage network test scripts using the pyATS framework and Cisco Modeling Labs APIs.
+3. Build a Continuous Integration / Continuous Deployment (CI/CD) pipeline definition that will
+automatically deploy network changes using Ansible into a virtual network provided by CML.
+4. Run the pyATS test scripts to validate the changes.
+5. Deploy the same configuration into production.
 
 ### IBOCRT-2003 - Everything You Wanted to Know About the Cisco Certified DevNet Expert but Were Afraid to Ask 
 
