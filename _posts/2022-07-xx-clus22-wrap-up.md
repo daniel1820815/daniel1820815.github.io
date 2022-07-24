@@ -40,18 +40,7 @@ The four hour techtorial session was very good to get additional insights of the
 
 ### LTRCRT-2000 - Building Config Change Confidence with Cisco Modeling Labs and NetDevOps
 
-The four hour lab session was so much fun.
-
-Manage network configuration in the Git version control system.
-2. Leverage network test scripts using the pyATS framework and Cisco Modeling Labs APIs.
-3. Build a Continuous Integration / Continuous Deployment (CI/CD) pipeline definition that will
-automatically deploy network changes using Ansible into a virtual network provided by CML.
-4. Run the pyATS test scripts to validate the changes.
-5. Deploy the same configuration into production.
-
-### IBOCRT-2003 - Everything You Wanted to Know About the Cisco Certified DevNet Expert but Were Afraid to Ask 
-
-The first session was an extra paid 4 hours session on Sunday dedicated for the DevNet Expert certification.
+The four hour lab session was so much fun. There was a lab environment in [Cisco Modeling Labs](https://www.cisco.com/c/en/us/products/cloud-systems-management/modeling-labs/index.html){:target="_blank"} prepared which contained a test and prod environment. You had to master different things like manage network configuration in the Git version control system, leverage network test scripts using the [pyATS framework](https://developer.cisco.com/docs/pyats/){:target="_blank"} and Cisco Modeling Labs APIs. After that you need to build a Continuous Integration / Continuous Deployment (CI/CD) pipeline definition that automatically deployed network changes using Ansible into the virtual network provided by CML. Final step was to tun the pyATS test scripts to validate the changes and deploy the same configuration into production.
 
 ## Cisco Learning Network VIP's
 
@@ -63,4 +52,4 @@ Also many thanks to the Cisco Champion organization team! They did a really awes
 
 ## See you in Amsterdam
 
-The next Cisco Live event for me will be probably the [Cisco Live 2023 Amsterdam](https://www.ciscolive.com/emear.html) from February 6-10, 2023. I'm looking forward to see all the friends I made in Las Vegas again in Amsterdam and I hope that there will be more people to connect with. Until then, stay safe and healthy!
+The next Cisco Live event for me will be probably the [Cisco Live 2023 Amsterdam](https://www.ciscolive.com/emear.html){:target="_blank"} from February 6-10, 2023. I'm looking forward to see all the friends I made in Las Vegas again in Amsterdam and I hope that there will be more people I already know virtually to connect with in-person. Until then, stay safe and healthy!
