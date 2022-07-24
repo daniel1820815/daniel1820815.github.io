@@ -7,7 +7,7 @@
     <a class="button"
       href="https://github.com/{{ issues_repo }}/issues/{{ issue_id }}"
       >Post comment</a>
-  </div>
+  </div><br>
   <div id="comments-wrapper">
     Loading...
   </div>
@@ -97,19 +97,15 @@
             const edited = comment.created_at !== comment.updated_at;
 
             return `<li class="comment">
-                        <div class="commenter">
-                            <img src="${user.avatar_url}" alt="" aria-hidden="true" class="meta avatar" width="20" height="20"/>
-                            <a
-                                href="https://github.com/${user.login}"
-                                class="meta username"
-                                >${user.login}</a
-                            >
-                            <div class="meta date-posted">commented <time datetime="${comment.created_at}">${datePosted}</time></div>
+                      <div class="commenter">
+                        <img src="${user.avatar_url}" alt="" aria-hidden="true" class="meta avatar" width="20" height="20"/>
+                          <a href="https://github.com/${user.login}" class="meta username">${user.login}</a>
+                          <div class="meta date-posted">commented <time datetime="${comment.created_at}">${datePosted}</time></div><br>
+                          <div class="comment-body">${body}</div>
                         </div><br>
-                        <div class="comment-body">${body}</div>
                     </li>`;
-        })
-        .join('');
+                })
+                .join('');
 
         commentsWrapper.innerHTML = '';
         commentsWrapper.appendChild(commentsList);
