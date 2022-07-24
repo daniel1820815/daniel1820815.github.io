@@ -36,11 +36,11 @@ All sessions which are also available on the Cisco Live on-demand library are li
 
 ### TECCRT-3778 - DevNet Expert Techtorial
 
-The four hour techtorial session was very good to get additional insights of the DevNet Expert lab exam. You got many more details how to treat the [exam topics](https://learningnetwork.cisco.com/s/devnet-expert-exam-topics-lab){:target="_blank"} during your preparation and and carefully go through each topic. Another important thing was how to build your strategy according to the [lab format](https://learningnetwork.cisco.com/s/article/devnet-expert-lab-exam-format){:target="_blank"} which contains two modules, a three hour "Design" and five hour "Develop, Test, Deploy and Maintain" module. We walked through some sample lab tasks to get a better understanding about the scenarios and its constraints you have to deal with during the exam. It is so important it is to read carefully and categorize the different parts of the questions into tasks and constraints. It was also very helpful to ask questions directly to the team who built the exam and follow the questions of other attendees.
+The four hour techtorial session was very good to get additional insights of the DevNet Expert lab exam. You got many more details how to treat the [exam topics](https://learningnetwork.cisco.com/s/devnet-expert-exam-topics-lab){:target="_blank"} during your preparation and and carefully go through each topic. Another important thing was how to build your strategy according to the [lab format](https://learningnetwork.cisco.com/s/article/devnet-expert-lab-exam-format){:target="_blank"} which contains two modules, a three hour "Design" and five hour "Develop, Test, Deploy and Maintain" module. We walked through some sample lab tasks to get a better understanding about the scenarios and its constraints you have to deal with during the exam. It is so important it is to read carefully and categorize the different parts of the questions into tasks and constraints. It was also very helpful to ask questions directly to the team who built the exam and follow the questions of other attendees. I can highly recommend to book such a session when you plan to take an expert level certification.
 
 ### LTRCRT-2000 - Building Config Change Confidence with Cisco Modeling Labs and NetDevOps
 
-The four hour lab session
+The four hour lab session was so much fun.
 
 ### IBOCRT-2003 - Everything You Wanted to Know About the Cisco Certified DevNet Expert but Were Afraid to Ask 
 
