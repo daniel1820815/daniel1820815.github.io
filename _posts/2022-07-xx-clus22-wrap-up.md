@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "My personal Cisco Live US 2022 wrap-up"
+title:  "Yet another Cisco Live US 2022 wrap up"
 date:   2022-07-24 14:00:00 +0100
 categories: Personal
 ---
@@ -9,34 +9,46 @@ The Cisco Live 2022 in Las Vegas was my first in the US after nine attendances i
 
 I had the great pleasure to meet a lot of my Social Media connections from LinkedIn and Twitter, and of course from the Cisco Learning Network and from the Cisco Champion group. It was a lot of fun and a pleasure to built even more close relationships and friendships with many people I only knew virtual until then.
 
+INSERT PIC (Jason & me?)
+
 My personal focus of technical sessions was pretty much dominated by topics around the Cisco DevNet Expert certification. After achieving the Cisco Certified DevNet Professional in June I started collecting information about the lab exam for the preparation journey. Therefore I booked a dedicated techtorial session, a related hands-on lab session and I spent a lot of time in the DevNet zone attending various workshops. 
 
 By the way if you are interested in achieving the Cisco Certified DevNet Professional I wrote a knowledge base article which was published in the Cisco Learning Network about my [Road to the Cisco Certified DevNet Professional](https://learningnetwork.cisco.com/s/article/Road-to-the-Cisco-DevNet-Professional){:target="_blank"}. 
 
 ## My Sessions
 
+Here is the list of sessions I attended during Cisco Live  but missing some DevNet workshops I was just listening and not actively participating because I didn't get a seat:
 
-TECCRT-3778 - DevNet Expert Techtorial
+- TECCRT-3778 - DevNet Expert Techtorial
+- LTRCRT-2000 - Building Config Change Confidence with Cisco Modeling Labs and NetDevOps
+- [BRKDEV-2014 - Introduction to the DevNet Expert Certification](https://www.ciscolive.com/on-demand/on-demand-library.html?search.event=1654953906132001zSK6&zid=pp&search=BRKDEV-2014#/session/1655424183286001Qsgv){:target="_blank"}
+- BRKMER-2003 - Meraki & Secure Network and Cloud Analytics: Threat Detection for the Rest of Us 
+- IBOCRT-2003 - Everything You Wanted to Know About the Cisco Certified DevNet Expert but Were Afraid to Ask 
+- DEVWKS-1235 - Getting Started with IaC and Terraform
+- DEVWKS-1955 - It Sounded Good on Paper: How To Avoid Common Pitfalls in Network Automation 
+- DEVWKS-1950 - Saturday Night and the Network's Alright - Network Automation Hacks to Keep Your Weekends Free!
+- DEVWKS-2252 - Standardize your Network: Building Roles for Device Compliance using Ansible 
+- DEVWKS-2295 - Next-Level Automation Using Sources of Truth
+- DEVWKS-2870 - Hands on with Model-Driven DevOps
+- VILCOL-2011 - Unified Communications - The Future of Provisioning Automation
+
+All sessions which are also available on the Cisco Live on-demand library are linked. I want to highlight some of the sessions I liked the most and had much fun attending.
+
+### TECCRT-3778 - DevNet Expert Techtorial
+
+The four hour techtorial session was very good to get additional insights of the DevNet Expert lab exam. You got many more details how to treat the [exam topics](https://learningnetwork.cisco.com/s/devnet-expert-exam-topics-lab){:target="_blank"} during your preparation and and carefully go through each topic. Another important thing was how to build your strategy according to the [lab format](https://learningnetwork.cisco.com/s/article/devnet-expert-lab-exam-format){:target="_blank"} which contains two modules, a three hour "Design" and five hour "Develop, Test, Deploy and Maintain" module. We walked through some sample lab tasks to get a better understanding about the scenarios and its constraints you have to deal with during the exam. It is so important it is to read carefully and categorize the different parts of the questions into tasks and constraints. It was also very helpful to ask questions directly to the team who built the exam and follow the questions of other attendees.
+
+### LTRCRT-2000 - Building Config Change Confidence with Cisco Modeling Labs and NetDevOps
+
+The four hour lab session
+
+### IBOCRT-2003 - Everything You Wanted to Know About the Cisco Certified DevNet Expert but Were Afraid to Ask 
 
 The first session was an extra paid 4 hours session on Sunday dedicated for the DevNet Expert certification.
 
-
-
-LTRCRT-2000 - Building Config Change Confidence with Cisco Modeling Labs and NetDevOps
-BRKDEV-2014 - Introduction to the DevNet Expert Certification
-BRKMER-2003 - Meraki & Secure Network and Cloud Analytics: Threat Detection for the Rest of Us 
-IBOCRT-2003 - Everything You Wanted to Know About the Cisco Certified DevNet Expert but Were Afraid to Ask 
-DEVWKS-1235 - Getting Started with IaC and Terraform
-DEVWKS-1955 - It Sounded Good on Paper: How To Avoid Common Pitfalls in Network Automation 
-DEVWKS-1950 - Saturday Night and the Network's Alright - Network Automation Hacks to Keep Your Weekends Free!
-DEVWKS-2252 - Standardize your Network: Building Roles for Device Compliance using Ansible 
-DEVWKS-2295 - Next-Level Automation Using Sources of Truth
-DEVWKS-2870 - Hands on with Model-Driven DevOps
-VILCOL-2011 - Unified Communications - The Future of Provisioning Automation
-
 ## Cisco Learning Network VIP's
 
-One of my personal highlight aside the technical sessions was the VIP dinner of the Cisco Learning Network and Cisco Community. It was really a huge honor and a pleasure for me to be there. I had the chance to connect with the fellow VIP's and the team who build, maintain, and evolve this awesome community. Thank you very much!
+One of my personal highlight aside the technical sessions was the VIP dinner of the Cisco Learning Network and Cisco Community. It was really a huge honor and a pleasure for me to be there. I had the chance to connect with the fellow VIP's and the community team who builds, maintains, and evolves this awesome community. We had a nice diner and some drinks at the House of Blues located in the Mandalay Bay Hotel. Thank you very much to whole community team!
 
 ## Cisco Champion Group
 
