@@ -45,5 +45,9 @@ layout: default
     {%- include disqus_comments.html -%}
   {%- endif -%}
 
+  {% if page.comments_id %}
+    {% include comments.html issue_id=page.comments_id %}
+  {% endif %}
+
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>
