@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "vril2-client for Cisco Modeling Labs"
+title:  "vril2_client for Cisco Modeling Labs"
 date:   2022-08-14 20:00:00 +0200
 categories: Automation
 ---
@@ -11,7 +11,7 @@ If you are using CML (Cisco Modeling Labs) Personal or Enterprise to build labs 
 
 As I got a new laptop a month ago I have not installed all the tools I used before and also did not pull all the repository I was working on. So I started to clone my private repository I worked on, created a virtual environment, and installed pyATS:
 
-```none
+```bash
 (pyats-test) pip install pyats
 ```
 
@@ -19,15 +19,45 @@ Note: There are different options how to install pyATS described in the document
 
 After that I installed the virl2-client library:
 
-```none
+```bash
 (pyats-test) pip install virl2-client
 ```
 
 Now I thought I could quickly create my testbed and start with testing. I used a small Python script which I copied from blog post "[How can I automate device configurations using CML2?](https://blogs.cisco.com/developer/363-askhankcml2-01){:target="_blank"}" by Hank Preston which contains a very good introduction and explanation how to use CML and pyATS.
 
-paste the script here
+```python
+from virl2_client import ClientLibrary
 
-show output of error
+# Create a client object for interacting with CML
+client = ClientLibrary("https://<YOUR-CML-IP/URL>", "<CML-USER", "CML-PASSWORD", ssl_verify=False)
+
+# Find your lab. Method returns a list, this assumes the first lab returned is what you want
+lab = client.find_labs_by_title("Multi Platform Network")[0]
+
+# Retrieve the testbed for the lab 
+pyats_testbed = lab.get_pyats_testbed()
+
+# Write the YAML testbed out to a file
+with open("lab_testbed.yaml", "w") as f: 
+    f.write(pyats_testbed)
+```
+
+You have to fill in your CML data, add the name of your lab, and specify the output file for the testbed. The script does the rest for you. This is the step where I ran into the issue.
+
+```bash
+(pyats-test) $ python create_testbed.py 
+SSL Verification disabled
+Traceback (most recent call last):
+  File "/Users/danielkuhl/Coding/pyats-test/create_testbed.py", line 4, in <module>
+    client = ClientLibrary("https://<YOUR-CML-IP/URL>", "<CML-USER", "CML-PASSWORD", ssl_verify=False)
+  File "/Users/danielkuhl/Coding/pyats-test/lib/python3.9/site-packages/virl2_client/virl2_client.py", line 281, in __init__
+    self.check_controller_version()
+  File "/Users/danielkuhl/Coding/pyats-test/lib/python3.9/site-packages/virl2_client/virl2_client.py", line 429, in check_controller_version
+    raise InitializationError(
+virl2_client.virl2_client.InitializationError: Controller version 2.2.3+build63 is marked incompatible! List of versions marked explicitly as incompatible: [2.0.0, 2.0.1, 2.1.0, 2.1.1, 2.1.2, 2.2.1, 2.2.2, 2.2.3].
+```
+
+The check of the controller version failed. The error told me that the virl2_client version I used was incompatible with the controller version. At this time I was confused and not aware about the fact that the virl2_client version need to match with the controller version.
 
 install correct version
 
@@ -45,7 +75,15 @@ pyats validate testbed
 I can highly recommend the  how to use it.
 
 
-## Another cool helper for building labs
+## A repository to grow
 
 point to your repository
 
+Links:
+
+- Github issue: https://github.com/CiscoDevNet/virl2-client/issues/20
+- my repository
+- pyATS documentation
+- Cisco Modeling Labs
+- [virl2_client](https://github.com/CiscoDevNet/virl2-client){:target="_blank"}
+- [How can I automate device configurations using CML2?](https://blogs.cisco.com/developer/363-askhankcml2-01){:target="_blank"}"
