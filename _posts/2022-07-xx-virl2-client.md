@@ -7,7 +7,7 @@ categories: Automation
 
 If you are using CML (Cisco Modeling Labs) Personal or Enterprise to build labs for study or test scenarios there will come the time you think about automating tasks and using the CML API. I was recently playing around with CML creating a new lab for testing the [pyATS framework](https://developer.cisco.com/docs/pyats/#!introduction/cisco-pyats-network-test--automation-solution){:target="_blank"}. I came very quick to the point to use the official Python library [virl2_client](https://github.com/CiscoDevNet/virl2-client){:target="_blank"} for CML to create a pyATS testbed automatically. During this process I stumbled over an issue which had an obvious solution.
 
-## Install pyATS and virl2-client library
+## Install pyATS and virl2_client library
 
 As I got a new laptop a month ago I have not installed all the tools I used before and also did not pull all the repository I was working on. So I started to clone my private repository I worked on, created a virtual environment, and installed pyATS:
 
@@ -42,7 +42,7 @@ with open("lab_testbed.yaml", "w") as f:
     f.write(pyats_testbed)
 ```
 
-You have to fill in your CML data, add the name of your lab, and specify the output file for the testbed. The script does the rest for you. This is the step where I ran into the issue.
+You have to fill in your CML data, add the name of your lab, and specify the output file for the testbed. The script does the rest for you and with quite good comments self-explanatory. But this is the step where I ran into the issue.
 
 ```bash
 (pyats-test) $ python create_testbed.py 
@@ -57,18 +57,55 @@ Traceback (most recent call last):
 virl2_client.virl2_client.InitializationError: Controller version 2.2.3+build63 is marked incompatible! List of versions marked explicitly as incompatible: [2.0.0, 2.0.1, 2.1.0, 2.1.1, 2.1.2, 2.2.1, 2.2.2, 2.2.3].
 ```
 
-The check of the controller version failed. The error told me that the virl2_client version I used was incompatible with the controller version. At this time I was confused and not aware about the fact that the virl2_client version need to match with the controller version.
+The check of the controller version failed. The error told me that the virl2_client version I used was incompatible with the controller version. At this time I was confused and not aware about the fact that the virl2_client version need to match with the controller version. That's why I thought I stumbled over a bug and too quickly created my first [Github issue](https://github.com/CiscoDevNet/virl2-client/issues/20){:target="_blank"} ever. I might have checked my error message more carefully and also double check the documentations. As you can see from the Github issue the developers of virl2_client responded very fast and mentioned that the error is expected with my controller version. Another lessons learned on the journey.
 
-install correct version
+## Install the compatible virl2_client version
+
+First I checked the virl2_client version and by default it installs the latest version which is 2.4.0 according to the latest CML controller version 2.4.0 released. My CML controller version is still the recommended version 2.2.3:
 
 ```none
-(pyats-test) pip install virl2-client
+(pyats-test) $ pip list | grep virl2
+virl2-client                 2.4.0
 ```
 
-Github issue: https://github.com/CiscoDevNet/virl2-client/issues/20
+With that I confirmed the version mismatch. Then uninstall virl2_client:
+
+```none
+(pyats-test) $ pip uninstall virl2_client
+Found existing installation: virl2-client 2.4.0
+Uninstalling virl2-client-2.4.0:
+  Would remove:
+    /Users/danielkuhl/Coding/pyats-test/lib/python3.9/site-packages/examples/demo.ipynb
+    /Users/danielkuhl/Coding/pyats-test/lib/python3.9/site-packages/examples/licensing.py
+    /Users/danielkuhl/Coding/pyats-test/lib/python3.9/site-packages/examples/link_conditioning.py
+    /Users/danielkuhl/Coding/pyats-test/lib/python3.9/site-packages/examples/sample.py
+    /Users/danielkuhl/Coding/pyats-test/lib/python3.9/site-packages/virl2_client-2.4.0.dist-info/*
+    /Users/danielkuhl/Coding/pyats-test/lib/python3.9/site-packages/virl2_client/*
+Proceed (Y/n)? Y
+  Successfully uninstalled virl2-client-2.4.0
+```
+
+And re-install with specifying the latest version less than 2.3.0 which is 2.2.1.post2 which I checked on the documentation after the virl2-client developer pointed me to that:
+
+```none
+(pyats-test) $ pip install "virl2-client<2.3.0"
+Collecting virl2-client<2.3.0
+  Using cached virl2_client-2.2.1.post2-py3-none-any.whl (52 kB)
+Requirement already satisfied: requests<3,>=2 in ./lib/python3.9/site-packages (from virl2-client<2.3.0) (2.28.1)
+Requirement already satisfied: requests-toolbelt<0.10.0,>=0.9.1 in ./lib/python3.9/site-packages (from virl2-client<2.3.0) (0.9.1)
+Requirement already satisfied: charset-normalizer<3,>=2 in ./lib/python3.9/site-packages (from requests<3,>=2->virl2-client<2.3.0) (2.1.0)
+Requirement already satisfied: idna<4,>=2.5 in ./lib/python3.9/site-packages (from requests<3,>=2->virl2-client<2.3.0) (3.3)
+Requirement already satisfied: certifi>=2017.4.17 in ./lib/python3.9/site-packages (from requests<3,>=2->virl2-client<2.3.0) (2022.6.15)
+Requirement already satisfied: urllib3<1.27,>=1.21.1 in ./lib/python3.9/site-packages (from requests<3,>=2->virl2-client<2.3.0) (1.26.11)
+Installing collected packages: virl2-client
+Successfully installed virl2-client-2.2.1.post2
+```
+
+Now I was back on the right path. Let's check if creating the testbed was working now.
+
+## Finally create the pyATS testbed
 
 
-## Finally create your pyATS testbed
 
 pyats validate testbed 
 
