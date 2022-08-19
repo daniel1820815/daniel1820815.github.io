@@ -105,9 +105,101 @@ Now I was back on the right path. Let's check if creating the testbed was workin
 
 ## Finally create the pyATS testbed
 
+```python
+(pyats-test) $ python create_testbed.py
+SSL Verification disabled
+```
+
+Validate testbed
 
 
-pyats validate testbed 
+```python
+(pyats-test) $ pyats validate testbed lab_testbed.yaml 
+Loading testbed file: lab_testbed.yaml
+--------------------------------------------------------------------------------
+
+Testbed Name:
+    LTRCRT-2000-TEST
+
+Testbed Devices:
+/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
+  sys.exit(main())
+/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
+  sys.exit(main())
+/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
+  sys.exit(main())
+/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
+  sys.exit(main())
+/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
+  sys.exit(main())
+/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
+  sys.exit(main())
+/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
+  sys.exit(main())
+/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
+  sys.exit(main())
+/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
+  sys.exit(main())
+/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
+  sys.exit(main())
+/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
+  sys.exit(main())
+/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
+  sys.exit(main())
+.
+|-- host-01 [linux/server]
+|   |-- eth0 ----------> l14
+|   `-- eth1 ----------> l16
+|-- rtr-edge [ios/iosv]
+|   |-- GigabitEthernet0/0 ----------> l1
+|   |-- GigabitEthernet0/1 ----------> l7
+|   |-- GigabitEthernet0/2 ----------> l8
+|   |-- GigabitEthernet0/3
+|   `-- Loopback0 ----------> rtr-edge:Loopback0
+|-- server-01 [linux/server]
+|   |-- eth0 ----------> l15
+|   `-- eth1 ----------> l17
+|-- sw-acc-01 [ios/iosv]
+|   |-- GigabitEthernet0/0 ----------> l5
+|   |-- GigabitEthernet0/1 ----------> l12
+|   |-- GigabitEthernet0/2 ----------> l16
+|   |-- GigabitEthernet0/3
+|   `-- Loopback0 ----------> sw-acc-01:Loopback0
+|-- sw-acc-02 [ios/iosv]
+|   |-- GigabitEthernet0/0 ----------> l6
+|   |-- GigabitEthernet0/1 ----------> l13
+|   |-- GigabitEthernet0/2 ----------> l17
+|   |-- GigabitEthernet0/3
+|   `-- Loopback0 ----------> sw-acc-02:Loopback0
+|-- sw-core [ios/iosv]
+|   |-- GigabitEthernet0/0 ----------> l2
+|   |-- GigabitEthernet0/1 ----------> l8
+|   |-- GigabitEthernet0/2 ----------> l9
+|   |-- GigabitEthernet0/3 ----------> l10
+|   `-- Loopback0 ----------> sw-core:Loopback0
+|-- sw-dist-01 [ios/iosv]
+|   |-- GigabitEthernet0/0 ----------> l3
+|   |-- GigabitEthernet0/1 ----------> l9
+|   |-- GigabitEthernet0/2 ----------> l11
+|   |-- GigabitEthernet0/3 ----------> l12
+|   `-- Loopback0 ----------> sw-dist-01:Loopback0
+|-- sw-dist-02 [ios/iosv]
+|   |-- GigabitEthernet0/0 ----------> l4
+|   |-- GigabitEthernet0/1 ----------> l10
+|   |-- GigabitEthernet0/2 ----------> l11
+|   |-- GigabitEthernet0/3 ----------> l13
+|   `-- Loopback0 ----------> sw-dist-02:Loopback0
+`-- terminal_server [linux/linux]
+
+YAML Lint Messages
+------------------
+
+Warning Messages
+----------------
+ - Device 'terminal_server' has no interface definitions
+```
+
+
 
 I can highly recommend the  how to use it.
 
