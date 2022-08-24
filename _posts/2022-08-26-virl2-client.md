@@ -1,11 +1,11 @@
 ---
 layout: post
-title:  "vril2_client for Cisco Modeling Labs"
-date:   2022-08-14 20:00:00 +0200
+title:  "Python vril2_client for Cisco Modeling Labs"
+date:   2022-08-26 13:00:00 +0200
 categories: Automation
 ---
 
-If you are using CML (Cisco Modeling Labs) Personal or Enterprise to build labs for study or test scenarios there will come the time you think about automating tasks and using the CML API. I was recently playing around with CML creating a new lab for testing the [pyATS framework](https://developer.cisco.com/docs/pyats/#!introduction/cisco-pyats-network-test--automation-solution){:target="_blank"}. I came very quick to the point to use the official Python library [virl2_client](https://github.com/CiscoDevNet/virl2-client){:target="_blank"} for CML to create a pyATS testbed automatically. During this process I stumbled over an issue which had an obvious solution.
+If you are using CML Cisco Modeling Labs Personal or Enterprise to build labs for study or test scenarios there will come the time you think about automating tasks and using the CML API. I was recently playing around with CML creating a new lab for testing the [pyATS framework](https://developer.cisco.com/docs/pyats/#!introduction/cisco-pyats-network-test--automation-solution){:target="_blank"}. I came very quick to the point to use the official Python library [virl2_client](https://github.com/CiscoDevNet/virl2-client){:target="_blank"} for CML to create a pyATS testbed automatically. During this process I stumbled over an issue which had an obvious solution.
 
 ## Install pyATS and virl2_client library
 
@@ -113,7 +113,7 @@ SSL Verification disabled
 Validate testbed
 
 
-```python
+```bash
 (pyats-test) $ pyats validate testbed lab_testbed.yaml 
 Loading testbed file: lab_testbed.yaml
 --------------------------------------------------------------------------------
@@ -122,31 +122,6 @@ Testbed Name:
     LTRCRT-2000-TEST
 
 Testbed Devices:
-/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
-  sys.exit(main())
-/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
-  sys.exit(main())
-/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
-  sys.exit(main())
-/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
-  sys.exit(main())
-/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
-  sys.exit(main())
-/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
-  sys.exit(main())
-/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
-  sys.exit(main())
-/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
-  sys.exit(main())
-/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
-  sys.exit(main())
-/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
-  sys.exit(main())
-/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
-  sys.exit(main())
-/Users/danielkuhl/Coding/pyats-test/bin/pyats:8: DeprecationWarning: The 'series' key has been deprecated, it is replaced by the 'platform' key.
-  sys.exit(main())
-.
 |-- host-01 [linux/server]
 |   |-- eth0 ----------> l14
 |   `-- eth1 ----------> l16
