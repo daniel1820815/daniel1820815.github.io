@@ -7,7 +7,7 @@ categories: Automation
 
 Are you are using Cisco Modeling Labs Personal or Enterprise to build labs for your learning and certification studies or even testing various scenarios from production environments in a safe place? Then you will probably come to the point that you think about automating tasks to build labs using the CML API. Automating repeating tasks is key in todays IT world. It will save you some time and help to focus on the topics you want to do in your lab rather than spending hours with the lab setup.
 
-I was recently playing around with CML while creating a new lab for testing the [pyATS framework](https://developer.cisco.com/docs/pyats/#!introduction/cisco-pyats-network-test--automation-solution){:target="_blank"}. I came very quickly to the point to use the official Python library [virl2_client](https://github.com/CiscoDevNet/virl2-client){:target="_blank"} for CML which provides a Python package to programmatically create, edit, delete, and control your network simulations on a CML controller. In my case I wanted to create a pyATS testbed automatically from a lab in the CML controller to create some test cases with pyATS. During this process I stumbled over an issue which had an obvious solution.
+I was recently playing around with CML while creating a new lab for testing the [Cisco pyATS framework](https://developer.cisco.com/docs/pyats/#!introduction/cisco-pyats-network-test--automation-solution){:target="_blank"}. I came very quickly to the point to use the official Python library [virl2_client](https://github.com/CiscoDevNet/virl2-client){:target="_blank"} for CML which provides a Python package to programmatically create, edit, delete, and control your network simulations on a CML controller. In my case I wanted to create a pyATS testbed automatically from a lab in the CML controller to create some test cases with pyATS. During this process I stumbled over an issue which had an obvious solution.
 
 ## Install pyATS and virl2_client library
 
@@ -25,7 +25,7 @@ After that I installed the virl2-client library:
 (pyats-test) pip install virl2-client
 ```
 
-Now I thought I could quickly create my testbed and start with testing. I used a small Python script which I copied from blog post "[How can I automate device configurations using CML2?](https://blogs.cisco.com/developer/363-askhankcml2-01){:target="_blank"}" by Hank Preston which contains a very good introduction and explanation how to use CML and pyATS.
+Now I thought I could quickly create my testbed and start with testing. I used a small Python script which I copied from the blog post "[How can I automate device configurations using CML2?](https://blogs.cisco.com/developer/363-askhankcml2-01){:target="_blank"}" by Hank Preston which contains a very good introduction and explanation how to use CML and pyATS.
 
 ```python
 from virl2_client import ClientLibrary
@@ -44,9 +44,9 @@ with open("lab_testbed.yaml", "w") as f:
     f.write(pyats_testbed)
 ```
 
-You have to fill in your CML data, add the name of your lab, and specify the output file for the testbed. The script does the rest for you and with quite good comments self-explanatory. But this is the step where I ran into the issue.
+You have to fill in your CML data or even better use environment variables. Add the name of your lab, and specify the output file for the testbed. The script does the rest for you and with quite good comments self-explanatory. But this is the step where I faced into the issue after I ran the Python script:
 
-```bash
+```python
 (pyats-test) $ python create_testbed.py 
 SSL Verification disabled
 Traceback (most recent call last):
@@ -59,20 +59,20 @@ Traceback (most recent call last):
 virl2_client.virl2_client.InitializationError: Controller version 2.2.3+build63 is marked incompatible! List of versions marked explicitly as incompatible: [2.0.0, 2.0.1, 2.1.0, 2.1.1, 2.1.2, 2.2.1, 2.2.2, 2.2.3].
 ```
 
-The check of the controller version failed. The error told me that the virl2_client version I used was incompatible with the controller version. At this time I was confused and not aware about the fact that the virl2_client version need to match with the controller version. That's why I thought I stumbled over a bug and too quickly created my first [Github issue](https://github.com/CiscoDevNet/virl2-client/issues/20){:target="_blank"} ever. I might have checked my error message more carefully and also double check the documentations. As you can see from the Github issue the developers of virl2_client responded very fast and mentioned that the error is expected with my controller version. Another lessons learned on the journey.
+The check of the controller version failed. The error told me that the virl2_client version I was using is incompatible with the controller version. At this time I was confused and not aware about the fact that the virl2_client version need to match with the controller version. That's why I thought I stumbled over a bug and too quickly created my first [Github issue](https://github.com/CiscoDevNet/virl2-client/issues/20){:target="_blank"} ever. I might have checked the error message more carefully and also double check the documentations. As you can see from the Github issue the developers of virl2_client responded very fast and mentioned that the error was expected with my controller version. Another lessons learned on the journey.
 
 ## Install the compatible virl2_client version
 
-First I checked the virl2_client version and by default it installs the latest version which is 2.4.0 according to the latest CML controller version 2.4.0 released. My CML controller version is still the recommended version 2.2.3:
+First I checked the virl2_client version and by default it installs the latest version which is 2.4.0 according to the latest CML controller version 2.4.0 released. My CML controller version is the recommended version 2.2.3 as of time of writing this article:
 
-```none
+```python
 (pyats-test) $ pip list | grep virl2
 virl2-client                 2.4.0
 ```
 
 With that I confirmed the version mismatch. Then uninstall virl2_client:
 
-```none
+```python
 (pyats-test) $ pip uninstall virl2_client
 Found existing installation: virl2-client 2.4.0
 Uninstalling virl2-client-2.4.0:
@@ -89,7 +89,7 @@ Proceed (Y/n)? Y
 
 And re-install with specifying the latest version less than 2.3.0 which is 2.2.1.post2 which I checked on the documentation after the virl2-client developer pointed me to that:
 
-```none
+```python
 (pyats-test) $ pip install "virl2-client<2.3.0"
 Collecting virl2-client<2.3.0
   Using cached virl2_client-2.2.1.post2-py3-none-any.whl (52 kB)
@@ -103,9 +103,11 @@ Installing collected packages: virl2-client
 Successfully installed virl2-client-2.2.1.post2
 ```
 
-Now I was back on the right path. Let's check if creating the testbed was working now.
+Now I was back on the right path. Let's check if creating of the testbed was working now.
 
 ## Finally create the pyATS testbed
+
+Run the Python script again:
 
 ```python
 (pyats-test) $ python create_testbed.py
@@ -121,7 +123,7 @@ Loading testbed file: lab_testbed.yaml
 --------------------------------------------------------------------------------
 
 Testbed Name:
-    LTRCRT-2000-TEST
+    LAB-TEST
 
 Testbed Devices:
 |-- host-01 [linux/server]
@@ -176,20 +178,25 @@ Warning Messages
  - Device 'terminal_server' has no interface definitions
 ```
 
+Well, this output looked much better than before. As you can see from the output all devices from the lab are listed there including the link labels besides the interfaces. Each device interfaces which contain the same link labels are connected with each other. This information gives you some additional opportunities for automating things. You could use link labels for configurations on both ends of devices which are connected or even drawing a full network topology to mention only some first ideas coming to my mind.
 
+## Lessons learned
 
-I can highly recommend the  how to use it.
+Hope you liked this small journey about a really good lessons-learned for me in regards to software version compatibility checks or reading the documentation before creating a Github issue. As I wrote it was the first time I created a public Github issue and it was good way to learn. I had to read about how to create a Github issue and what information is useful to put in. I can highly recommend to read through the section [About Github issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues){:target="_blank"} on Github. Below you will find all the links used in this article. Thank you for reading. Please feel free to leave a comment or get in contact with me on Social Media.
 
+### Links & References
 
-## A repository to grow
+#### Cisco Modeling Labs
 
-point to your repository
-
-Links:
-
-- Github issue: https://github.com/CiscoDevNet/virl2-client/issues/20
-- my repository
-- pyATS documentation
-- Cisco Modeling Labs
-- [virl2_client](https://github.com/CiscoDevNet/virl2-client){:target="_blank"}
+- [Product page](https://www.cisco.com/c/en/us/products/cloud-systems-management/modeling-labs/index.html){:target="_blank"}
+- [Documentation](https://developer.cisco.com/docs/modeling-labs/){:target="_blank"}
 - [How can I automate device configurations using CML2?](https://blogs.cisco.com/developer/363-askhankcml2-01){:target="_blank"}"
+
+#### Github
+
+- [virl2_client](https://github.com/CiscoDevNet/virl2-client){:target="_blank"}
+- [My Github issue](https://github.com/CiscoDevNet/virl2-client/issues/20){:target="_blank"}
+- [About Github issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues){:target="_blank"}
+
+#### pyATS
+- [Cisco pyATS: Network Test & Automation Solution](https://developer.cisco.com/docs/pyats/#!introduction/cisco-pyats-network-test--automation-solution){:target="_blank"}
