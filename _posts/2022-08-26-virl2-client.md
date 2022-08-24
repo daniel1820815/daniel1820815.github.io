@@ -5,17 +5,19 @@ date:   2022-08-26 13:00:00 +0200
 categories: Automation
 ---
 
-If you are using CML Cisco Modeling Labs Personal or Enterprise to build labs for study or test scenarios there will come the time you think about automating tasks and using the CML API. I was recently playing around with CML creating a new lab for testing the [pyATS framework](https://developer.cisco.com/docs/pyats/#!introduction/cisco-pyats-network-test--automation-solution){:target="_blank"}. I came very quick to the point to use the official Python library [virl2_client](https://github.com/CiscoDevNet/virl2-client){:target="_blank"} for CML to create a pyATS testbed automatically. During this process I stumbled over an issue which had an obvious solution.
+Are you are using Cisco Modeling Labs Personal or Enterprise to build labs for your learning and certification studies or even testing various scenarios from production environments in a safe place? Then you will probably come to the point that you think about automating tasks to build labs using the CML API. Automating repeating tasks is key in todays IT world. It will save you some time and help to focus on the topics you want to do in your lab rather than spending hours with the lab setup.
+
+I was recently playing around with CML while creating a new lab for testing the [pyATS framework](https://developer.cisco.com/docs/pyats/#!introduction/cisco-pyats-network-test--automation-solution){:target="_blank"}. I came very quickly to the point to use the official Python library [virl2_client](https://github.com/CiscoDevNet/virl2-client){:target="_blank"} for CML which provides a Python package to programmatically create, edit, delete, and control your network simulations on a CML controller. In my case I wanted to create a pyATS testbed automatically from a lab in the CML controller to create some test cases with pyATS. During this process I stumbled over an issue which had an obvious solution.
 
 ## Install pyATS and virl2_client library
 
-As I got a new laptop a month ago I have not installed all the tools I used before and also did not pull all the repository I was working on. So I started to clone my private repository I worked on, created a virtual environment, and installed pyATS:
+As I got a new laptop at this time I had not installed all the tools I used before and also did not pull all the repository I was working on. So I started to clone my private repository I was previously working on, created a new virtual environment, and installed pyATS using pip, the package installer for Python:
 
 ```bash
 (pyats-test) pip install pyats
 ```
 
-Note: There are different options how to install pyATS described in the documentation.
+> **Note:** There are different options how to install pyATS described in the pyATS documentation.
 
 After that I installed the virl2-client library:
 
