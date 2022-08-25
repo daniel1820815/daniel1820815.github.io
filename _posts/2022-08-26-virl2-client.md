@@ -3,6 +3,7 @@ layout: post
 title:  "Python vril2_client for Cisco Modeling Labs"
 date:   2022-08-26 13:00:00 +0200
 categories: Automation
+comments_id: 9
 ---
 
 Are you are using [Cisco Modeling Labs Personal or Enterprise](https://www.cisco.com/c/en/us/products/cloud-systems-management/modeling-labs/index.html){:target="_blank"} to build labs for your learning and certification studies or even testing various scenarios from production environments in a safe place? Then you will probably come to the point that you think about automating tasks to build labs using the CML API. Automating repeating tasks is key in todays IT world. It will save you some time and help to focus on the topics you want to do in your lab rather than spending hours with the lab setup.
