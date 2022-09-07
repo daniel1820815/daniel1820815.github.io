@@ -6,8 +6,10 @@ categories: Automation
 comments_id: # CREATE AND ADD ISSUE NO.
 ---
 
-Create a Docker image (including Dockerfile)
+As you might know I am currently studying for the [Cisco Certified DevNet Expert certification](https://learningnetwork.cisco.com/s/devnet-expert){:target="_blank"}.
 
-Package and deploy a solution by using Docker Compose
+- Create a Docker image using Dockerfile
 
-Package and deploy a solution by using Kubernetes
+- Package and deploy a solution by using Docker Compose
+
+- Package and deploy a solution by using Kubernetes
