@@ -15,7 +15,7 @@ Driving technology innovations on all various parts of my daily job is my passio
 
 Currently I am very focused on several topics related to IT Network Programmability and Automation. Beginning of 2021 I earned the [Cisco Certified DevNet Associate](https://developer.cisco.com/certification/devnet-associate/){:target="_blank"} certification and in November 2021 I took the [ENAUTO (Automating and Programming Cisco Enterprise Solutions)](https://developer.cisco.com/certification/devnet-en-auto/){:target="_blank"} exam. After a really hard study work I completed the [DEVCOR (Developing Applications Using Cisco Core Platforms and APIs)](https://developer.cisco.com/certification/devnet-core/){:target="_blank"} exam in June 2022 and became a [Cisco Certified DevNet Professional](https://developer.cisco.com/certification/devnet-professional/){:target="_blank"}. Now I am working on the preparation for the [Cisco DevNet Expert](https://learningnetwork.cisco.com/s/devnet-expert){:target="_blank"} lab exam.
 
-Thank you for visiting my blog. Don’t hesitate to contact me in any case of interest regarding IT networks and beyond. I am always happy to help.
+Thank you for visiting my blog site. Don’t hesitate to contact me in any case of interest regarding IT networks and beyond. I am always happy to help.
 
 ## Achievements
 
