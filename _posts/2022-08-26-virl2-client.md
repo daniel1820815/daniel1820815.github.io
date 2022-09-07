@@ -8,7 +8,7 @@ comments_id: 9
 
 Are you are using [Cisco Modeling Labs Personal or Enterprise](https://www.cisco.com/c/en/us/products/cloud-systems-management/modeling-labs/index.html){:target="_blank"} to build labs for your learning and certification studies or even testing various scenarios from production environments in a safe place? Then you will probably come to the point that you think about automating tasks to build labs using the CML API. Automating repeating tasks is key in todays IT world. It will save you some time and help to focus on the topics you want to do in your lab rather than spending hours with the lab setup.
 
-I was recently playing around with CML while creating a new lab for testing the [Cisco pyATS framework](https://developer.cisco.com/docs/pyats/#!introduction/cisco-pyats-network-test--automation-solution){:target="_blank"}. I came very quickly to the point to use the official Python library [virl2_client](https://github.com/CiscoDevNet/virl2-client){:target="_blank"} for CML which provides a Python package to programmatically create, edit, delete, and control your network simulations on a CML controller. 
+I was recently playing around with CML while creating a new lab for testing the [Cisco pyATS framework](https://developer.cisco.com/docs/pyats/#!introduction/cisco-pyats-network-test--automation-solution){:target="_blank"}. I came very quickly to the point to use the official Python library [virl2_client](https://github.com/CiscoDevNet/virl2-client){:target="_blank"} for CML which provides a Python package to programmatically create, edit, delete, and control your network simulations on a CML controller.
 
 In my case I wanted to create a pyATS testbed automatically from a lab on the CML controller rather than creating it manually. The automatic process will safe me some time in the future and I will be able to focus on creating my test cases using pyATS. During this process I stumbled over an issue which had an obvious solution. Let's take a look.
 
@@ -62,7 +62,7 @@ Traceback (most recent call last):
 virl2_client.virl2_client.InitializationError: Controller version 2.2.3+build63 is marked incompatible! List of versions marked explicitly as incompatible: [2.0.0, 2.0.1, 2.1.0, 2.1.1, 2.1.2, 2.2.1, 2.2.2, 2.2.3].
 ```
 
-The check of the controller version failed. The error told me that the virl2_client version I was using is incompatible with the controller version. At this time I was confused and not aware about the fact that the virl2_client version need to match with the controller version. That's why I thought I stumbled over a bug and too quickly created my first [Github issue](https://github.com/CiscoDevNet/virl2-client/issues/20){:target="_blank"} ever. 
+The check of the controller version failed. The error told me that the virl2_client version I was using is incompatible with the controller version. At this time I was confused and not aware about the fact that the virl2_client version need to match with the controller version. That's why I thought I stumbled over a bug and too quickly created my first [Github issue](https://github.com/CiscoDevNet/virl2-client/issues/20){:target="_blank"} ever.
 
 I might have checked the error message more carefully and also double check the documentation. As you can see from the Github issue the developers of virl2_client responded very fast and mentioned that the error was expected with my controller version. Another lessons learned on the journey.
 
@@ -120,7 +120,6 @@ SSL Verification disabled
 ```
 
 Validate testbed
-
 
 ```bash
 (pyats-test) $ pyats validate testbed lab_testbed.yaml 
@@ -187,7 +186,7 @@ Well, this output looked much better than before. As you can see from the output
 
 ## Lessons learned
 
-Hope you liked this small journey about a really good lessons-learned for me in regards to software version compatibility checks or reading the documentation before creating a Github issue. As I wrote it was the first time I created a public Github issue and it was good way to learn. I had to read about how to create a Github issue and what information is useful to put in. I can highly recommend to read through the section [About Github issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues){:target="_blank"} on Github. 
+Hope you liked this small journey about a really good lessons-learned for me in regards to software version compatibility checks or reading the documentation before creating a Github issue. As I wrote it was the first time I created a public Github issue and it was good way to learn. I had to read about how to create a Github issue and what information is useful to put in. I can highly recommend to read through the section [About Github issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues){:target="_blank"} on Github.
 
 Below you will find all the links used in this article. Thank you so much for reading. Please feel free to leave a comment or get in contact with me on Social Media if not happened yet.
 
@@ -206,4 +205,5 @@ Below you will find all the links used in this article. Thank you so much for re
 - [About Github issues](https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues){:target="_blank"}
 
 #### pyATS
+
 - [Cisco pyATS: Network Test & Automation Solution](https://developer.cisco.com/docs/pyats/#!introduction/cisco-pyats-network-test--automation-solution){:target="_blank"}
