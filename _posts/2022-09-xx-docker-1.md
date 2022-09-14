@@ -6,7 +6,7 @@ categories: Containers
 comments_id: # CREATE AND ADD ISSUE NO.
 ---
 
-As you might know I am currently studying for the [Cisco Certified DevNet Expert certification](https://learningnetwork.cisco.com/s/devnet-expert){:target="_blank"}.
+As you might know I am currently studying for the [Cisco Certified DevNet Expert](https://learningnetwork.cisco.com/s/devnet-expert){:target="_blank"} lab exam.
 
 - Create a Docker image using Dockerfile
 
@@ -15,6 +15,18 @@ As you might know I am currently studying for the [Cisco Certified DevNet Expert
 - Package and deploy a solution by using Kubernetes
 
 ## Intro
+
+In the first part of this blog series I show you how to create Docker images using Dockerfile and then run containers using these images. In my example, I use three containers running as an application. The application will contain the following components: A [NGNIX](https://hub.docker.com/_/nginx){:target="_blank"} load balancer container on the frontend which balances the requests between two similar application containers.
+
+```mermaid
+stateDiagram 
+    direction LR
+    [*] --> LOADBALANCER: request
+    LOADBALANCER --> APP1
+    LOADBALANCER --> APP2
+```
+
+The idea for this scenario came originally from the Cisco On Demand E-Learning course [Developing Applications using Cisco Core Platforms and APIs (DEVCOR) v1.0](https://learningnetworkstore.cisco.com/on-demand-e-learning/developing-applications-using-cisco-core-platforms-and-apis-devcor-v1.0/ELT-DEVCOR-V1-024035.html){:target="_blank"} available on the [Cisco Learning Network Store](https://learningnetworkstore.cisco.com){:target="_blank"}. There was a little more complex scenario used to demonstrate containerized applications using Docker. Additionally it contained a MYSQL database in the backend to store the data which was not a container. I want keep it simple here and focus on Docker containers. Nevertheless I can highly recommend this course, especially for the labs used to demonstrate the topics.
 
 ## Create a new docker network
 
@@ -72,7 +84,7 @@ Let's inspect the details of the bridge network.
 ]
 ```
 
-Docker automatically created a bridge network with a /16 subnet mask and the first IP address as gateway. The scope is local, no IPv6 enabled, and currently there are no containers attached to the network. So far so good for our case. For more information how to configure Docker networks please take a look at the [Docker documentation](https://docs.docker.com){:target="_blank"}. Now we continue with building the images from Dockerfiles.
+Docker automatically created a bridge network with a /16 subnet mask and assigns the first IP address as the gateway. The scope is local, no IPv6 enabled, and currently there are no containers attached to the network. So far so good for my deployment. For more information how to configure [Docker networks](https://docs.docker.com/network/){:target="_blank"} please take a look at the documentation. Now we continue with the Dockerfiles for building the images.
 
 ## Build the images from Dockerfiles
 
@@ -82,4 +94,6 @@ Docker automatically created a bridge network with a /16 subnet mask and the fir
 
 ### Links & References
 
+- https://hub.docker.com/_/nginx
+- https://docs.docker.com/network/
 - [Docker Documentations](https://docs.docker.com){:target="_blank"}
