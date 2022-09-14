@@ -2,7 +2,7 @@
 layout: post
 title: "DevNet Expert blog series - Docker part 1"
 date: 2022-09-16 18:00:00 +0200
-categories: Automation
+categories: Containers
 comments_id: # CREATE AND ADD ISSUE NO.
 ---
 
@@ -14,7 +14,9 @@ As you might know I am currently studying for the [Cisco Certified DevNet Expert
 
 - Package and deploy a solution by using Kubernetes
 
-## Create a docker network
+## Intro
+
+## Create a new docker network
 
 Let's start with creating a new Docker network to isolate the new deployment from other existing containers. By default, new docker containers will be added to the default *bridge* network and will be able to communicate with other containers on that network. Before creating a new network check for existing container networks:
 
@@ -27,14 +29,14 @@ NETWORK ID     NAME             DRIVER    SCOPE
 eed3f5c39cf7   none             null      local
 ```
 
-As you can see from the output there are already some networks on my devbox. The Docker network mode *host* for a container means, that it is not isolated from the Docker host network stack and the container does not get its own IP address allocated. When you create a network without specifying any options, it creates a *bridge* network with non-overlapping subnetwork for the network by default.
+As you can see from the output there are already some Docker networks on my devbox. The Docker network mode *host* for a container means, that it is not isolated from the Docker host network stack and the container does not get its own IP address allocated. When you create a network without specifying any options, it creates a *bridge* network with non-overlapping subnetwork for the network by default. That is what we want to create.
 
 ```zsh
 [expert@devbox ~]$ docker network create my-network
 ade9ab9d04c4ced907112faa81acf7d1f6b6faa1dfc174bb0d1d4ac9e482b970
 ```
 
-Let's inspect the details of the network settings.
+Let's inspect the details of the bridge network.
 
 ```zsh
 [expert@devbox ~]$ docker network inspect my-network
@@ -70,6 +72,14 @@ Let's inspect the details of the network settings.
 ]
 ```
 
-## Links
+Docker automatically created a bridge network with a /16 subnet mask and the first IP address as gateway. The scope is local, no IPv6 enabled, and currently there are no containers attached to the network. So far so good for our case. For more information how to configure Docker networks please take a look at the [Docker documentation](https://docs.docker.com){:target="_blank"}. Now we continue with building the images from Dockerfiles.
+
+## Build the images from Dockerfiles
+
+## Run the containers
+
+## Summary and Outlook
+
+### Links & References
 
 - [Docker Documentations](https://docs.docker.com){:target="_blank"}
