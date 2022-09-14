@@ -88,6 +88,54 @@ Docker automatically created a bridge network with a /16 subnet mask and assigns
 
 ## Build the images from Dockerfiles
 
+```zsh
+events {}
+http {
+  upstream myapp {
+    server 172.20.0.100:5000;
+    server 172.20.0.101:5000;
+  }
+
+  server {
+    listen 8080;
+    server_name localhost;
+
+    location / {
+      proxy_pass http://myapp;
+      proxy_set_header Host $host;
+    }
+  }
+}
+```
+
+```docker
+FROM nginx
+
+COPY nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 8080
+
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+If you add a custom CMD in the Dockerfile, be sure to include -g daemon off; in the CMD in order for nginx to stay in the foreground, so that Docker can track the process properly (otherwise your container will stop immediately after starting)!
+
+Then build the image with docker build -t custom-nginx . and run it as follows:
+
+docker run --name my-custom-nginx-container -d custom-nginx
+
+```docker
+FROM python:3.7
+
+COPY . /app
+WORKDIR /app
+
+RUN pip install -r requirements.txt
+EXPOSE 5000
+
+CMD ["python3", "main.py"]
+```
+
 ## Run the containers
 
 ## Summary and Outlook
