@@ -28,35 +28,69 @@ stateDiagram
 
 The idea for this scenario came originally from the Cisco On Demand E-Learning course [Developing Applications using Cisco Core Platforms and APIs (DEVCOR) v1.0](https://learningnetworkstore.cisco.com/on-demand-e-learning/developing-applications-using-cisco-core-platforms-and-apis-devcor-v1.0/ELT-DEVCOR-V1-024035.html){:target="_blank"} available on the [Cisco Learning Network Store](https://learningnetworkstore.cisco.com){:target="_blank"}. There was a little more complex scenario used to demonstrate containerized applications using Docker. Additionally it contained a MYSQL database in the backend to store the data which was not a container. I want keep it simple here and focus on Docker containers. Nevertheless I can highly recommend this course, especially for the labs used to demonstrate the topics.
 
-## Create a new docker network
-
-Let's start with creating a new Docker network to isolate the new deployment from other existing containers. By default, new docker containers will be added to the default *bridge* network and will be able to communicate with other containers on that network. Before creating a new network check for existing container networks:
+Before I begin let's make sure that Docker is running on my machine. I am using Docker Desktop version 4.12.0 (85629) on Apple MacBook Pro macOS Monterey version 12.6.
 
 ```zsh
-[expert@devbox ~]$ docker network ls
-NETWORK ID     NAME             DRIVER    SCOPE
-33b17295e975   bridge           bridge    local
-43b6478812cd   gitlab_default   bridge    local
-42563378bde0   host             host      local
-eed3f5c39cf7   none             null      local
+$ docker version
+Client:
+ Cloud integration: v1.0.29
+ Version:           20.10.17
+ API version:       1.41
+ Go version:        go1.17.11
+ Git commit:        100c701
+ Built:             Mon Jun  6 23:04:45 2022
+ OS/Arch:           darwin/arm64
+ Context:           default
+ Experimental:      true
+
+Server: Docker Desktop 4.12.0 (85629)
+ Engine:
+  Version:          20.10.17
+  API version:      1.41 (minimum version 1.12)
+  Go version:       go1.17.11
+  Git commit:       a89b842
+  Built:            Mon Jun  6 23:01:01 2022
+  OS/Arch:          linux/arm64
+  Experimental:     false
+ containerd:
+  Version:          1.6.8
+  GitCommit:        9cd3357b7fd7218e4aec3eae239db1f68a5a6ec6
+ runc:
+  Version:          1.1.4
+  GitCommit:        v1.1.4-0-g5fd4c4d
+ docker-init:
+  Version:          0.19.0
+  GitCommit:        de40ad0
 ```
 
-As you can see from the output there are already some Docker networks on my devbox. The Docker network mode *host* for a container means, that it is not isolated from the Docker host network stack and the container does not get its own IP address allocated. When you create a network without specifying any options, it creates a *bridge* network with non-overlapping subnetwork for the network by default. That is what we want to create.
+## Create a new docker network
+
+Let's start with creating a new Docker network to isolate the new deployment from other existing containers. By default, new docker containers will be added to the default *bridge* network and will be able to communicate with other containers on that network. Before creating a new network I check for existing container networks:
 
 ```zsh
-[expert@devbox ~]$ docker network create my-network
-ade9ab9d04c4ced907112faa81acf7d1f6b6faa1dfc174bb0d1d4ac9e482b970
+$ docker network ls   
+NETWORK ID     NAME      DRIVER    SCOPE
+b561344e969a   bridge    bridge    local
+85292295a34d   host      host      local
+9c55956a8c6f   none      null      local
+```
+
+As you can see from the output there are only default Docker networks on my machine. The Docker network mode *host* for a container means, that it is not isolated from the Docker host network stack and the container does not get its own IP address allocated. When you create a network without specifying any options, it creates a *bridge* network with non-overlapping subnetwork for the network by default. That is what we want to create.
+
+```zsh
+$ docker network create my-network
+609d0654ad91262ff0ee8fd15b1dc44e008c04a0d736fbb4f510201a96aecec2
 ```
 
 Let's inspect the details of the bridge network.
 
 ```zsh
-[expert@devbox ~]$ docker network inspect my-network
+$ docker network inspect my-network
 [
     {
         "Name": "my-network",
-        "Id": "ade9ab9d04c4ced907112faa81acf7d1f6b6faa1dfc174bb0d1d4ac9e482b970",
-        "Created": "2022-09-13T22:26:48.22250377+02:00",
+        "Id": "609d0654ad91262ff0ee8fd15b1dc44e008c04a0d736fbb4f510201a96aecec2",
+        "Created": "2022-09-21T16:42:41.218769509Z",
         "Scope": "local",
         "Driver": "bridge",
         "EnableIPv6": false,
@@ -65,8 +99,8 @@ Let's inspect the details of the bridge network.
             "Options": {},
             "Config": [
                 {
-                    "Subnet": "172.20.0.0/16",
-                    "Gateway": "172.20.0.1"
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
                 }
             ]
         },
@@ -84,120 +118,9 @@ Let's inspect the details of the bridge network.
 ]
 ```
 
-Docker automatically created a bridge network with a /16 subnet mask and assigns the first IP address as the gateway. The scope is local, no IPv6 enabled, and currently there are no containers attached to the network. So far so good for my deployment. For more information how to configure [Docker networks](https://docs.docker.com/network/){:target="_blank"} please take a look at the documentation. Now we continue with the Dockerfiles for building the images.
+As you can see from the output, Docker created a bridge network by default with a local subnet of 172.18.0.0/16 with gateway 172.18.0.1. No other specific settings were made. For more information about Docker networking I recommend looking at the [Docker Networking](https://docs.docker.com/network/){:target="_blank"} documentation.
 
-## Build the images from Dockerfiles
-
-```zsh
-events {}
-http {
-  upstream myapp {
-    server 172.20.0.100:5000;
-    server 172.20.0.101:5000;
-  }
-
-  server {
-    listen 8080;
-    server_name localhost;
-
-    location / {
-      proxy_pass http://myapp;
-      proxy_set_header Host $host;
-    }
-  }
-}
-```
-
-```docker
-FROM nginx
-
-COPY nginx.conf /etc/nginx/nginx.conf
-
-EXPOSE 8080
-
-CMD ["nginx", "-g", "daemon off;"]
-```
-
-If you add a custom CMD in the Dockerfile, be sure to include -g daemon off; in the CMD in order for nginx to stay in the foreground, so that Docker can track the process properly (otherwise your container will stop immediately after starting)!
-
-Then build the image with docker build -t ngnix-lb . and run it as follows:
-
-```zsh
-[expert@devbox lb]$ docker build -t nginx-lb .
-Sending build context to Docker daemon  3.072kB
-Step 1/4 : FROM nginx
-latest: Pulling from library/nginx
-31b3f1ad4ce1: Pull complete 
-fd42b079d0f8: Pull complete 
-30585fbbebc6: Pull complete 
-18f4ffdd25f4: Pull complete 
-9dc932c8fba2: Pull complete 
-600c24b8ba39: Pull complete 
-Digest: sha256:0b970013351304af46f322da1263516b188318682b2ab1091862497591189ff1
-Status: Downloaded newer image for nginx:latest
- ---> 2d389e545974
-Step 2/4 : COPY nginx.conf /etc/nginx/nginx.conf
- ---> bd2553d2dc5f
-Step 3/4 : EXPOSE 8080
- ---> Running in b41f852200da
-Removing intermediate container b41f852200da
- ---> 2bf0f4b7f95b
-Step 4/4 : CMD ["nginx", "-g", "daemon off;"]
- ---> Running in 696f6122f09f
-Removing intermediate container 696f6122f09f
- ---> 6162199d1567
-Successfully built 6162199d1567
-Successfully tagged nginx-lb:latest
-```
-
-docker run --name my-nginx-lb -d nginx-lb
-
-Connect to my Docker network
-
-docker network connect my-network my-nginx
-
-```zsh
-[expert@devbox lb]$ docker network inspect my-network
-[
-    {
-        "Name": "my-network",
-        "Id": "ade9ab9d04c4ced907112faa81acf7d1f6b6faa1dfc174bb0d1d4ac9e482b970",
-        "Created": "2022-09-13T22:26:48.22250377+02:00",
-        "Scope": "local",
-        "Driver": "bridge",
-        "EnableIPv6": false,
-        "IPAM": {
-            "Driver": "default",
-            "Options": {},
-            "Config": [
-                {
-                    "Subnet": "172.20.0.0/16",
-                    "Gateway": "172.20.0.1"
-                }
-            ]
-        },
-        "Internal": false,
-        "Attachable": false,
-        "Ingress": false,
-        "ConfigFrom": {
-            "Network": ""
-        },
-        "ConfigOnly": false,
-        "Containers": {
-            "a123a9ea0d879a58c2e0ab9cba71ab7b4deff23a27ff2f56a783e10c42594722": {
-                "Name": "my-nginx-lb",
-                "EndpointID": "690b8d01b912c3922f37f7112ae7eefcc3312c66279045a7fa7d8a1aec336673",
-                "MacAddress": "02:42:ac:14:00:02",
-                "IPv4Address": "172.20.0.2/16",
-                "IPv6Address": ""
-            }
-        },
-        "Options": {},
-        "Labels": {}
-    }
-]
-```
-
+## Create Docker images
 
 ```docker
 FROM python:3.7
@@ -205,7 +128,7 @@ FROM python:3.7
 COPY . /app
 WORKDIR /app
 
-RUN pip install -r requirements.txt
+RUN pip install flask
 EXPOSE 5000
 
 CMD ["python3", "main.py"]
@@ -274,12 +197,28 @@ Successfully built 5e0fa157a6d2
 Successfully tagged flask-app:latest
 ```
 
+```zsh
+[expert@devbox ~]$ docker run --name my-flask-app1 -d flask-app
+8e5319a9cd35ccf94e6837e32fca8ad9ad0a8990c39be78c79327db9bd567356
+[expert@devbox ~]$ docker ps
+CONTAINER ID   IMAGE                  COMMAND                  CREATED         STATUS                 PORTS                                                NAMES
+8e5319a9cd35   flask-app              "python3 main.py"        8 seconds ago   Up 4 seconds           5000/tcp                                             my-flask-app1
+a123a9ea0d87   nginx-lb               "/docker-entrypoint.…"   6 days ago      Up 6 days              80/tcp, 8080/tcp                                     my-nginx-lb
+```
+
+docker network connect my-network my-flask-app1
+
 ## Run the containers
 
 ## Summary and Outlook
 
 ### Links & References
 
-- https://hub.docker.com/_/nginx
-- https://docs.docker.com/network/
-- [Docker Documentations](https://docs.docker.com){:target="_blank"}
+#### NGINX
+
+- [NGINX on Docker Hub](https://hub.docker.com/_/nginx){:target="_blank"}
+
+#### Docker
+
+- [Docker Documentation](https://docs.docker.com){:target="_blank"}
+- [Docker Networking Overview](https://docs.docker.com/network/){:target="_blank"}
