@@ -118,12 +118,24 @@ $ docker network inspect my-network
 ]
 ```
 
-As you can see from the output, Docker created a bridge network by default with a local subnet of 172.18.0.0/16 with gateway 172.18.0.1. No other specific settings were made. For more information about Docker networking I recommend looking at the [Docker Networking](https://docs.docker.com/network/){:target="_blank"} documentation.
+As you can see from the output, Docker created a bridge network by default with a local subnet of 172.18.0.0/16 with gateway 172.18.0.1. No other specific settings were made and currently there are no containers attached to the network. For more information about Docker networking please look at the [Docker Networking](https://docs.docker.com/network/){:target="_blank"} documentation. Let's move on and create the Docker images from a Dockerfile.
 
 ## Create Docker images
 
+First I create the Dockerfile for my load balancer image:
+
 ```docker
-FROM python:3.7
+FROM nginx
+
+COPY nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 8080
+
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+```docker
+FROM python:3.9
 
 COPY . /app
 WORKDIR /app
@@ -133,6 +145,9 @@ EXPOSE 5000
 
 CMD ["python3", "main.py"]
 ```
+
+I use the official Docker image *python* from [Docker Hub](https://hub.docker.com){:target="_blank"} in version 3.9. Official Docker images are designed for most common use cases. They have clear documentation and use Docker best practices. The *COPY* statement is used to copy local files to a directory on the container. Then I set the working directory with *WORKDIR*. After that the container needs to install the Python library *flask* which is a lightweight web application framework which is used in the *main.py* file to start the app using the *CMD* statement. Before that the *EXPOSE* statement is used to enable the container listening on the specified port.
+
 
 ```zsh
 [expert@devbox app]$ docker build -t flask-app .
@@ -222,3 +237,8 @@ docker network connect my-network my-flask-app1
 
 - [Docker Documentation](https://docs.docker.com){:target="_blank"}
 - [Docker Networking Overview](https://docs.docker.com/network/){:target="_blank"}
+- [Docker Hub](https://hub.docker.com){:target="_blank"}
+
+#### Python
+
+- [Flask](https://pypi.org/project/Flask/){:target="_blank"}
