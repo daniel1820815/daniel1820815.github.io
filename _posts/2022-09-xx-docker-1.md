@@ -65,7 +65,7 @@ Server: Docker Desktop 4.12.0 (85629)
 
 ## Create a new docker network
 
-Let's start with creating a new Docker network to isolate the new deployment from other existing containers. By default, new docker containers will be added to the default *bridge* network and will be able to communicate with other containers on that network. Before creating a new network I check for existing container networks:
+Let's start with creating a new Docker network to isolate the new deployment from other existing containers. By default, new Docker containers will be added to the default *bridge* network and will be able to communicate with other containers on that network. Before creating a new network I check for existing container networks:
 
 ```zsh
 $ docker network ls   
@@ -78,8 +78,8 @@ b561344e969a   bridge    bridge    local
 As you can see from the output there are only default Docker networks on my machine. The Docker network mode *host* for a container means, that it is not isolated from the Docker host network stack and the container does not get its own IP address allocated. When you create a network without specifying any options, it creates a *bridge* network with non-overlapping subnetwork for the network by default. That is what we want to create.
 
 ```zsh
-$ docker network create my-network
-609d0654ad91262ff0ee8fd15b1dc44e008c04a0d736fbb4f510201a96aecec2
+$ docker network create my-network 
+9c161e4d72f551f73b8ace265b5642b55950dd3c17bba65c2108e2bda2ae3319
 ```
 
 Let's inspect the details of the bridge network.
@@ -89,8 +89,8 @@ $ docker network inspect my-network
 [
     {
         "Name": "my-network",
-        "Id": "609d0654ad91262ff0ee8fd15b1dc44e008c04a0d736fbb4f510201a96aecec2",
-        "Created": "2022-09-21T16:42:41.218769509Z",
+        "Id": "9c161e4d72f551f73b8ace265b5642b55950dd3c17bba65c2108e2bda2ae3319",
+        "Created": "2022-09-21T18:29:27.031196834Z",
         "Scope": "local",
         "Driver": "bridge",
         "EnableIPv6": false,
@@ -99,8 +99,8 @@ $ docker network inspect my-network
             "Options": {},
             "Config": [
                 {
-                    "Subnet": "172.18.0.0/16",
-                    "Gateway": "172.18.0.1"
+                    "Subnet": "172.19.0.0/16",
+                    "Gateway": "172.19.0.1"
                 }
             ]
         },
@@ -118,21 +118,11 @@ $ docker network inspect my-network
 ]
 ```
 
-As you can see from the output, Docker created a bridge network by default with a local subnet of 172.18.0.0/16 with gateway 172.18.0.1. No other specific settings were made and currently there are no containers attached to the network. For more information about Docker networking please look at the [Docker Networking](https://docs.docker.com/network/){:target="_blank"} documentation. Let's move on and create the Docker images from a Dockerfile.
+As you can see from the output, Docker created a bridge network by default with a local subnet of 172.19.0.0/16 with gateway 172.19.0.1. No other specific settings were made and currently there are no containers attached to the network. For more information about Docker networking please look at the [Docker Networking](https://docs.docker.com/network/){:target="_blank"} documentation. Let's move on and create the Docker images from a Dockerfile.
 
 ## Create Docker images
 
-First I create the Dockerfile for my load balancer image:
-
-```docker
-FROM nginx
-
-COPY nginx.conf /etc/nginx/nginx.conf
-
-EXPOSE 8080
-
-CMD ["nginx", "-g", "daemon off;"]
-```
+First let's create two folders *app* and *lb* to separate the Dockerfiles and container specific files. Then we start with creating the Dockerfile for the application image in the *app* directory:
 
 ```docker
 FROM python:3.9
@@ -141,76 +131,65 @@ COPY . /app
 WORKDIR /app
 
 RUN pip install flask
-EXPOSE 5000
+EXPOSE tcp/5000
 
 CMD ["python3", "main.py"]
 ```
 
-I use the official Docker image *python* from [Docker Hub](https://hub.docker.com){:target="_blank"} in version 3.9. Official Docker images are designed for most common use cases. They have clear documentation and use Docker best practices. The *COPY* statement is used to copy local files to a directory on the container. Then I set the working directory with *WORKDIR*. After that the container needs to install the Python library *flask* which is a lightweight web application framework which is used in the *main.py* file to start the app using the *CMD* statement. Before that the *EXPOSE* statement is used to enable the container listening on the specified port.
-
+We use the official Docker image *python* from [Docker Hub](https://hub.docker.com){:target="_blank"} in version 3.9. Official Docker images are designed for most common use cases. They have clear documentation and use Docker best practices. The *COPY* statement is used to copy local files to a directory on the container. Then set the working directory with *WORKDIR* for the app. After that the container needs to install the Python library *flask* which is a lightweight web application framework which is used in the *main.py* file. We will look at it in a minute. The app will start the app with the *CMD* statement. Before that the *EXPOSE* statement is used to enable the container listening on the specified port, in our case tcp port 5000. The statements in the Dockerfile are called stages. When we build the Docker image we will see the different stages:
 
 ```zsh
-[expert@devbox app]$ docker build -t flask-app .
-Sending build context to Docker daemon  3.072kB
-Step 1/6 : FROM python:3.7
-3.7: Pulling from library/python
-23858da423a6: Pull complete 
-326f452ade5c: Pull complete 
-a42821cd14fb: Pull complete 
-8471b75885ef: Pull complete 
-8ffa7aaef404: Pull complete 
-15132af73342: Pull complete 
-a81a13cb42bc: Pull complete 
-39baa166dda6: Pull complete 
-28d172f530ba: Pull complete 
-Digest: sha256:249a4d1d1fedfcc2c3ea02b6e6e009be818e4153cc8f7353810529bb54c5d876
-Status: Downloaded newer image for python:3.7
- ---> 7d2ecbd72983
-Step 2/6 : COPY . /app
- ---> 37c21165ecbd
-Step 3/6 : WORKDIR /app
- ---> Running in 274604dd87ce
-Removing intermediate container 274604dd87ce
- ---> 0813156ce6ea
-Step 4/6 : RUN pip install flask
- ---> Running in 4d59003da528
-Collecting flask
-  Downloading Flask-2.2.2-py3-none-any.whl (101 kB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 101.5/101.5 KB 1.5 MB/s eta 0:00:00
-Collecting Jinja2>=3.0
-  Downloading Jinja2-3.1.2-py3-none-any.whl (133 kB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 133.1/133.1 KB 1.9 MB/s eta 0:00:00
-Collecting itsdangerous>=2.0
-  Downloading itsdangerous-2.1.2-py3-none-any.whl (15 kB)
-Collecting click>=8.0
-  Downloading click-8.1.3-py3-none-any.whl (96 kB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 96.6/96.6 KB 2.8 MB/s eta 0:00:00
-Collecting importlib-metadata>=3.6.0
-  Downloading importlib_metadata-4.12.0-py3-none-any.whl (21 kB)
-Collecting Werkzeug>=2.2.2
-  Downloading Werkzeug-2.2.2-py3-none-any.whl (232 kB)
-     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 232.7/232.7 KB 5.2 MB/s eta 0:00:00
-Collecting zipp>=0.5
-  Downloading zipp-3.8.1-py3-none-any.whl (5.6 kB)
-Collecting typing-extensions>=3.6.4
-  Downloading typing_extensions-4.3.0-py3-none-any.whl (25 kB)
-Collecting MarkupSafe>=2.0
-  Downloading MarkupSafe-2.1.1-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (25 kB)
-Installing collected packages: zipp, typing-extensions, MarkupSafe, itsdangerous, Werkzeug, Jinja2, importlib-metadata, click, flask
-Successfully installed Jinja2-3.1.2 MarkupSafe-2.1.1 Werkzeug-2.2.2 click-8.1.3 flask-2.2.2 importlib-metadata-4.12.0 itsdangerous-2.1.2 typing-extensions-4.3.0 zipp-3.8.1
-Removing intermediate container 4d59003da528
- ---> fb49696f122e
-Step 5/6 : EXPOSE 5000
- ---> Running in 961ef653dac6
-Removing intermediate container 961ef653dac6
- ---> e5abbe7313a0
-Step 6/6 : CMD ["python3", "main.py"]
- ---> Running in 12e2d9b7f755
-Removing intermediate container 12e2d9b7f755
- ---> 5e0fa157a6d2
-Successfully built 5e0fa157a6d2
-Successfully tagged flask-app:latest
+$ docker build -t my-app .
+[+] Building 24.6s (9/9) FINISHED                                                                                         
+ => [internal] load build definition from Dockerfile                                                                 0.0s
+ => => transferring dockerfile: 146B                                                                                 0.0s
+ => [internal] load .dockerignore                                                                                    0.0s
+ => => transferring context: 2B                                                                                      0.0s
+ => [internal] load metadata for docker.io/library/python:3.9                                                        2.1s
+ => [internal] load build context                                                                                    0.0s
+ => => transferring context: 494B                                                                                    0.0s
+ => [1/4] FROM docker.io/library/python:3.9@sha256:cfcc9ef77b6cf87f57327aacc6f9b50c7cdb4d7dd93662a36549f05b7403cd4  20.0s
+ => => resolve docker.io/library/python:3.9@sha256:cfcc9ef77b6cf87f57327aacc6f9b50c7cdb4d7dd93662a36549f05b7403cd47  0.0s
+ => => sha256:cfcc9ef77b6cf87f57327aacc6f9b50c7cdb4d7dd93662a36549f05b7403cd47 1.86kB / 1.86kB                       0.0s
+ => => sha256:644efdc0e0b3ba36050cb12e27d074e3a15ca68a3f41ae96e42bdc0af720da05 2.22kB / 2.22kB                       0.0s
+ => => sha256:daa25dbffbabb85498e5d2c2d270f81ca67f9679617c9611bf18faf6ed4a09a0 10.66MB / 10.66MB                     1.9s
+ => => sha256:d732b9878117efd35e3ac57ec9db1daefb52e73424878b91c2bf006a44876b2e 8.53kB / 8.53kB                       0.0s
+ => => sha256:10cff8997b4d4f243419e6bede830f1ac33f3d18c5200e5fb80e19333883ec2b 53.69MB / 53.69MB                     5.0s
+ => => sha256:4c9f2bf6f4deeb7ed2acd14f7997ec0a0cdf45b5b314051ddaab1911e22d997d 5.15MB / 5.15MB                       1.2s
+ => => sha256:a9360b3024e18f921a2fcec8614f617312c87ea1a31b5c94c9c643535bde9775 54.68MB / 54.68MB                     8.3s
+ => => sha256:9175ba771bff9348347af555b31874fcf715783d5265e9282369fbcb0f5048c5 189.72MB / 189.72MB                  14.4s
+ => => sha256:9273f03e50bc5a05d868e3daa064af40309676421aaf7b2460bad3ae69482331 6.16MB / 6.16MB                       6.1s
+ => => extracting sha256:10cff8997b4d4f243419e6bede830f1ac33f3d18c5200e5fb80e19333883ec2b                            1.5s
+ => => sha256:b9e722e88430b63dff46f6dedbbda5be70950dca96aa4297b2d3e656148aefd9 17.92MB / 17.92MB                     9.2s
+ => => extracting sha256:4c9f2bf6f4deeb7ed2acd14f7997ec0a0cdf45b5b314051ddaab1911e22d997d                            0.1s
+ => => extracting sha256:daa25dbffbabb85498e5d2c2d270f81ca67f9679617c9611bf18faf6ed4a09a0                            0.2s
+ => => sha256:97425eb7e05c8eaf1edc78540e3275610a5074d47c96807f23f62f3962712620 234B / 234B                           8.4s
+ => => extracting sha256:a9360b3024e18f921a2fcec8614f617312c87ea1a31b5c94c9c643535bde9775                            1.7s
+ => => sha256:751570a0fcefd6c1e6f7735c1acaee06a6c84eebfce5e739aca725737ddc355f 2.88MB / 2.88MB                       8.9s
+ => => extracting sha256:9175ba771bff9348347af555b31874fcf715783d5265e9282369fbcb0f5048c5                            4.5s
+ => => extracting sha256:9273f03e50bc5a05d868e3daa064af40309676421aaf7b2460bad3ae69482331                            0.2s
+ => => extracting sha256:b9e722e88430b63dff46f6dedbbda5be70950dca96aa4297b2d3e656148aefd9                            0.5s
+ => => extracting sha256:97425eb7e05c8eaf1edc78540e3275610a5074d47c96807f23f62f3962712620                            0.0s
+ => => extracting sha256:751570a0fcefd6c1e6f7735c1acaee06a6c84eebfce5e739aca725737ddc355f                            0.1s
+ => [2/4] COPY . /app                                                                                                0.4s
+ => [3/4] WORKDIR /app                                                                                               0.0s
+ => [4/4] RUN pip install flask                                                                                      1.9s
+ => exporting to image                                                                                               0.1s
+ => => exporting layers                                                                                              0.1s
+ => => writing image sha256:8f0931edc49de029de1c8250c36596f10676f2703d769584e291c0cdd0ba40f2                         0.0s
+ => => naming to docker.io/library/my-app   
 ```
+
+You can see that four stages were completed. The fifth and sixth stages which are related to the *EXPOSE* and *CMD* statements will be executed during image run. Let's check if the image is there:
+
+```zsh
+$ docker image ls
+REPOSITORY                      TAG         IMAGE ID       CREATED         SIZE
+my-app                          latest      8f0931edc49d   9 minutes ago   875MB
+< output omitted>
+```
+
+With ```docker image inspect my-app``` you could take a look into the details of the image. I did not add the output here to avoid overloading this post with information. Now let's take a look at the 
 
 ```zsh
 [expert@devbox ~]$ docker run --name my-flask-app1 -d flask-app
