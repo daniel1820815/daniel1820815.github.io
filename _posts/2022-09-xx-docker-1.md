@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "DevNet Expert blog series - Docker part 1"
-date: 2022-09-16 18:00:00 +0200
+date: 2022-10-28 18:00:00 +0200
 categories: Containers
 comments_id: # CREATE AND ADD ISSUE NO.
 ---
@@ -16,7 +16,7 @@ As you might know I am currently studying for the [Cisco Certified DevNet Expert
 
 ## Intro
 
-In the first part of this blog series I show you how to create Docker images using Dockerfile and then run containers using these images. In my example, I use three containers running as an application. The application will contain the following components: A [NGNIX](https://hub.docker.com/_/nginx){:target="_blank"} load balancer container on the frontend which balances the requests between two similar application containers.
+In the first part of this blog series I show you how to create Docker images using Dockerfile and then run containers using these images. In my example, I use three containers running as an application. The application will contain the following components: A [NGNIX](https://hub.docker.com/_/nginx){:target="_blank"} load balancer container on the frontend which balances the requests between two similar application containers named APP1 and APP2.
 
 ```mermaid
 stateDiagram 
