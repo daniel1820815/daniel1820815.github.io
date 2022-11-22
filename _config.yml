@@ -13,11 +13,15 @@ social:
   name: Daniel Kuhl
   links:
     - https://twitter.com/daniel1820815
+    - https://techhub.social/@daniel1820815
     - https://www.linkedin.com/in/daniel-kuhl-b8b9603b
     - https://github.com/daniel1820815
 twitter:
   username: daniel1820815
   card: summary
+mastodon:
+  - username: daniel1820815
+    instance: techhub.social
 issues_repo: daniel1820815/daniel1820815.github.io
 
 header_pages:
