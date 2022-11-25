@@ -6,7 +6,7 @@ author:
 description: >- # this means to ignore newlines until "baseurl:"
   Currently it is focused on IT Network Automation & Programmability 
   including further evolving in this area, obtaining certifications, 
-  and sharing knowledge. Enjoy reading and leave a feedback!
+  and sharing knowledge. Enjoy reading!
 baseurl: "" # the subpath of your site, e.g. /blog
 url: https://blog.kuhlcloud.de # the base hostname & protocol for your site, e.g. http://example.com
 social:
