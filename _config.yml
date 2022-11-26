@@ -26,6 +26,7 @@ issues_repo: daniel1820815/daniel1820815.github.io
 
 header_pages:
   - about.md
+  - posts.md
   - categories.html
   - privacy.md
 
