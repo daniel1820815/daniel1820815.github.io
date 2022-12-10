@@ -4,24 +4,29 @@ author:
   name: Daniel Kuhl
   email: blog@kuhlcloud.de
 description: >- # this means to ignore newlines until "baseurl:"
-  Currently it is focused on IT Network Automation & Programmability 
+  Currently it is focused on IT Network Programmability & Automation
   including further evolving in this area, obtaining certifications, 
-  and knowledge sharing. Enjoy reading!
+  and sharing knowledge.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: https://blog.kuhlcloud.de # the base hostname & protocol for your site, e.g. http://example.com
 social:
   name: Daniel Kuhl
   links:
     - https://twitter.com/daniel1820815
+    - https://techhub.social/@daniel1820815
     - https://www.linkedin.com/in/daniel-kuhl-b8b9603b
     - https://github.com/daniel1820815
 twitter:
   username: daniel1820815
   card: summary
+mastodon:
+  - username: daniel1820815
+    instance: techhub.social
 issues_repo: daniel1820815/daniel1820815.github.io
 
 header_pages:
   - about.md
+  - posts.md
   - categories.html
   - privacy.md
 
@@ -29,6 +34,7 @@ minima:
   skin: dark
   social_links:
     twitter: daniel1820815
+    mastodon: '@daniel1820815'
     github: daniel1820815
     linkedin: daniel-kuhl-b8b9603b
 

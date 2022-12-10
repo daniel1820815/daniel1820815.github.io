@@ -1,5 +1,5 @@
 <footer class="site-footer h-card">
-  <data class="u-url" href="{{ "/" | relative_url }}"></data>
+  <data class="u-url" href="{{ '/' | relative_url }}"></data>
 
   <div class="wrapper">
 
@@ -39,6 +39,13 @@
           </a>
         </p>
         <p class="social-links">
+          <a rel="me" href="https://techhub.social/{{ site.minima.social_links.mastodon | escape }}" target="_blank">
+            <svg class="svg-icon grey">
+              <use xlink:href="{{ '/assets/minima-social-icons.svg#mastodon' | relative_url }}"></use>
+            </svg><span>{{ site.minima.social_links.mastodon | escape }}</span>
+          </a>
+        </p>
+        <p class="social-links">
           <a href="https://www.linkedin.com/in/{{ site.minima.social_links.linkedin | escape }}" target="_blank">
             <svg class="svg-icon grey">
               <use xlink:href="{{ '/assets/minima-social-icons.svg#linkedin' | relative_url }}"></use>
@@ -48,7 +55,7 @@
       </div>
       <div class="footer-col">
         <a href="https://www.cisco.com/c/en/us/training-events/events-webinars/influencer-hub.html" target="_blank">
-          <img src="/images/champion.png" width="110" height="110" alt="Cisco Champion"/>
+          <img src="/images/cisco-champion-2022.png" width="110" height="110" alt="Cisco Champion"/>
         </a>
       </div>
       <div class="footer-col">
