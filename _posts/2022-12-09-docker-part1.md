@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "DevNet Expert blog series - Docker part 1"
+title: "DevNet Expert series - Docker part 1"
 date: 2022-12-09 18:00:00 +0200
 categories: Containers
 #comments_id: # CREATE AND ADD ISSUE NO.
@@ -16,9 +16,9 @@ ADD MORE INTRO HERE!
 
 - Package and deploy a solution by using Kubernetes
 
-### Part 1: Create a Docker image using Dockerfile
+- Create, consume, and troubleshoot a Docker host and bridge-based networks and integrate them with external networks
 
-#### Intro
+### Part 1: Docker images using Dockerfile
 
 In the first part of this blog series I will show you how to create Docker images using Dockerfile and then run containers using these images. In my example, I use three containers running as an application. The application will contain the following components: A [NGNIX](https://hub.docker.com/_/nginx){:target="_blank"} load balancer container on the frontend which balances the requests between two similar application containers named APP1 and APP2.
 
@@ -34,7 +34,7 @@ The idea for this scenario came originally from the Cisco On Demand E-Learning c
 
 Before we start, let's make sure that Docker is running on my machine. I am using a virtual machine running Ubuntu 20.04.
 
-```sh
+```bash
 developer@devbox:~$ docker version
 Client:
  Version:           20.10.12
@@ -70,7 +70,7 @@ Server:
 
 Docker is already running on my machine. Now let's check if there are any containers running or if there are any images:
 
-```sh
+```bash
 developer@devbox:~$ docker ps -a
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 # no container
@@ -82,7 +82,7 @@ developer@devbox:~$
 
 The `docker ps` command lists containers and with the option `-a` it shows all containers, because by default it shows only running containers. The `docker image` command manages images and with the option `ls` it lists all locally available images. Nothing there so far, we have a green field. Now we quickly try running an official Docker image called [hello-world](https://hub.docker.com/_/hello-world){:target="_blank"} to test the Docker setup. I will explain the official Docker images in a minute.
 
-```sh
+```bash
 developer@devbox:~$ docker run hello-world
 Unable to find image 'hello-world:latest' locally
 latest: Pulling from library/hello-world
@@ -115,7 +115,7 @@ For more examples and ideas, visit:
 
 As you can see from the output the command started a container using the image *hello-world*. Docker could not find it locally and then the steps described above were done. If we list now the containers and images again we will see more than before:
 
-```sh
+```bash
 developer@devbox:~$ docker ps -a
 CONTAINER ID   IMAGE         COMMAND    CREATED          STATUS                      PORTS     NAMES
 824970e1855e   hello-world   "/hello"   22 minutes ago   Exited (0) 3 minutes ago             objective_neumann
@@ -128,11 +128,11 @@ developer@devbox:~$
 
 The container was created but stopped after it streamed the output to my terminal as you can see from the status. The *hello-world* image is now available locally. If you run it again there is no need to download it. Now I will show you how we create your own images from a Dockerfile and create containers running for the scenario described before.
 
-#### Create new Docker image
+#### Create the APP image
 
 First let's create two folders *app* and *lb* to separate the Dockerfiles and container specific files.
 
-```bash
+```none
 developer@devbox:~$ mkdir app lb
 developer@devbox:~$ tree
 .
@@ -156,7 +156,7 @@ RUN venv/bin/pip install flask
 
 EXPOSE 5000/tcp
 
-CMD ["python3", "main.py"]
+CMD ["venv/bin/python3", "main.py"]
 ```
 
 We use the official Docker image *python* from [Docker Hub](https://hub.docker.com){:target="_blank"} in version 3.9 and specify it with the *FROM* statement. Official Docker images are designed for most common use cases. They have clear documentation and use Docker best practices. The *COPY* statement is used to copy local files to a directory on the container. Then we set the working directory with *WORKDIR* for the app. After that the container creates a virtual environment, upgrades *pip*, and  installs the Python library *flask* which is a lightweight web application framework which is used in the *main.py* file. We will look at it in a minute. The app will start the app with the *CMD* statement. Before that the *EXPOSE* statement is used to enable the container listening on the specified port, in our case tcp port 5000. The statements in the Dockerfile are called stages. When we build the Docker image with we will see the different stages.
@@ -185,7 +185,7 @@ if __name__ == '__main__':
 
 With *socket*, a low-level networking interface, we grab the IP address of the application server and *flask* provides the web application to display content including the IP address to verify the load balancing functionality. Now we run the Docker build command using *-t myapp:1.0* option which stands for tag and specifies the image name and optionally a tag in the *name:tag* format.
 
-```bash
+```none
 developer@devbox:~/app$ docker build . -t myapp:1.0
 Sending build context to Docker daemon  3.072kB
 Step 1/8 : FROM python:3.9
@@ -254,7 +254,7 @@ Successfully tagged myapp:1.0
 
  Yeah, we did build a Docker image successfully. As you you can see from the output there were eight stages completed during the image build process according to the Dockerfile. The stages 7 + 8 which are related to the *EXPOSE* and *CMD* statements will be executed during image run. Let's check if the image is there and how it look like.
 
-```bash
+```none
 developer@devbox:~/app$ docker image ls
 REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
 myapp         1.0       952e8a95ab6f   3 minutes ago   953MB
@@ -262,33 +262,132 @@ python        3.9       7d357ce6a803   2 days ago      915MB
 hello-world   latest    feb5d9fea6a5   14 months ago   13.3kB
 ```
 
-With ```docker image inspect myapp``` you could take a look into the details of the image. I did not add the output here to avoid overloading this post with more information.
+With ```docker image inspect myapp``` you could take a look into the details of the image. I did not add the output here to avoid overloading this post with more information. If you would like to make change to your Docker image you need to simply change the Dockerfile and run ```docker build . -t myapp``` again. It will create a new image with the tag *latest*. I did it without any changes and there fore the image id stays the same.
 
-Now let's take a look at the...
+```bash
+developer@devbox:~/app$ docker image ls
+REPOSITORY    TAG       IMAGE ID       CREATED              SIZE
+myapp         1.0       be6d20d775cc   About a minute ago   953MB
+myapp         latest    be6d20d775cc   About a minute ago   953MB
+# output omitted
+```
 
-```sh
+We can start a new Docker container using the myapp image with ```docker run --rm -it -p 5000:5000 myapp``` which will take the latest version of our image. We used the options *--rm* to remove the container after exiting, *-i* for interactive and *-t* to allocate a pseudo-TTY. We also need to make the app available to external for us to test with *-p* which publishes a container's port to the host using *container port:host port* syntax.
+
+```bash
+developer@devbox:~/app$ docker run -it -p 5000:5000 myapp
+ * Serving Flask app 'main'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://172.17.0.2:5000
+Press CTRL+C to quit
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 454-847-600
 
 ```
 
-By default, new Docker containers will be added to the default *bridge* network and will be able to communicate with other containers on that network.
+For now we don't care about networking. By default, new Docker containers will be added to the default *bridge* network and will be able to communicate with other containers on that network. That should be enough to know for now because I will cover Docker networking on the next blog post.
 
-```sh
+Open a web browser and connect to the IP address of the devbox on port 5000 which is in my case <http://192.168.11.51:5000/> and you should get the page:
 
+INSERT IMAGE
+
+Look at the debug output we activated for our app for the successful GET request.
+
+```bash
+# output omitted
+192.168.11.1 - - [10/Dec/2022 15:28:14] "GET / HTTP/1.1" 200 -
+# output omitted
 ```
 
-As you can see from the output there are only the default Docker networks on my machine. The Docker network mode *host* for a container means, that it is not isolated from the Docker host network stack and the container does not get its own IP address allocated. When you create a network without specifying any options, it creates a *bridge* network with non-overlapping subnetwork for the network by default.
+Hit *CTRL+C* to exit the app and the container will be removed. Our APP container image is working. Now let's take a look at the image for the load balancer.
 
-Let's inspect the details of the bridge network.
+#### Create the LB image
 
-```sh
+We change into the *lb* directory and create another Dockerfile with the filename *Dockerfile* for the load balancer image.
 
+```docker
+FROM nginx
+
+COPY nginx.conf /etc/nginx/nginx.conf
+
+EXPOSE 8080
+
+CMD ["nginx", "-g", "daemon off;"]
 ```
 
-As you can see from the output, Docker created a bridge network by default with a local subnet of 172.19.0.0/16 with gateway 172.19.0.1. No other specific settings were made and currently there are no containers attached to the network. For more information about Docker networking please look at the [Docker Networking](https://docs.docker.com/network/){:target="_blank"} documentation. Let's move on and create the Docker images from a Dockerfile.
+```conf
+events {}
+http {
 
-## Run the containers
+  upstream myapp {
+    server 172.17.0.2:5000;
+    server 172.17.0.3:5000;
+  }
 
-## Summary and Outlook
+  server {
+    listen 8080;
+    server_name localhost;
+
+    location / {
+      proxy_pass http://myapp;
+      proxy_set_header Host $host;
+    }
+  }
+
+}
+```
+
+```bash
+developer@devbox:~/lb$ docker build . -t lb
+Sending build context to Docker daemon  3.072kB
+Step 1/4 : FROM nginx
+latest: Pulling from library/nginx
+025c56f98b67: Pull complete
+ca9c7f45d396: Pull complete
+ed6bd111fc08: Pull complete
+e25b13a5f70d: Pull complete
+9bbabac55ab6: Pull complete
+e5c9ba265ded: Pull complete
+Digest: sha256:ab589a3c466e347b1c0573be23356676df90cd7ce2dbf6ec332a5f0a8b5e59db
+Status: Downloaded newer image for nginx:latest
+ ---> ac8efec875ce
+Step 2/4 : COPY nginx.conf /etc/nginx/nginx.conf
+ ---> 87b2c9fa3285
+Step 3/4 : EXPOSE 8080
+ ---> Running in f36fda5062e2
+Removing intermediate container f36fda5062e2
+ ---> d55ea235188e
+Step 4/4 : CMD ["nginx", "-g", "daemon off;"]
+ ---> Running in bb552d7895c2
+Removing intermediate container bb552d7895c2
+ ---> 8776a416d609
+Successfully built 8776a416d609
+Successfully tagged lb:latest
+```
+
+docker run -itd -p 8080:8080 lb
+
+docker ps
+
+```bash
+developer@devbox:~/lb$ docker ps -a
+CONTAINER ID   IMAGE     COMMAND                  CREATED              STATUS              PORTS                                               NAMES
+5ca2a4ed8dcf   lb        "/docker-entrypoint.…"   About a minute ago   Up About a minute   80/tcp, 0.0.0.0:8080->8080/tcp, :::8080->8080/tcp   nostalgic_torvalds
+50dc6ca1ce05   myapp     "venv/bin/python3 ma…"   7 minutes ago        Up 7 minutes        5000/tcp                                            vigilant_wright
+46f85ddcd5cd   myapp     "venv/bin/python3 ma…"   7 minutes ago        Up 7 minutes        5000/tcp                                            gracious_margulis
+```
+
+INSERT SCREENSHOT .2
+
+INSERT SCREENSHOT .3
+
+round robin
+
+Stay tuned for the next blog post about Docker networking and to optimize the setup...
 
 ### Links & References
 
@@ -299,7 +398,6 @@ As you can see from the output, Docker created a bridge network by default with 
 #### Docker
 
 - [Docker Documentation](https://docs.docker.com){:target="_blank"}
-- [Docker Networking Overview](https://docs.docker.com/network/){:target="_blank"}
 - [Docker Hub](https://hub.docker.com){:target="_blank"}
 
 #### Python
