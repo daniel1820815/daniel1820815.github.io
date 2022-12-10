@@ -2,7 +2,7 @@
 layout: post
 title:  "All Hands and Eyes on Network Automation"
 date:   2021-11-29 00:11:00 +0100
-categories: Automation
+categories: Certifications
 ---
 I did not write any blog post after I started this blog on the 1st January this year. Apologies for that! It was a real shame, because I was highly motivated to work on my CCIE studies and share my progress and experiences with the community. But then my priorities and my focus dramatically changed to 100% Network Automation. It was not only because of the customer requirements within a current project, there is also a huge request in the market. And I need to jump on it…
 
