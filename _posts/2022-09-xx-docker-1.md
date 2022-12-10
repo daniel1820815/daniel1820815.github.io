@@ -278,8 +278,6 @@ By default, new Docker containers will be added to the default *bridge* network 
 
 As you can see from the output there are only the default Docker networks on my machine. The Docker network mode *host* for a container means, that it is not isolated from the Docker host network stack and the container does not get its own IP address allocated. When you create a network without specifying any options, it creates a *bridge* network with non-overlapping subnetwork for the network by default.
 
-
-
 Let's inspect the details of the bridge network.
 
 ```sh
@@ -287,7 +285,6 @@ Let's inspect the details of the bridge network.
 ```
 
 As you can see from the output, Docker created a bridge network by default with a local subnet of 172.19.0.0/16 with gateway 172.19.0.1. No other specific settings were made and currently there are no containers attached to the network. For more information about Docker networking please look at the [Docker Networking](https://docs.docker.com/network/){:target="_blank"} documentation. Let's move on and create the Docker images from a Dockerfile.
-
 
 ## Run the containers
 
