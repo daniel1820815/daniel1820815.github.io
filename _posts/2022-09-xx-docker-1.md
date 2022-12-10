@@ -161,7 +161,7 @@ CMD ["python3", "main.py"]
 
 We use the official Docker image *python* from [Docker Hub](https://hub.docker.com){:target="_blank"} in version 3.9 and specify it with the *FROM* statement. Official Docker images are designed for most common use cases. They have clear documentation and use Docker best practices. The *COPY* statement is used to copy local files to a directory on the container. Then we set the working directory with *WORKDIR* for the app. After that the container creates a virtual environment, upgrades *pip*, and  installs the Python library *flask* which is a lightweight web application framework which is used in the *main.py* file. We will look at it in a minute. The app will start the app with the *CMD* statement. Before that the *EXPOSE* statement is used to enable the container listening on the specified port, in our case tcp port 5000. The statements in the Dockerfile are called stages. When we build the Docker image with we will see the different stages.
 
-Let's quickly create the *main.py* file for the application itself in which we use the two Python libraries *flask* and *socket*. With *socket*, a low-level networking interface, we grab the IP address of the application server and flask provides the web application to display the content including the IP address to verify the loadbalancing functionality.
+Let's quickly create the *main.py* file for the application itself in which we use the two Python libraries *flask* and *socket*.
 
 ```python
 from flask import Flask
@@ -182,6 +182,8 @@ def home():
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
 ```
+
+With *socket*, a low-level networking interface, we grab the IP address of the application server and *flask* provides the web application to display content including the IP address to verify the load balancing functionality. Now we run the Docker build command using *-t myapp:1.0* option which stands for tag and specifies the image name and optionally a tag in the *name:tag* format.
 
 ```bash
 developer@devbox:~/app$ docker build . -t myapp:1.0
@@ -250,7 +252,7 @@ Successfully built 952e8a95ab6f
 Successfully tagged myapp:1.0
 ```
 
-We ran the Docker build command with a *-t myapp:1.0* option which stands for tag and specifies the image name and optionally a tag in the *name:tag* format. As you you can see from the output there were eight stages completed The stages 7 + 8 which are related to the *EXPOSE* and *CMD* statements will be executed during image run. Let's check if the image is there and how it look like.
+ Yeah, we did build a Docker image successfully. As you you can see from the output there were eight stages completed during the image build process according to the Dockerfile. The stages 7 + 8 which are related to the *EXPOSE* and *CMD* statements will be executed during image run. Let's check if the image is there and how it look like.
 
 ```bash
 developer@devbox:~/app$ docker image ls
@@ -260,7 +262,9 @@ python        3.9       7d357ce6a803   2 days ago      915MB
 hello-world   latest    feb5d9fea6a5   14 months ago   13.3kB
 ```
 
-With ```docker image inspect myapp``` you could take a look into the details of the image. I did not add the output here to avoid overloading this post with information. Now let's take a look at the 
+With ```docker image inspect myapp``` you could take a look into the details of the image. I did not add the output here to avoid overloading this post with more information.
+
+Now let's take a look at the...
 
 ```sh
 
