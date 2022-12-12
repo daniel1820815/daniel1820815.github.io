@@ -26,7 +26,11 @@ In the first part of this blog series I will show you how to create Docker image
 
 The idea for this scenario came originally from the Cisco On Demand E-Learning course [Developing Applications using Cisco Core Platforms and APIs (DEVCOR) v1.0](https://learningnetworkstore.cisco.com/on-demand-e-learning/developing-applications-using-cisco-core-platforms-and-apis-devcor-v1.0/ELT-DEVCOR-V1-024035.html){:target="_blank"} available on the [Cisco Learning Network Store](https://learningnetworkstore.cisco.com){:target="_blank"}. There was a little more complex scenario used to demonstrate containerized applications using Docker. Additionally it contained a MYSQL database in the backend to store the data which was not a container. I want to keep it simple here and focus on Docker containers. Nevertheless I can highly recommend this course, especially for the labs used to demonstrate the topics.
 
-Before we start, let's make sure that Docker is running on my machine. I am using a virtual machine running Ubuntu 20.04.
+Before we start, let's.
+
+ADD SETUP
+
+make sure that Docker is running on my machine. I am using a virtual machine running Ubuntu 20.04.
 
 ```bash
 developer@devbox:~$ docker version
