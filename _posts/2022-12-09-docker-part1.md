@@ -20,15 +20,9 @@ ADD MORE INTRO HERE!
 
 ### Part 1: Docker images using Dockerfile
 
-In the first part of this blog series I will show you how to create Docker images using Dockerfile and then run containers using these images. In my example, I use three containers running as an application. The application will contain the following components: A [NGNIX](https://hub.docker.com/_/nginx){:target="_blank"} load balancer container on the frontend which balances the requests between two similar application containers named APP1 and APP2.
+In the first part of this blog series I will show you how to create Docker images using Dockerfile and then run containers using these images. In my example, I use three containers running as an application. The application will contain the following components: A [NGNIX](https://hub.docker.com/_/nginx){:target="_blank"} load balancer container on the frontend which balances the requests between two similar application containers.
 
-```mermaid
-stateDiagram 
-    direction LR1
-    [*] --> LOADBALANCER: request
-    LOADBALANCER --> APP_SERVER1
-    LOADBALANCER --> APP_SERVER2
-```
+![Docker app diagram](/images/docker-app-diagram.png "Docker app diagram")
 
 The idea for this scenario came originally from the Cisco On Demand E-Learning course [Developing Applications using Cisco Core Platforms and APIs (DEVCOR) v1.0](https://learningnetworkstore.cisco.com/on-demand-e-learning/developing-applications-using-cisco-core-platforms-and-apis-devcor-v1.0/ELT-DEVCOR-V1-024035.html){:target="_blank"} available on the [Cisco Learning Network Store](https://learningnetworkstore.cisco.com){:target="_blank"}. There was a little more complex scenario used to demonstrate containerized applications using Docker. Additionally it contained a MYSQL database in the backend to store the data which was not a container. I want to keep it simple here and focus on Docker containers. Nevertheless I can highly recommend this course, especially for the labs used to demonstrate the topics.
 
@@ -303,21 +297,23 @@ Look at the debug output we activated for our app for the successful GET request
 # output omitted
 ```
 
-Hit *CTRL+C* to exit the app and the container will be removed. Our APP container image is working. Now let's take a look at the image for the load balancer.
+Hit *CTRL+C* to exit the app, the container will stop, and removed. Our APP container image is working. Now let's take a look at the image for the load balancer.
 
 #### Create the LB image
 
-We change into the *lb* directory and create another Dockerfile with the filename *Dockerfile* for the load balancer image.
+We change into the *lb* directory and create another Dockerfile with the filename *Dockerfile* for the load balancer image. We use the latest *nginx* Docker image which is an open source reverse proxy server, as well as a load balancer, HTTP cache, and a web server.
 
 ```docker
 FROM nginx
 
 COPY nginx.conf /etc/nginx/nginx.conf
 
-EXPOSE 8080
+EXPOSE 8080/tcp
 
 CMD ["nginx", "-g", "daemon off;"]
 ```
+
+We use again the *COPY* statement to copy the configuration file to the image and use the *EXPOSE* statement to let the container listening on tcp port 8080. Last but not least we use the *CMD* statement to start the load balancer using the configuration below.
 
 ```conf
 events {}
@@ -340,6 +336,8 @@ http {
 
 }
 ```
+
+We need to put in the servers between we want to load balance the traffic including the port and some basics settings. For more details about the nginx services please go to the [nginx Documentation](https://nginx.org/en/docs/){:target="_blank"}. We need to create those configuration and save it as *nginx.conf* in the *lb* folder. The we can build our Docker load balancer image with the label *lb* using ```docker build . -t lb```.
 
 ```bash
 developer@devbox:~/lb$ docker build . -t lb
@@ -369,9 +367,26 @@ Successfully built 8776a416d609
 Successfully tagged lb:latest
 ```
 
-docker run -itd -p 8080:8080 lb
+Perfect, we successfully created our load balancer image. As you can see again we have four stages during the Docker image creation. Now our local image library has grown.
 
-docker ps
+```bash
+developer@devbox:~/lb$ docker image ls
+REPOSITORY    TAG       IMAGE ID       CREATED         SIZE
+lb            latest    8776a416d609   2 days ago      142MB
+myapp         1.0       be6d20d775cc   2 days ago      953MB
+myapp         latest    be6d20d775cc   2 days ago      953MB
+python        3.9       7d357ce6a803   4 days ago      915MB
+nginx         latest    ac8efec875ce   6 days ago      142MB
+hello-world   latest    feb5d9fea6a5   14 months ago   13.3kB
+```
+
+Now let's bring all containers up and test the load balancing feature.
+
+### Bring all the containers online
+
+As we don't focus on Docker networking for now, we need to start the application containers from the design first that they get the first and second IP address as we specified in the load balancer configuration file. The command ```docker run -itd myapp``` will start the application container in the background using the additional *-d* statement for detached mode. We need to run this command two times to get two application containers running.
+
+Then we run ```docker run -itd -p 8080:8080 lb``` to create and start the load balancer container also in detached mode and exposed port 8080 to make in available for us. Let's check the running containers with ```docker ps``` and we should have three running containers.
 
 ```bash
 developer@devbox:~/lb$ docker ps -a
@@ -381,19 +396,24 @@ CONTAINER ID   IMAGE     COMMAND                  CREATED              STATUS   
 46f85ddcd5cd   myapp     "venv/bin/python3 ma…"   7 minutes ago        Up 7 minutes        5000/tcp                                            gracious_margulis
 ```
 
-INSERT SCREENSHOT .2
+It looks good, so let's test the connection with a web browser using the IP address of the devbox again but this time on port 8080 for the load balancer looks like <http://192.168.11.51:8080/> in my case. We should get the following result:
 
-INSERT SCREENSHOT .3
+![Docker load balancer connection 1](/images/docker-part1-lb1.png "Docker load balancer connection 1")
 
-round robin
+Now we refresh the web browser and should get a response from the second server as the default behavior of the load balancer is round-robin:
 
-Stay tuned for the next blog post about Docker networking and to optimize the setup...
+![Docker load balancer connection 2](/images/docker-part1-lb2.png "Docker load balancer connection 2")
+
+Great it worked! We build an application with two servers with a load balancer feature in front of it all in Docker containers from our own created images. I hope it was easy to follow and to replicate on your own setup. If you face into any issues with the setup or if you found any errors please let me know and/or leave a comment using the Github issues.
+
+Thank you for reading this blog post and following along until the end. Stay tuned for the next blog post about Docker networking where we will optimize the setup we build today.
 
 ### Links & References
 
 #### NGINX
 
-- [NGINX on Docker Hub](https://hub.docker.com/_/nginx){:target="_blank"}
+- [nginx on Docker Hub](https://hub.docker.com/_/nginx){:target="_blank"}
+- [nginx Documentation](https://nginx.org/en/docs/){:target="_blank"}
 
 #### Docker
 
@@ -402,5 +422,6 @@ Stay tuned for the next blog post about Docker networking and to optimize the se
 
 #### Python
 
+- [python on Docker Hub](https://hub.docker.com/_/python){:target="_blank"}
 - [flask](https://pypi.org/project/Flask/){:target="_blank"}
 - [socket](https://docs.python.org/3/library/socket.html){:target="_blank"}
