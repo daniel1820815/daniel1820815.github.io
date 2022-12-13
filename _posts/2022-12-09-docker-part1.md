@@ -6,17 +6,19 @@ categories: Containers
 #comments_id: # CREATE AND ADD ISSUE NO.
 ---
 
-As you might know I am currently studying for the [Cisco Certified DevNet Expert](https://learningnetwork.cisco.com/s/devnet-expert){:target="_blank"} lab exam.
+As you might know I am currently studying for the [Cisco Certified DevNet Expert](https://learningnetwork.cisco.com/s/devnet-expert){:target="_blank"} lab exam. Therefore I decided to create a series of blog post which shows what I am studying from the exam topics. I will try to explain several topics and create real live examples to demonstrate how it works. It will not cover each topic in full sense but I will try my best to cover a much as possible.
 
-ADD MORE INTRO HERE!
+During this first blog series I will cover section 4.0 from the [exam blueprint](https://learningnetwork.cisco.com/s/devnet-expert-exam-topics-lab){:target="_blank"} which is about Containers using Docker and Kubernetes. I will try to cover the four main bullet points below using a simple example but as I wrote before not in full sense.
 
-- Create a Docker image using Dockerfile
+- 4.1 Create a Docker image using Dockerfile
 
-- Package and deploy a solution by using Docker Compose
+- 4.2 Package and deploy a solution by using Docker Compose
 
-- Package and deploy a solution by using Kubernetes
+- 4.3 Package and deploy a solution by using Kubernetes
 
-- Create, consume, and troubleshoot a Docker host and bridge-based networks and integrate them with external networks
+- 4.4 Create, consume, and troubleshoot a Docker host and bridge-based networks and integrate them with external networks
+
+Hope you are excited about this blog series like I am and you follow my journey towards the Cisco Certified DevNet Expert. Let's start!
 
 ### Part 1: Docker images using Dockerfile
 
@@ -26,7 +28,7 @@ In the first part of this blog series I will show you how to create Docker image
 
 The idea for this scenario came originally from the Cisco On Demand E-Learning course [Developing Applications using Cisco Core Platforms and APIs (DEVCOR) v1.0](https://learningnetworkstore.cisco.com/on-demand-e-learning/developing-applications-using-cisco-core-platforms-and-apis-devcor-v1.0/ELT-DEVCOR-V1-024035.html){:target="_blank"} available on the [Cisco Learning Network Store](https://learningnetworkstore.cisco.com){:target="_blank"}. There was a little more complex scenario used to demonstrate containerized applications using Docker. Additionally it contained a MYSQL database in the backend to store the data which was not a container. I want to keep it simple here and focus on Docker containers. Nevertheless I can highly recommend this course, especially for the labs used to demonstrate the topics.
 
-Before we start, let's.
+Before we start, let me show you the setup I am using during this demonstration. 
 
 ADD SETUP
 
