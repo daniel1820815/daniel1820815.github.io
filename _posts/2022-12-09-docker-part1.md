@@ -3,7 +3,7 @@ layout: post
 title: "DevNet Expert series - Docker part 1"
 date: 2022-12-09 18:00:00 +0200
 categories: Containers
-#comments_id: # CREATE AND ADD ISSUE NO.
+comments_id: 13
 ---
 
 As you might know I am currently studying for the [Cisco Certified DevNet Expert](https://learningnetwork.cisco.com/s/devnet-expert){:target="_blank"} lab exam. Therefore I decided to create a series of blog post which shows what I am studying from the exam topics. I will try to explain several topics and create real live examples to demonstrate how it works. It will not cover each topic in full sense but I will try my best to cover a much as possible.
@@ -28,11 +28,9 @@ In the first part of this blog series I will show you how to create Docker image
 
 The idea for this scenario came originally from the Cisco On Demand E-Learning course [Developing Applications using Cisco Core Platforms and APIs (DEVCOR) v1.0](https://learningnetworkstore.cisco.com/on-demand-e-learning/developing-applications-using-cisco-core-platforms-and-apis-devcor-v1.0/ELT-DEVCOR-V1-024035.html){:target="_blank"} available on the [Cisco Learning Network Store](https://learningnetworkstore.cisco.com){:target="_blank"}. There was a little more complex scenario used to demonstrate containerized applications using Docker. Additionally it contained a MYSQL database in the backend to store the data which was not a container. I want to keep it simple here and focus on Docker containers. Nevertheless I can highly recommend this course, especially for the labs used to demonstrate the topics.
 
-Before we start, let me show you the setup I am using during this demonstration. 
+Before we start, let me quickly explain my setup for this demonstration. I am using a simple lab setup in [Cisco Modeling Labs (CML)](https://developer.cisco.com/modeling-labs/){:target="_blank"} with a Ubuntu 20.04 machine as devbox running Docker and external connectivity. My lab topology file is available [here](https://github.com/daniel1820815/devnet-expert-lab/blob/main/blog/docker/){:target="_blank"} for download and import into CML. You could also use the official Candidate Workstation available for download on the [Cisco Learning Network](https://learningnetwork.cisco.com/s/article/devnet-expert-equipment-and-software-list){:target="_blank"}.
 
-ADD SETUP
-
-make sure that Docker is running on my machine. I am using a virtual machine running Ubuntu 20.04.
+No matter what setup you use, make sure that Docker is running on your machine.
 
 ```bash
 developer@devbox:~$ docker version
@@ -126,7 +124,7 @@ hello-world   latest    feb5d9fea6a5   13 months ago   13.3kB
 developer@devbox:~$
 ```
 
-The container was created but stopped after it streamed the output to my terminal as you can see from the status. The *hello-world* image is now available locally. If you run it again there is no need to download it. Now I will show you how we create your own images from a Dockerfile and create containers running for the scenario described before.
+The container was created but stopped after it streamed the output to my terminal as you can see from the status. The *hello-world* image is now available locally. If you run it again there is no need to download it. Now I will show you how we create our own images from a Dockerfile and create containers running for the scenario described before.
 
 #### Create the APP image
 
@@ -142,7 +140,7 @@ developer@devbox:~$ tree
 2 directories, 0 files
 ```
 
-Then we create a Dockerfile with the filename *Dockerfile* for the application image in the *app* directory. The Dockerfile will later be recognized when we run the ```docker build .``` command later from the app folder to build the image.
+Then we create a Dockerfile with the filename *Dockerfile* for the application image in the *app* directory. The Dockerfile will later be recognized when we run the ```docker build .``` command from the *app* folder to build the image.
 
 ```docker
 FROM python:3.9
@@ -159,7 +157,7 @@ EXPOSE 5000/tcp
 CMD ["venv/bin/python3", "main.py"]
 ```
 
-We use the official Docker image *python* from [Docker Hub](https://hub.docker.com){:target="_blank"} in version 3.9 and specify it with the *FROM* statement. Official Docker images are designed for most common use cases. They have clear documentation and use Docker best practices. The *COPY* statement is used to copy local files to a directory on the container. Then we set the working directory with *WORKDIR* for the app. After that the container creates a virtual environment, upgrades *pip*, and  installs the Python library *flask* which is a lightweight web application framework which is used in the *main.py* file. We will look at it in a minute. The app will start the app with the *CMD* statement. Before that the *EXPOSE* statement is used to enable the container listening on the specified port, in our case tcp port 5000. The statements in the Dockerfile are called stages. When we build the Docker image with we will see the different stages.
+We use the official Docker image *python* from [Docker Hub](https://hub.docker.com){:target="_blank"} in version 3.9 and specify it with the *FROM* statement. Official Docker images are designed for most common use cases. They have clear documentation and use Docker best practices. The *COPY* statement is used to copy local files to a directory on the container. Then we set the working directory with *WORKDIR* for the app. After that the container creates a virtual environment, upgrades *pip*, and  installs the Python library *flask* which is a lightweight web application framework which is used in the *main.py* file. We will look at it in a minute. The app will start with the *CMD* statement. Before that the *EXPOSE* statement is used to enable the container listening on the specified port, in our case tcp port 5000. The statements in the Dockerfile are called stages. When we build the Docker image with we will see the different stages.
 
 Let's quickly create the *main.py* file for the application itself in which we use the two Python libraries *flask* and *socket*.
 
@@ -183,7 +181,7 @@ if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
 ```
 
-With *socket*, a low-level networking interface, we grab the IP address of the application server and *flask* provides the web application to display content including the IP address to verify the load balancing functionality. Now we run the Docker build command using *-t myapp:1.0* option which stands for tag and specifies the image name and optionally a tag in the *name:tag* format.
+With *socket*, a low-level networking interface, we grab the IP address of the application server and *flask* provides the web application to display content including the IP address to verify the load balancing functionality. Now we run ```docker build . -t myapp:1.0``` command where *-t myapp:1.0* option stands for tag and specifies the image name and optionally a tag in the *name:tag* format.
 
 ```none
 developer@devbox:~/app$ docker build . -t myapp:1.0
@@ -252,7 +250,7 @@ Successfully built 952e8a95ab6f
 Successfully tagged myapp:1.0
 ```
 
- Yeah, we did build a Docker image successfully. As you you can see from the output there were eight stages completed during the image build process according to the Dockerfile. The stages 7 + 8 which are related to the *EXPOSE* and *CMD* statements will be executed during image run. Let's check if the image is there and how it look like.
+Yeah, we did successfully build a Docker image. As you you can see from the output there were eight stages completed during the image build process according to the Dockerfile. The stages 7 + 8 which are related to the *EXPOSE* and *CMD* statements will be executed during image run. Let's check if the image is there and how it look like.
 
 ```none
 developer@devbox:~/app$ docker image ls
@@ -262,7 +260,7 @@ python        3.9       7d357ce6a803   2 days ago      915MB
 hello-world   latest    feb5d9fea6a5   14 months ago   13.3kB
 ```
 
-With ```docker image inspect myapp``` you could take a look into the details of the image. I did not add the output here to avoid overloading this post with more information. If you would like to make change to your Docker image you need to simply change the Dockerfile and run ```docker build . -t myapp``` again. It will create a new image with the tag *latest*. I did it without any changes and there fore the image id stays the same.
+With ```docker image inspect myapp``` you could take a look into the details of the image. I did not add the output here to avoid overloading this post with more information. If you would like to make a change to your Docker image you need to simply change the Dockerfile and run ```docker build . -t myapp``` again. It will create a new image with the tag *latest*. I did it without any changes and therefore the image id stays the same.
 
 ```bash
 developer@devbox:~/app$ docker image ls
@@ -286,16 +284,15 @@ Press CTRL+C to quit
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 454-847-600
-
 ```
 
 For now we don't care about networking. By default, new Docker containers will be added to the default *bridge* network and will be able to communicate with other containers on that network. That should be enough to know for now because I will cover Docker networking on the next blog post.
 
 Open a web browser and connect to the IP address of the devbox on port 5000 which is in my case <http://192.168.11.51:5000/> and you should get the page:
 
-INSERT IMAGE
+![Docker flask app](/images/docker-part1-flask.png "Docker flask app]")
 
-Look at the debug output we activated for our app for the successful GET request.
+Take a look at the debug output from the flask app and see the successful GET request.
 
 ```bash
 # output omitted
@@ -388,7 +385,7 @@ hello-world   latest    feb5d9fea6a5   14 months ago   13.3kB
 
 Now let's bring all containers up and test the load balancing feature.
 
-### Bring all the containers online
+### Bring all containers up
 
 As we don't focus on Docker networking for now, we need to start the application containers from the design first that they get the first and second IP address as we specified in the load balancer configuration file. The command ```docker run -itd myapp``` will start the application container in the background using the additional *-d* statement for detached mode. We need to run this command two times to get two application containers running.
 
@@ -410,11 +407,22 @@ Now we refresh the web browser and should get a response from the second server 
 
 ![Docker load balancer connection 2](/images/docker-part1-lb2.png "Docker load balancer connection 2")
 
-Great it worked! We build an application with two servers with a load balancer feature in front of it all in Docker containers from our own created images. I hope it was easy to follow and to replicate on your own setup. If you face into any issues with the setup or if you found any errors please let me know and/or leave a comment using the Github issues.
+Great it worked! We build a simple application framework with two servers and a load balancer in front of it all in Docker containers from our own created images. I hope it was easy to follow and to replicate on your own setup. If you face into any issues with the setup or if you found any errors please let me know and/or leave a comment using the Github issues.
 
-Thank you for reading this blog post and following along until the end. Stay tuned for the next blog post about Docker networking where we will optimize the setup we build today.
+Thank you for reading this blog post and following along until the end. Stay tuned for the next blog post about Docker where we will optimize the setup we build today using Docker networking.
 
 ### Links & References
+
+#### Cisco Modeling Labs
+
+- [Cisco Modeling Labs (CML)](https://developer.cisco.com/modeling-labs/){:target="_blank"}
+- [CML Documentation](https://developer.cisco.com/docs/modeling-labs/){:target="_blank"}
+
+#### Cisco Learning Network
+
+- [Cisco Certified DevNet Expert Certification and Training](https://learningnetwork.cisco.com/s/devnet-expert){:target="_blank"}
+- [DevNet Certifications Community](https://learningnetwork.cisco.com/s/topic/0TO3i0000008jY5GAI/devnet-certifications-community){:target="_blank"}
+- [Cisco Certified DevNet Expert (v1.0) Equipment and Software List](https://learningnetwork.cisco.com/s/article/devnet-expert-equipment-and-software-list){:target="_blank"}
 
 #### NGINX
 
