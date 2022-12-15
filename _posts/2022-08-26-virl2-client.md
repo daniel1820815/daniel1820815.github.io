@@ -2,7 +2,7 @@
 layout: post
 title: "Python vril2_client for Cisco Modeling Labs"
 date: 2022-08-26 13:00:00 +0200
-categories: Automation
+categories: Python
 comments_id: 9
 ---
 
