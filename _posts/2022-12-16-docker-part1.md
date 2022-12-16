@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "DevNet Expert series - Docker part 1"
-date: 2022-12-16 16:00:00 +0200
+date: 2022-12-16 12:00:00 +0200
 categories: Containers
 comments_id: 13
 ---
