@@ -13,16 +13,16 @@ stateDiagram
     net2 --> APP_SERVER2
     
     state LOADBALANCER {
-        VIP: VIP 172.18.0.100
+        VIP: Frontend VIP 172.18.0.100
         APP: Backend IP 172.19.0.100
         VIP --> APP
     }
     state APP_SERVER1 {
-        APP1: APP IP 172.19.0.101
-        APP1 --> [*]
+        APP1: IP 172.19.0.101
+        APP1
     }
     state APP_SERVER2 {
-        APP2: APP IP 172.19.0.102
-        APP2 --> [*]
+        APP2: IP 172.19.0.102
+        APP2
     }
 ```
