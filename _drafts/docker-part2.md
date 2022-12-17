@@ -6,13 +6,17 @@ categories: Containers
 #comments_id: # CREATE AND ADD ISSUE NO.
 ---
 
-Intro and recap from first post
+This is part 2 of the DevNet Expert series about Containers using Docker and Kubernetes. It continues where we are at the end from the first part [DevNet Expert series - Docker part 1](https://blog.kuhlcloud.de/containers/2022/12/16/docker-part1.html){:target="_blank"}". If you do not like to go through the first part you can find the source files on the Github repository, clone it, and start through with the second part.
 
-Not a good idea to put all the Docker containers into the default network...
+During the first part we focused on section 4.1 from the [exam blueprint](https://learningnetwork.cisco.com/s/devnet-expert-exam-topics-lab){:target="_blank"} which is about creating a Docker image using Dockerfile. We ignored Docker networking to keep it simple, but maybe it was not a good idea to put all Docker containers into the same network and also using the default network. We will take a closer look at Docker networking now according to section 4.2. which is called "Create, consume, and troubleshoot a Docker host and bridge-based networks and integrate them with external networks". Sounds interesting, right?
+
+Hope you are also excited about this second part of the Containers series like I am and you follow my journey towards the Cisco Certified DevNet Expert. Let's start!
 
 #### Part 2: Docker networks
 
-In the second part of this
+In the second part of this blog series I will show you how to expand our application framework example using the benefits of Docker networking.
+
+
 
 Show frontend and backend networks
 
