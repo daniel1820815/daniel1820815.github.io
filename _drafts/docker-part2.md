@@ -1,19 +1,28 @@
 ---
 layout: post
 title: "DevNet Expert series - Docker part 2"
-date: 2022-12-09 18:00:00 +0200
+date: 2022-12-30 12:00:00 +0200
 categories: Containers
 #comments_id: # CREATE AND ADD ISSUE NO.
 ---
+
+Intro and recap from first post
 
 Not a good idea to put all the Docker containers into the default network...
 
 #### Part 2: Docker networks
 
-Create frontend and backend networks
+In the second part of this
 
-frontend with external connectivity
-backend without external connectivity
+Show frontend and backend networks
+
+![Docker app networking diagram](/images/docker-app-networking-diagram.png "Docker app networking diagram")
+
+create backend network without external connectivity and assign fixed IP addresses to APPs and LB
+
+show external connectivity is not working
+
+create frontend network with external connectivity and assign IP address to LB
 
 LB connected to both networks
 APP connected to backend only
