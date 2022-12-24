@@ -1,12 +1,13 @@
 ---
 layout: post
 title: "DevNet Expert series - Docker part 2"
+#date: 2022-12-27 12:00:00 +0200
 date: 2022-12-17 12:00:00 +0200
 categories: Containers
 #comments_id: # CREATE AND ADD ISSUE NO.
 ---
 
-This is part 2 of the DevNet Expert series about Containers using Docker and Kubernetes. It continues where we are at the end from the first part [DevNet Expert series - Docker part 1](https://blog.kuhlcloud.de/containers/2022/12/16/docker-part1.html){:target="_blank"}". If you do not like to go through the first part you can find the source files on the Github repository, clone it, and start through with the second part.
+This is part two of the DevNet Expert series about Containers using Docker and Kubernetes. It continues where we are at the end from the first part [DevNet Expert series - Docker part 1](https://blog.kuhlcloud.de/containers/2022/12/16/docker-part1.html){:target="_blank"}. If you do not like to go through the first part you can find the source files on the [Github repository](https://github.com/daniel1820815/devnet-expert-lab/tree/main/blog/docker){:target="_blank"}. You can simply clone it and start through with the second part.
 
 During the first part we focused on section 4.1 from the [exam blueprint](https://learningnetwork.cisco.com/s/devnet-expert-exam-topics-lab){:target="_blank"} which is about creating a Docker image using Dockerfile. We ignored Docker networking to keep it simple, but maybe it was not a good idea to put all Docker containers into the same network and also using the default network. We will take a closer look at Docker networking now according to section 4.2. which is called "Create, consume, and troubleshoot a Docker host and bridge-based networks and integrate them with external networks". Sounds interesting, right? I will show you how to expand our application framework example using the benefits of Docker networking.
 
@@ -20,17 +21,21 @@ We will slightly change our design and create a frontend and a backend network i
 
 [<img src="/images/docker-app-networking-diagram.png" width="500"/>](/images/docker-app-networking-diagram.png)
 
-As you can see from the diagram we will also take advantage of assigning IP addresses to our containers from the new networks to get a fixed IP setup. This will make the setup a little bit easier to handle because we do not need to start the containers in order to make sure they get a specific IP address as we did before in part 1.
+As you can see from the diagram we will also take advantage of assigning IP addresses to our containers from the new networks to get a fixed IP setup. This will make the setup a little bit easier to handle because we do not need to start the containers in order to make sure they get a specific IP address as we did before in part one.
 
 To begin with we take a look at the Docker networks we have out of the box.
 
 ```docker network ls```
 
 ```bash
-
+developer@devbox:~$ docker network ls
+NETWORK ID     NAME      DRIVER    SCOPE
+6ba106d77aaa   bridge    bridge    local
+0d30fa1bbb5e   host      host      local
+91482370b08a   none      null      local
 ```
 
-As you can see from the output there are only the default Docker networks on my machine. The Docker network mode *host* for a container means, that it is not isolated from the Docker host network stack and the container does not get its own IP address allocated. When you create a network without specifying any options, it creates a *bridge* network with non-overlapping subnetwork for the network by default.
+As you can see from the output there are only the default Docker networks on my machine. The Docker network mode *host* for a container means, that it is not isolated from the Docker host network stack and the container does not get its own IP address allocated. The *none* network has all networking disabled. When you create a network without specifying any options, it creates a *bridge* network with non-overlapping subnetwork for the network by default.
 
 docker inspect
 
@@ -51,6 +56,9 @@ create frontend network with external connectivity and assign IP address to LB
 LB connected to both networks
 APP connected to backend only
 
+#### Bring all containers up again
+
+start
 
 ### Links & References
 
