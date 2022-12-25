@@ -23,9 +23,7 @@ We will slightly change our design and create a frontend and a backend network i
 
 As you can see from the diagram we will also take advantage of assigning IP addresses to our containers from the new networks to get a fixed IP setup. This will make the setup a little bit easier to handle because we do not need to start the containers in order to make sure they get a specific IP address as we did before in part one.
 
-To begin with we take a look at the Docker networks we have out of the box.
-
-```docker network ls```
+To begin with we take a look at the Docker networks we have out of the box using the ```docker network ls``` command.
 
 ```bash
 developer@devbox:~$ docker network ls
@@ -35,28 +33,162 @@ NETWORK ID     NAME      DRIVER    SCOPE
 91482370b08a   none      null      local
 ```
 
-As you can see from the output there are only the default Docker networks on my machine. The Docker network mode *host* for a container means, that it is not isolated from the Docker host network stack and the container does not get its own IP address allocated. The *none* network has all networking disabled. When you create a network without specifying any options, it creates a *bridge* network with non-overlapping subnetwork for the network by default.
+As you can see from the output there are only the default Docker networks on my machine. The Docker network mode *host* for a container means, that it is not isolated from the Docker host network stack and the container does not get its own IP address allocated. The *none* network has all networking disabled. When you create a network without specifying any options, it creates a *bridge* network with non-overlapping subnetwork by default. Bridge networks are usually used for applications running in standalone containers that need to communicate.
 
-docker inspect
+Let's take a closer look at the default bridge network *bridge* using ```docker network inspect <network name or id>``` command.
 
-```sh
-
+```bash
+developer@devbox:~$ docker network inspect bridge
+[
+    {
+        "Name": "bridge",
+        "Id": "6ba106d77aaa988cf9f1f7a776d859057e87c97de23e0d5b8c35009982a80dd1",
+        "Created": "2022-12-10T11:58:16.95713737Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.17.0.0/16",
+                    "Gateway": "172.17.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {},
+        "Options": {
+            "com.docker.network.bridge.default_bridge": "true",
+            "com.docker.network.bridge.enable_icc": "true",
+            "com.docker.network.bridge.enable_ip_masquerade": "true",
+            "com.docker.network.bridge.host_binding_ipv4": "0.0.0.0",
+            "com.docker.network.bridge.name": "docker0",
+            "com.docker.network.driver.mtu": "1500"
+        },
+        "Labels": {}
+    }
+]
 ```
 
-As you can see from the output, Docker created a bridge network by default with a local subnet of 172.19.0.0/16 with gateway 172.19.0.1. No other specific settings were made and currently there are no containers attached to the network. For more information about Docker networking please look at the [Docker Networking](https://docs.docker.com/network/){:target="_blank"} documentation. Let's move on and create the Docker images from a Dockerfile.
+As you can see from the output, the Docker bridge network by default with a local subnet of 172.17.0.0/16 with gateway 172.17.0.1. *com.docker.network.bridge.enable_ip_masquerade* *com.docker.network.bridge.enable_icc*
 
-#### Create new networks
+Differences between default bridge and user-defined bridge
 
-create backend network without external connectivity and assign fixed IP addresses to APPs and LB
+For more information about Docker networking please look at the [Docker Networking](https://docs.docker.com/network/){:target="_blank"} documentation. Let's move on and create our own Docker networks.
 
-show external connectivity is not working
+#### Create new bridge networks
 
-create frontend network with external connectivity and assign IP address to LB
+create backend network without external connectivity
+
+```bash
+docker network create -d bridge \
+--subnet=172.21.0.0/16 \
+--gateway=172.21.0.1 \
+-o "com.docker.network.bridge.enable_ip_masquerade"="false" \
+-o "com.docker.network.bridge.enable_icc"="true" \
+backend-net
+```
+
+Test with apline:
+
+docker run -itd --rm --network=backend-net --ip=172.21.0.10 --name test1 alpine
+docker run -it --rm --network=backend-net --ip=172.21.0.11 --name test2 alpine
+
+```bash
+/ # ping 172.21.0.1
+PING 172.21.0.1 (172.21.0.1): 56 data bytes
+64 bytes from 172.21.0.1: seq=0 ttl=64 time=0.230 ms
+64 bytes from 172.21.0.1: seq=1 ttl=64 time=0.171 ms
+64 bytes from 172.21.0.1: seq=2 ttl=64 time=0.095 ms
+64 bytes from 172.21.0.1: seq=3 ttl=64 time=0.096 ms
+^C
+--- 172.21.0.1 ping statistics ---
+4 packets transmitted, 4 packets received, 0% packet loss
+round-trip min/avg/max = 0.095/0.148/0.230 ms
+/ # ping 172.21.0.10
+PING 172.21.0.10 (172.21.0.10): 56 data bytes
+64 bytes from 172.21.0.10: seq=0 ttl=64 time=0.314 ms
+64 bytes from 172.21.0.10: seq=1 ttl=64 time=0.112 ms
+64 bytes from 172.21.0.10: seq=2 ttl=64 time=0.110 ms
+64 bytes from 172.21.0.10: seq=3 ttl=64 time=0.111 ms
+^C
+--- 172.21.0.10 ping statistics ---
+4 packets transmitted, 4 packets received, 0% packet loss
+round-trip min/avg/max = 0.110/0.161/0.314 ms
+/ # ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8): 56 data bytes
+^C
+--- 8.8.8.8 ping statistics ---
+5 packets transmitted, 0 packets received, 100% packet loss
+```
+
+From the output...
+
+docker kill test*
+
+create frontend network with external connectivity but without inter container connectivity
+
+```bash
+docker network rm fronend-net
+docker network create -d bridge \
+--subnet=172.20.0.0/16 \
+--gateway=172.20.0.1 \
+-o "com.docker.network.bridge.enable_ip_masquerade"="true" \
+-o "com.docker.network.bridge.enable_icc"="false" \
+frontend-net
+```
+
+docker run -itd --rm --network=frontend-net --ip=172.20.0.10 --name test1 alpine
+docker run -it --rm --network=frontend-net --ip=172.20.0.11 --name test2 alpine
+
+```bash
+/ # ping 172.20.0.1
+PING 172.20.0.1 (172.20.0.1): 56 data bytes
+64 bytes from 172.20.0.1: seq=0 ttl=64 time=0.227 ms
+64 bytes from 172.20.0.1: seq=1 ttl=64 time=0.114 ms
+64 bytes from 172.20.0.1: seq=2 ttl=64 time=0.116 ms
+64 bytes from 172.20.0.1: seq=3 ttl=64 time=0.099 ms
+^C
+--- 172.20.0.1 ping statistics ---
+4 packets transmitted, 4 packets received, 0% packet loss
+round-trip min/avg/max = 0.099/0.139/0.227 ms
+/ # ping 172.20.0.10
+PING 172.20.0.10 (172.20.0.10): 56 data bytes
+^C
+--- 172.20.0.10 ping statistics ---
+4 packets transmitted, 0 packets received, 100% packet loss
+/ # ping 8.8.8.8
+PING 8.8.8.8 (8.8.8.8): 56 data bytes
+64 bytes from 8.8.8.8: seq=0 ttl=118 time=15.636 ms
+64 bytes from 8.8.8.8: seq=1 ttl=118 time=15.050 ms
+64 bytes from 8.8.8.8: seq=2 ttl=118 time=14.739 ms
+64 bytes from 8.8.8.8: seq=3 ttl=118 time=14.807 ms
+^C
+--- 8.8.8.8 ping statistics ---
+4 packets transmitted, 4 packets received, 0% packet loss
+round-trip min/avg/max = 14.739/15.058/15.636 ms
+```
+
+From the output
 
 LB connected to both networks
 APP connected to backend only
 
 #### Bring all containers up again
+
+assign fixed IP addresses to APPs
+
+show external connectivity is not working
+
+docker run -itd --network=backend-net --ip=172.21.0.101 myapp
 
 start
 
