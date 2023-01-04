@@ -480,7 +480,7 @@ Great everything worked, hopefully also for you if you followed along. After cre
 
 I hope it was again easy to follow and to replicate on your own setup. If you face into any issues with the setup or if you found any errors please let me know and/or leave a comment using the Github issues.
 
-Thank you for reading this blog post and following along until the end. Stay tuned for the next blog post about Docker where we will further optimize the setup we build today using Docker compose.
+Thank you for reading this blog post and following along until the end. Stay tuned for the next blog post about Docker where we will further optimize the setup we build today using Docker Compose.
 
 ### Links & References
 
