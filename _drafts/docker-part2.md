@@ -17,11 +17,11 @@ Hope you are also excited about this second part of the Containers series like I
 
 ### Part 2: Docker networking
 
-We will slightly change our design and create a frontend and a backend network in Docker to separate the containers. It is meaningful to keep different parts of functions isolate from each other and also control external connectivity of the containers. In our case the frontend network needs to have external connectivity as we have it in the default network, but the backend network does not necessarily need to. The load balancer will be connected to both networks to serve the incoming requests and have connectivity to the application servers on the backend. The application servers will only have the backend network connected.
+We will slightly change our design and create a frontend and a backend network in Docker to separate the containers. It is meaningful to keep different parts of functions isolated from each other and also control external connectivity of the containers. In our case the frontend network needs to have external connectivity as we had it in the default network before, but the backend network does not necessarily need to. The load balancer will be connected to both networks to serve the incoming requests and have connectivity to the application servers on the backend. The application servers will only have the backend network connected.
 
 [<img src="/images/docker-app-networking-diagram.png" width="500"/>](/images/docker-app-networking-diagram.png)
 
-As you can see from the diagram we will also take advantage of assigning IP addresses to our containers from the new networks to get a fixed IP setup. This will make the setup a little bit easier to handle because we do not need to start the containers in order to make sure they get a specific IP address as we did before in part one.
+As you can see from the diagram we will also take advantage of assigning IP addresses to our containers from the new networks to get a fixed IP setup. This will make the whole setup a little bit easier to manage because we do not need to start the containers in any specific order to make sure they get a specific IP address as we did before in part one.
 
 To begin with we take a look at the Docker networks we have out of the box using the ```docker network ls``` command.
 
@@ -35,7 +35,7 @@ NETWORK ID     NAME      DRIVER    SCOPE
 
 As you can see from the output there are only the default Docker networks on my machine. The Docker network mode *host* for a container means, that it is not isolated from the Docker host network stack and the container does not get its own IP address allocated. The *none* network has all networking disabled. When you create a network without specifying any options, it creates a *bridge* network with non-overlapping subnetwork by default. Bridge networks are usually used for applications running in standalone containers that need to communicate.
 
-Let's take a closer look at the default bridge network *bridge* using ```docker network inspect <network name or id>``` command.
+Let's take a closer look at the default bridge network *bridge* using ```docker network inspect bridge``` command. You can either use the network name or the network id to inspect the network.
 
 ```bash
 developer@devbox:~$ docker network inspect bridge
@@ -78,15 +78,27 @@ developer@devbox:~$ docker network inspect bridge
 ]
 ```
 
-As you can see from the output, the Docker bridge network by default with a local subnet of 172.17.0.0/16 with gateway 172.17.0.1. *com.docker.network.bridge.enable_ip_masquerade* *com.docker.network.bridge.enable_icc*
+As you can see from the output the Docker default bridge network has a local subnet of 172.17.0.0/16 with gateway 172.17.0.1. Let's focus on two other important settings for us. To provide external connectivity from the Docker containers attached to the bridge network the option *com.docker.network.bridge.enable_ip_masquerade* needs to be set to *true*. This option enables IP masquerading which is another wording for NAT (Network Address Translation). Then we have the option *com.docker.network.bridge.enable_icc* which enables inter container connectivity. That means containers attached to the same network are able to communicate with each other. We will see the differences in a minute in practice.
 
-Differences between default bridge and user-defined bridge
+At this point I want to highlight some (but not all) differences between the Docker default bridge and user-defined bridges:
 
-For more information about Docker networking please look at the [Docker Networking](https://docs.docker.com/network/){:target="_blank"} documentation. Let's move on and create our own Docker networks.
+- **User-defined bridges provide provide better isolation**
+
+    This is one of the key differences why we create user-defined networks in our example because we want to isolate the frontend and backend. By default all containers are attached to the default bridge unless specifying another network using the ```--network``` option.
+
+- **Containers can be attached and detached from user-defined networks on the fly**
+
+    By default you can't remove a container from the default bridge without stopping it while you can connect or disconnect it from user-defined networks. This adds more flexibility to the container management.
+
+- **User-defined bridges provide automatic DNS resolution between containers**
+
+    The last difference I want to highlight is the automatic DNS resolution between containers which allows us to use the names of the containers instead of IP addresses to communicate with them.
+
+For more information about [Docker Networking](https://docs.docker.com/network/){:target="_blank"} and especially the [Differences between user-defined bridges and the default bridge](https://docs.docker.com/network/bridge/#differences-between-user-defined-bridges-and-the-default-bridge){:target="_blank"} please look at the documentation links. Let's move on and create our own Docker bridge networks.
 
 #### Create new bridge networks
 
-create backend network without external connectivity
+First we create the backend network named *backend-net* without external connectivity. We use the ```docker network create -d bridge``` command to create our new bridge network. We specify a subnet 172.21.0.0/16 and a gateway 172.21.0.1 using the corresponding ```--subnet``` and ```--gateway``` command options. In our example we want our backend application containers to not have connectivity to any external destinations therefore we will disable the IP masquerade option we talked about earlier. As we need connectivity between the containers on the backend, in our case between the load balancer and the app containers, we will enable the inter container connectivity.
 
 ```bash
 docker network create -d bridge \
@@ -97,13 +109,13 @@ docker network create -d bridge \
 backend-net
 ```
 
-Test with apline:
+Test with alpine:
 
 docker run -itd --rm --network=backend-net --ip=172.21.0.10 --name test1 alpine
 docker run -it --rm --network=backend-net --ip=172.21.0.11 --name test2 alpine
 
 ```bash
-/ # ping 172.21.0.1
+# ping 172.21.0.1
 PING 172.21.0.1 (172.21.0.1): 56 data bytes
 64 bytes from 172.21.0.1: seq=0 ttl=64 time=0.230 ms
 64 bytes from 172.21.0.1: seq=1 ttl=64 time=0.171 ms
@@ -113,7 +125,8 @@ PING 172.21.0.1 (172.21.0.1): 56 data bytes
 --- 172.21.0.1 ping statistics ---
 4 packets transmitted, 4 packets received, 0% packet loss
 round-trip min/avg/max = 0.095/0.148/0.230 ms
-/ # ping 172.21.0.10
+
+# ping 172.21.0.10
 PING 172.21.0.10 (172.21.0.10): 56 data bytes
 64 bytes from 172.21.0.10: seq=0 ttl=64 time=0.314 ms
 64 bytes from 172.21.0.10: seq=1 ttl=64 time=0.112 ms
@@ -123,7 +136,8 @@ PING 172.21.0.10 (172.21.0.10): 56 data bytes
 --- 172.21.0.10 ping statistics ---
 4 packets transmitted, 4 packets received, 0% packet loss
 round-trip min/avg/max = 0.110/0.161/0.314 ms
-/ # ping 8.8.8.8
+
+# ping 8.8.8.8
 PING 8.8.8.8 (8.8.8.8): 56 data bytes
 ^C
 --- 8.8.8.8 ping statistics ---
@@ -150,7 +164,7 @@ docker run -itd --rm --network=frontend-net --ip=172.20.0.10 --name test1 alpine
 docker run -it --rm --network=frontend-net --ip=172.20.0.11 --name test2 alpine
 
 ```bash
-/ # ping 172.20.0.1
+# ping 172.20.0.1
 PING 172.20.0.1 (172.20.0.1): 56 data bytes
 64 bytes from 172.20.0.1: seq=0 ttl=64 time=0.227 ms
 64 bytes from 172.20.0.1: seq=1 ttl=64 time=0.114 ms
@@ -160,12 +174,14 @@ PING 172.20.0.1 (172.20.0.1): 56 data bytes
 --- 172.20.0.1 ping statistics ---
 4 packets transmitted, 4 packets received, 0% packet loss
 round-trip min/avg/max = 0.099/0.139/0.227 ms
-/ # ping 172.20.0.10
+
+# ping 172.20.0.10
 PING 172.20.0.10 (172.20.0.10): 56 data bytes
 ^C
 --- 172.20.0.10 ping statistics ---
 4 packets transmitted, 0 packets received, 100% packet loss
-/ # ping 8.8.8.8
+
+# ping 8.8.8.8
 PING 8.8.8.8 (8.8.8.8): 56 data bytes
 64 bytes from 8.8.8.8: seq=0 ttl=118 time=15.636 ms
 64 bytes from 8.8.8.8: seq=1 ttl=118 time=15.050 ms
