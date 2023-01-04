@@ -216,7 +216,9 @@ We create two containers named *test1* and *test2*. For *test1* we assign an IP 
 
 ```bash
 # Run test1 container
-developer@devbox:~$ docker run -itd --rm --network=backend-net --ip=172.21.0.10 --name test1 alpine
+developer@devbox:~$ docker run -itd --rm \
+> --network=backend-net --ip=172.21.0.10 \
+> --name test1 alpine
 60bf5bb2752fab6b8849e55c63bc2d0cdc19d00ff18fc095aad251395f88aa5b
 # Run test2 container
 developer@devbox:~$ docker run -it --rm --network=backend-net --ip=172.21.0.11 --name test2 alpine
@@ -260,7 +262,9 @@ As you can see from the output the backend bridge network works as expected. The
 
 ```bash
 # Run test1 container
-developer@devbox:~$ docker run -itd --rm --network=frontend-net --ip=172.20.0.10 --name test1 alpine
+developer@devbox:~$ docker run -itd --rm \
+> --network=frontend-net --ip=172.20.0.10 \
+> --name test1 alpine
 727d3bc5e0b45a49fbcd743cb18065d4c51c31f627d31719230eaeddae4391e6
 # Run test2 container
 developer@devbox:~$ docker run -it --rm --network=frontend-net --ip=172.20.0.11 --name test2 alpine
@@ -299,19 +303,184 @@ CONTAINER ID   IMAGE     COMMAND     CREATED          STATUS          PORTS     
 developer@devbox:~$ docker stop 727d3bc5e0b4
 ```
 
-From the output we can see that the frontend bridge network also works as expected. The gateway and Google DNS are reachable but the inter container connectivity is not working no matter the automatic DNS resolution worked.
+From the output we can see that the frontend bridge network also works as expected. The gateway and Google DNS server are reachable but the inter container connectivity is not working no matter the automatic DNS resolution worked.
 
 Now everything is prepared to bring up all containers from our example while attaching them to our user-defined bridge networks we created.
 
 #### Bring all containers up again
 
-assign fixed IP addresses to APPs
+Let's run both application containers named *myapp1* and *myapp2* first and connect them to the backend bridge network *backend-net* using the ```--network``` together with the ```--ip```option to assign a specific IP address from that network.
 
-show external connectivity is not working
+```bash
+docker run -itd \
+--network=backend-net --ip=172.21.0.101 \
+--name myapp1 myapp
+```
 
-docker run -itd --network=backend-net --ip=172.21.0.101 myapp
+```bash
+docker run -itd \
+--network=backend-net --ip=172.21.0.102 \
+--name myapp2 myapp
+```
 
-start
+```bash
+developer@devbox:~$ docker ps
+CONTAINER ID   IMAGE     COMMAND             CREATED          STATUS          PORTS      NAMES
+d4aa6d87fe5d   myapp     "python3 main.py"   27 seconds ago   Up 24 seconds   5000/tcp   myapp2
+902c09b50e38   myapp     "python3 main.py"   34 seconds ago   Up 32 seconds   5000/tcp   myapp1
+```
+
+Both application containers are up and running. We can quickly use the ```docker inspect```command to check if the network settings were applied as expected. For better visibility I removed most of the output as it gives a lot of data back.
+
+```bash
+developer@devbox:~$ docker inspect myapp1
+<output omitted>
+"Networks": {
+    "backend-net": {
+        "IPAMConfig": {
+            "IPv4Address": "172.21.0.101"
+        },
+        "Links": null,
+        "Aliases": [
+            "902c09b50e38"
+        ],
+        "NetworkID": "234c7a469fb689636906866b7a30855dad4c1a239627c7613e4f3241d692ebcd",
+        "EndpointID": "1ad831f2b470bb1250c94393ff6f19d26021aa4248eae921a54a17cda1a2e66e",
+        "Gateway": "172.21.0.1",
+        "IPAddress": "172.21.0.101",
+<output omitted>
+```
+
+So far so good with the application containers. Before we start the load balancer container we need to adjust the *nginx.conf* file and update the image as we use other IP addresses than in part one. You can simply edit the existing files or make a copy of the files and edit the copy. I have created a new folder in the repository I used for this blog posts which you can find [here](https://github.com/daniel1820815/devnet-expert-lab/tree/main/blog/docker){:target="_blank"}. Switch to the *lb* directory, open the *nginx.conf* file, and update the IP addresses according the network diagram.
+
+```conf
+events {}
+http {
+
+  upstream myapp {
+    server 172.21.0.101:5000;
+    server 172.21.0.102:5000;
+  }
+
+  server {
+    listen 8080;
+    server_name localhost;
+
+    location / {
+      proxy_pass http://myapp;
+      proxy_set_header Host $host;
+    }
+  }
+
+}
+```
+
+Save the file and update the Docker image using the ```docker build . -t mylb``` command from the *lb* directory.
+
+```bash
+developer@devbox:~/devnet-expert-lab/blog/docker/part2-files/lb$ docker build . -t mylb
+Sending build context to Docker daemon  3.072kB
+Step 1/4 : FROM nginx
+ ---> ac8efec875ce
+Step 2/4 : COPY nginx.conf /etc/nginx/nginx.conf
+ ---> 5b956db57667
+Step 3/4 : EXPOSE 8080
+ ---> Running in 97df5e000e01
+Removing intermediate container 97df5e000e01
+ ---> 567098c461bb
+Step 4/4 : CMD ["nginx", "-g", "daemon off;"]
+ ---> Running in 871b051f5bf2
+Removing intermediate container 871b051f5bf2
+ ---> 59767fb921d4
+Successfully built 59767fb921d4
+Successfully tagged mylb:latest
+```
+
+Now we are ready to run the load balancer container named *mylb1* exposing the tcp port 8080 as we did during part one. As the ```docker run``` command only allows one network to be specified along with the ```--network``` option we only connect the frontend bridge network in a first place and assign the IP address 172.20.0.100.
+
+```bash
+docker run -itd -p 8080:8080 \
+--network=frontend-net --ip=172.20.0.100 \
+--name mylb1 mylb
+```
+
+Then we use the ```docker network connect``` command to attach the running load balancer container *mylb1* to the backend network using the IP address 172.21.0.100.
+
+```bash
+docker network connect --ip 172.21.0.100 backend-net mylb1
+```
+
+Again we inspect the container to check if the network settings were applied for the load balancer as well.
+
+```bash
+developer@devbox:~$ docker inspect mylb1
+<output omitted>
+"Networks": {
+    "backend-net": {
+        "IPAMConfig": {
+            "IPv4Address": "172.21.0.100"
+        },
+        "Links": null,
+        "Aliases": [
+            "2f86fc7286cd"
+        ],
+        "NetworkID": "234c7a469fb689636906866b7a30855dad4c1a239627c7613e4f3241d692ebcd",
+        "EndpointID": "9943ba4a79eddc99c37a5e14e6e372ad00f81bc828b3f8c3acca00ad002d4a57",
+        "Gateway": "172.21.0.1",
+        "IPAddress": "172.21.0.100",
+        "IPPrefixLen": 16,
+        "IPv6Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "MacAddress": "02:42:ac:15:00:64",
+        "DriverOpts": {}
+    },
+    "frontend-net": {
+        "IPAMConfig": {
+            "IPv4Address": "172.20.0.100"
+        },
+        "Links": null,
+        "Aliases": [
+            "2f86fc7286cd"
+        ],
+        "NetworkID": "8a6a5362e2886f011bf798d41adbdbeddd8a9ada05912d0b33dfba38905a1e7b",
+        "EndpointID": "4de0671ff7e54e7a113dfcc468eae2af32713a50793fd61376764bec79a6b51a",
+        "Gateway": "172.20.0.1",
+        "IPAddress": "172.20.0.100",
+        "IPPrefixLen": 16,
+        "IPv6Gateway": "",
+        "GlobalIPv6Address": "",
+        "GlobalIPv6PrefixLen": 0,
+        "MacAddress": "02:42:ac:14:00:64",
+        "DriverOpts": null
+    }
+}
+<output omitted>
+```
+
+Everything looks good so far. It is time to test the Docker networking setup we build. For that we try to access the load balancer container from the devbox itself using a ```curl 127.0.0.1:8080```command.
+
+```bash
+developer@devbox:~$ curl 127.0.0.1:8080
+Welcome to the Docker Lab.<br>The IP address of the server is 172.21.0.101.<br>
+
+developer@devbox:~$ curl 127.0.0.1:8080
+Welcome to the Docker Lab.<br>The IP address of the server is 172.21.0.102.<br>
+```
+
+It works! The first request was sent to the first application container *myapp1* with IP address 172.21.0.101 and the second request we made was load balanced to the second application container *myapp2* with IP address 172.21.0.102. Let us test the connection with a web browser using the IP address of the devbox on port 8080. In my case it is <http://192.168.11.51:8080/>.
+
+![Docker load balancer connection 1](/images/docker-part2-lb1.png "Docker load balancer connection 1")
+
+Now we refresh the web browser and get a response from the second application container as before with the ```curl``` command.
+
+![Docker load balancer connection 2](/images/docker-part2-lb2.png "Docker load balancer connection 2")
+
+Great everything worked, hopefully also for you if you followed along. After creating our own Docker images during part one we now extended our simple application framework example with some advantages of Docker Networking using user-defined bridge networks.
+
+I hope it was again easy to follow and to replicate on your own setup. If you face into any issues with the setup or if you found any errors please let me know and/or leave a comment using the Github issues.
+
+Thank you for reading this blog post and following along until the end. Stay tuned for the next blog post about Docker where we will further optimize the setup we build today using Docker compose.
 
 ### Links & References
 
