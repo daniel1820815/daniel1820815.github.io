@@ -109,10 +109,9 @@ docker network create -d bridge \
 backend-net
 ```
 
-Similar to that we create the frontend network named *frontend-net* with external connectivity but without inter container connectivity. We use a subnet 172.20.0.0/16 and a gateway 172.20.0.1.
+Similar to the backend we create the frontend network named *frontend-net* with external connectivity but without inter container connectivity. We use a subnet 172.20.0.0/16 and a gateway 172.20.0.1. The IP masquerade option will be enabled while we disable the inter container connectivity.
 
 ```bash
-docker network rm frontend-net
 docker network create -d bridge \
 --subnet=172.20.0.0/16 \
 --gateway=172.20.0.1 \
@@ -121,85 +120,188 @@ docker network create -d bridge \
 frontend-net
 ```
 
-
-Test with alpine:
-
-docker run -itd --rm --network=backend-net --ip=172.21.0.10 --name test1 alpine
-docker run -it --rm --network=backend-net --ip=172.21.0.11 --name test2 alpine
+Now we check the available networks using the ```docker network ls``` command again and if our new bridge networks were created.
 
 ```bash
-# ping 172.21.0.1
+developer@devbox:~$ docker network ls
+NETWORK ID     NAME           DRIVER    SCOPE
+234c7a469fb6   backend-net    bridge    local
+6ba106d77aaa   bridge         bridge    local
+8a6a5362e288   frontend-net   bridge    local
+0d30fa1bbb5e   host           host      local
+91482370b08a   none           null      local
+```
+
+Let's take a closer look into the settings we specified during the creation using the ```docker network inspect``` for both networks and compare settings.
+
+```bash
+developer@devbox:~$ docker network inspect backend-net
+[
+    {
+        "Name": "backend-net",
+        "Id": "234c7a469fb689636906866b7a30855dad4c1a239627c7613e4f3241d692ebcd",
+        "Created": "2022-12-24T14:30:38.963979508Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.21.0.0/16",
+                    "Gateway": "172.21.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {},
+        "Options": {
+            "com.docker.network.bridge.enable_icc": "true",
+            "com.docker.network.bridge.enable_ip_masquerade": "false"
+        },
+        "Labels": {}
+    }
+]
+```
+
+For the backend network the settings were applied as we specified it. Inter container connectivity was set to *true* which means it is enabled and the IP masquerade option was set to *false* which means disabled. What about the frontend network?
+
+```bash
+developer@devbox:~$ docker network inspect frontend-net
+[
+    {
+        "Name": "frontend-net",
+        "Id": "8a6a5362e2886f011bf798d41adbdbeddd8a9ada05912d0b33dfba38905a1e7b",
+        "Created": "2022-12-24T14:58:58.35827556Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.20.0.0/16",
+                    "Gateway": "172.20.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {},
+        "Options": {
+            "com.docker.network.bridge.enable_icc": "false",
+            "com.docker.network.bridge.enable_ip_masquerade": "true"
+        },
+        "Labels": {}
+    }
+]
+```
+
+It looks also good and the settings we want were applied. Let's do some ping tests using a minimal Docker image based on [Alpine Linux](https://hub.docker.com/_/alpine){:target="_blank"} with a complete package index and only 5 MB in size.
+
+We create two containers named *test1* and *test2*. For *test1* we assign an IP address of 172.21.0.10 and run it in *detached* mode in the background. For *test2* we assign an IP address of 172.21.0.11 and run in *interactive* mode which means we are on the console after it started. Then we can start our ping tests. We use the ```-rm``` command option which will remove the containers when we stop them.
+
+```bash
+# Run test1 container
+developer@devbox:~$ docker run -itd --rm --network=backend-net --ip=172.21.0.10 --name test1 alpine
+60bf5bb2752fab6b8849e55c63bc2d0cdc19d00ff18fc095aad251395f88aa5b
+# Run test2 container
+developer@devbox:~$ docker run -it --rm --network=backend-net --ip=172.21.0.11 --name test2 alpine
+# Ping the gateway
+/  ping 172.21.0.1
 PING 172.21.0.1 (172.21.0.1): 56 data bytes
-64 bytes from 172.21.0.1: seq=0 ttl=64 time=0.230 ms
-64 bytes from 172.21.0.1: seq=1 ttl=64 time=0.171 ms
-64 bytes from 172.21.0.1: seq=2 ttl=64 time=0.095 ms
-64 bytes from 172.21.0.1: seq=3 ttl=64 time=0.096 ms
+64 bytes from 172.21.0.1: seq=0 ttl=64 time=0.276 ms
+64 bytes from 172.21.0.1: seq=1 ttl=64 time=0.121 ms
+64 bytes from 172.21.0.1: seq=2 ttl=64 time=0.096 ms
+64 bytes from 172.21.0.1: seq=3 ttl=64 time=0.097 ms
 ^C
 --- 172.21.0.1 ping statistics ---
 4 packets transmitted, 4 packets received, 0% packet loss
-round-trip min/avg/max = 0.095/0.148/0.230 ms
-
-# ping 172.21.0.10
-PING 172.21.0.10 (172.21.0.10): 56 data bytes
-64 bytes from 172.21.0.10: seq=0 ttl=64 time=0.314 ms
-64 bytes from 172.21.0.10: seq=1 ttl=64 time=0.112 ms
-64 bytes from 172.21.0.10: seq=2 ttl=64 time=0.110 ms
-64 bytes from 172.21.0.10: seq=3 ttl=64 time=0.111 ms
+round-trip min/avg/max = 0.096/0.147/0.276 ms
+# Ping test1 container
+/  ping test1
+PING test1 (172.21.0.10): 56 data bytes
+64 bytes from 172.21.0.10: seq=0 ttl=64 time=0.293 ms
+64 bytes from 172.21.0.10: seq=1 ttl=64 time=0.139 ms
+64 bytes from 172.21.0.10: seq=2 ttl=64 time=0.113 ms
+64 bytes from 172.21.0.10: seq=3 ttl=64 time=0.115 ms
 ^C
---- 172.21.0.10 ping statistics ---
+--- test1 ping statistics ---
 4 packets transmitted, 4 packets received, 0% packet loss
-round-trip min/avg/max = 0.110/0.161/0.314 ms
-
-# ping 8.8.8.8
+round-trip min/avg/max = 0.113/0.165/0.293 ms
+# Ping Google DNS server
+/  ping 8.8.8.8
 PING 8.8.8.8 (8.8.8.8): 56 data bytes
 ^C
 --- 8.8.8.8 ping statistics ---
-5 packets transmitted, 0 packets received, 100% packet loss
+4 packets transmitted, 0 packets received, 100% packet loss
+/  exit
+developer@devbox:~$ docker ps
+CONTAINER ID   IMAGE     COMMAND     CREATED          STATUS          PORTS     NAMES
+60bf5bb2752f   alpine    "/bin/sh"   20 minutes ago   Up 20 minutes             test1
+developer@devbox:~$
+developer@devbox:~$ docker stop 60bf5bb2752f
 ```
 
-From the output...
-
-docker kill test*
-
-
-
-docker run -itd --rm --network=frontend-net --ip=172.20.0.10 --name test1 alpine
-docker run -it --rm --network=frontend-net --ip=172.20.0.11 --name test2 alpine
+As you can see from the output the backend bridge network works as expected. The gateway is reachable but the external connectivity is not. The connectivity between the containers is working and we used the automatic DNS resolution we talked about before to verify it. The *test1* container name was resolved with the IP address we assigned to it. We exited from *test2* und stopped *test1* which is then removed. Now we do the same tests for the frontend bridge network.
 
 ```bash
-# ping 172.20.0.1
+# Run test1 container
+developer@devbox:~$ docker run -itd --rm --network=frontend-net --ip=172.20.0.10 --name test1 alpine
+727d3bc5e0b45a49fbcd743cb18065d4c51c31f627d31719230eaeddae4391e6
+# Run test2 container
+developer@devbox:~$ docker run -it --rm --network=frontend-net --ip=172.20.0.11 --name test2 alpine
+# Ping the gateway
+/  ping 172.20.0.1
 PING 172.20.0.1 (172.20.0.1): 56 data bytes
-64 bytes from 172.20.0.1: seq=0 ttl=64 time=0.227 ms
-64 bytes from 172.20.0.1: seq=1 ttl=64 time=0.114 ms
-64 bytes from 172.20.0.1: seq=2 ttl=64 time=0.116 ms
-64 bytes from 172.20.0.1: seq=3 ttl=64 time=0.099 ms
+64 bytes from 172.20.0.1: seq=0 ttl=64 time=0.284 ms
+64 bytes from 172.20.0.1: seq=1 ttl=64 time=0.129 ms
+64 bytes from 172.20.0.1: seq=2 ttl=64 time=0.108 ms
+64 bytes from 172.20.0.1: seq=3 ttl=64 time=0.102 ms
 ^C
 --- 172.20.0.1 ping statistics ---
 4 packets transmitted, 4 packets received, 0% packet loss
-round-trip min/avg/max = 0.099/0.139/0.227 ms
-
-# ping 172.20.0.10
-PING 172.20.0.10 (172.20.0.10): 56 data bytes
+round-trip min/avg/max = 0.102/0.155/0.284 ms
+# Ping test1 container
+/  ping test1
+PING test1 (172.20.0.10): 56 data bytes
 ^C
---- 172.20.0.10 ping statistics ---
+--- test1 ping statistics ---
 4 packets transmitted, 0 packets received, 100% packet loss
-
-# ping 8.8.8.8
+# Ping Google DNS server
+/  ping 8.8.8.8
 PING 8.8.8.8 (8.8.8.8): 56 data bytes
-64 bytes from 8.8.8.8: seq=0 ttl=118 time=15.636 ms
-64 bytes from 8.8.8.8: seq=1 ttl=118 time=15.050 ms
-64 bytes from 8.8.8.8: seq=2 ttl=118 time=14.739 ms
-64 bytes from 8.8.8.8: seq=3 ttl=118 time=14.807 ms
+64 bytes from 8.8.8.8: seq=0 ttl=118 time=15.851 ms
+64 bytes from 8.8.8.8: seq=1 ttl=118 time=14.852 ms
+64 bytes from 8.8.8.8: seq=2 ttl=118 time=14.794 ms
+64 bytes from 8.8.8.8: seq=3 ttl=118 time=14.801 ms
 ^C
 --- 8.8.8.8 ping statistics ---
 4 packets transmitted, 4 packets received, 0% packet loss
-round-trip min/avg/max = 14.739/15.058/15.636 ms
+round-trip min/avg/max = 14.794/15.074/15.851 ms
+/  exit
+developer@devbox:~$ docker ps
+CONTAINER ID   IMAGE     COMMAND     CREATED          STATUS          PORTS     NAMES
+727d3bc5e0b4   alpine    "/bin/sh"   58 seconds ago   Up 56 seconds             test1
+developer@devbox:~$ docker stop 727d3bc5e0b4
 ```
 
-From the output
+From the output we can see that the frontend bridge network also works as expected. The gateway and Google DNS are reachable but the inter container connectivity is not working no matter the automatic DNS resolution worked.
 
-LB connected to both networks
-APP connected to backend only
+Now everything is prepared to bring up all containers from our example while attaching them to our user-defined bridge networks we created.
 
 #### Bring all containers up again
 
