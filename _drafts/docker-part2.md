@@ -109,6 +109,19 @@ docker network create -d bridge \
 backend-net
 ```
 
+Similar to that we create the frontend network named *frontend-net* with external connectivity but without inter container connectivity. We use a subnet 172.20.0.0/16 and a gateway 172.20.0.1.
+
+```bash
+docker network rm frontend-net
+docker network create -d bridge \
+--subnet=172.20.0.0/16 \
+--gateway=172.20.0.1 \
+-o "com.docker.network.bridge.enable_ip_masquerade"="true" \
+-o "com.docker.network.bridge.enable_icc"="false" \
+frontend-net
+```
+
+
 Test with alpine:
 
 docker run -itd --rm --network=backend-net --ip=172.21.0.10 --name test1 alpine
@@ -148,17 +161,7 @@ From the output...
 
 docker kill test*
 
-create frontend network with external connectivity but without inter container connectivity
 
-```bash
-docker network rm fronend-net
-docker network create -d bridge \
---subnet=172.20.0.0/16 \
---gateway=172.20.0.1 \
--o "com.docker.network.bridge.enable_ip_masquerade"="true" \
--o "com.docker.network.bridge.enable_icc"="false" \
-frontend-net
-```
 
 docker run -itd --rm --network=frontend-net --ip=172.20.0.10 --name test1 alpine
 docker run -it --rm --network=frontend-net --ip=172.20.0.11 --name test2 alpine
