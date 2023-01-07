@@ -258,7 +258,7 @@ developer@devbox:~$
 developer@devbox:~$ docker stop 60bf5bb2752f
 ```
 
-As you can see from the output the backend bridge network works as expected. The gateway is reachable but the external connectivity is not. The connectivity between the containers is working and we used the automatic DNS resolution we talked about before to verify it. The *test1* container name was resolved with the IP address we assigned to it. We exited from *test2* und stopped *test1* which is then removed. Now we do the same tests for the frontend bridge network.
+As you can see from the output the backend bridge network works as expected. The gateway is reachable but the external connectivity is not. The connectivity between the containers is working and we used the automatic DNS resolution we talked about before to verify it. The *test1* container name was resolved with the IP address we assigned to it. We exited out from *test2* und stopped *test1* which is then removed. Now we do the same tests for the frontend bridge network.
 
 ```bash
 # Run test1 container
@@ -484,6 +484,10 @@ Thank you for reading this blog post and following along until the end. Stay tun
 
 ### Links & References
 
+#### GitHub
+
+- [Github repository for blog post source files](https://github.com/daniel1820815/devnet-expert-lab/){:target="_blank"}
+
 #### Cisco Modeling Labs
 
 - [Cisco Modeling Labs (CML)](https://developer.cisco.com/modeling-labs/){:target="_blank"}
@@ -503,6 +507,7 @@ Thank you for reading this blog post and following along until the end. Stay tun
 #### Docker
 
 - [Docker Documentation](https://docs.docker.com){:target="_blank"}
+- [Docker Networking](https://docs.docker.com/network/){:target="_blank"}
 - [Docker Hub](https://hub.docker.com){:target="_blank"}
 
 #### Python
