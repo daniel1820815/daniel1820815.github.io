@@ -1,10 +1,9 @@
 ---
 layout: post
 title: "DevNet Expert series - Docker part 2"
-#date: 2023-01-09 12:00:00 +0200
-date: 2022-12-17 12:00:00 +0200
+date: 2023-01-09 12:00:00 +0200
 categories: Containers
-#comments_id: # CREATE AND ADD ISSUE NO.
+comments_id: 15
 ---
 
 This is part two of the DevNet Expert series about Containers using Docker and Kubernetes. It continues where we were at the end from the first part [DevNet Expert series - Docker part 1](https://blog.kuhlcloud.de/containers/2022/12/16/docker-part1.html){:target="_blank"}. If you do not like to go through the first part you can find the source files on the [Github repository](https://github.com/daniel1820815/devnet-expert-lab/){:target="_blank"}. You can simply clone it and start through with the second part.
