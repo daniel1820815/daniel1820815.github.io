@@ -15,3 +15,15 @@ I am still using a simple lab setup in [Cisco Modeling Labs (CML)](https://devel
 Hope you are still with me after two parts of the Containers series and follow my journey towards the Cisco Certified DevNet Expert. Let's start with Docker Compose!
 
 ### Part 3: Docker compose
+
+using Docker compose to build the app and lb containers including the networks we defined
+
+Check Docker compose installation and add link to installation
+
+create docker-compose.yaml file
+
+define the services
+
+define the networks
+
+run and test everything
