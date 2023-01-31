@@ -16,11 +16,32 @@ Hope you are still with me after two parts of the Containers series and follow m
 
 ### Part 3: Docker compose
 
-using Docker compose to build the app and lb containers including the networks we defined
+Before we start we need to verify if Docker Compose is already installed. If you are using Docker Desktop/Toolbox on a Windows or Mac it should be already installed, but if you are on a Linux machine like I am it could be the case that you need to install it. If you are using my setup from the [Github repository](_blank"} with a Ubuntu 20.04 machine as devbox running Docker and external connectivity you should be fine. My lab topology file is available [here](https://github.com/daniel1820815/devnet-expert-lab/blob/main/blog/docker/){:target="_blank"}, please be aware that I made an update to the packages for the Devbox. You can either use the updated version from my repository or simply follow the [Docker installation](https://docs.docker.com/engine/install/){:target="_blank"} and then you should be at the same status.
 
-Check Docker compose installation and add link to installation
+Whatever way you chose in the end you need to get a similar output when using the ```docker compose version``` command.
+
+```bash
+developer@devbox:~$ docker compose version
+Docker Compose version v2.15.1
+```
+
+We will use the same setup we used in the previous post but now 
+
+Intro using Docker compose to build the app and lb containers including the networks we defined...
 
 create docker-compose.yaml file
+
+```bash
+docker run -itd \
+--network=backend-net --ip=172.21.0.101 \
+--name myapp1 myapp
+```
+
+```bash
+docker run -itd \
+--network=backend-net --ip=172.21.0.102 \
+--name myapp2 myapp
+```
 
 define the services
 
