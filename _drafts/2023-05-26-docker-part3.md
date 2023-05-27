@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "DevNet Expert series - Docker part 3"
-date: 2023-01-17 12:00:00 +0200
+date: 2023-05-26 12:00:00 +0200
 categories: Containers
 #comments_id: # CREATE AND ADD ISSUE NO.
 ---
@@ -10,26 +10,31 @@ This is part three out of four of the DevNet Expert series about Containers usin
 
 During the first part we focused on section 4.1 from the [exam blueprint](https://learningnetwork.cisco.com/s/devnet-expert-exam-topics-lab){:target="_blank"} which is about creating a Docker image using Dockerfile. We ignored Docker networking during the first part and added that within the second part according to section 4.4. which is called "Create, consume, and troubleshoot a Docker host and bridge-based networks and integrate them with external networks". Now it is time to bring all together when using Docker Compose which covers section 4.2 "Package and deploy a solution by using Docker Compose" from the exam topics.
 
-I am still using a simple lab setup in [Cisco Modeling Labs (CML)](https://developer.cisco.com/modeling-labs/){:target="_blank"} with a Ubuntu 20.04 machine as devbox running Docker and external connectivity. My lab topology file is available [here](https://github.com/daniel1820815/devnet-expert-lab/blob/main/blog/docker/){:target="_blank"} for download and import into CML. You could also use the official Candidate Workstation available for download on the [Cisco Learning Network](https://learningnetwork.cisco.com/s/article/devnet-expert-equipment-and-software-list){:target="_blank"}.
+EDIT THIS PART AFTER TESTING WITH CWS
+
+- Download and test part 1 and 2 on CWS
+- Describe new lab setup and provide Github link
+
+I am still using [Cisco Modeling Labs (CML)](https://developer.cisco.com/modeling-labs/){:target="_blank"} with a Ubuntu 20.04 machine as devbox running Docker and external connectivity. My lab topology file is available [here](https://github.com/daniel1820815/devnet-expert-lab/blob/main/blog/docker/){:target="_blank"} for download and import into CML. You could also use the official Candidate Workstation available for download on the [Cisco Learning Network](https://learningnetwork.cisco.com/s/article/devnet-expert-equipment-and-software-list){:target="_blank"}.
 
 Hope you are still with me after two parts of the Containers series and follow my journey towards the Cisco Certified DevNet Expert. Let's start with Docker Compose!
 
 ### Part 3: Docker compose
+
+We will use the same design we used in the previous post, but now we will use Docker Compose to create and start all parts of the application framework. We will create our frontend and backend network which we need to separate the containers, the load balancer container to serve the incoming requests, and the two application containers which provides the web page displayed. All parts will be defined within a Docker Compose file.
+
+[<img src="/images/docker-app-networking-diagram.png" width="500"/>](/images/docker-app-networking-diagram.png)
 
 Before we start we need to verify if Docker Compose is already installed. If you are using Docker Desktop/Toolbox on a Windows or Mac it should be already installed, but if you are on a Linux machine like I am it could be the case that you need to install it. If you are using my setup from the [Github repository](_blank"} with a Ubuntu 20.04 machine as devbox running Docker and external connectivity you should be fine. My lab topology file is available [here](https://github.com/daniel1820815/devnet-expert-lab/blob/main/blog/docker/){:target="_blank"}, please be aware that I made an update to the packages for the Devbox. You can either use the updated version from my repository or simply follow the [Docker installation](https://docs.docker.com/engine/install/){:target="_blank"} and then you should be at the same status.
 
 Whatever way you chose in the end you need to get a similar output when using the ```docker compose version``` command.
 
 ```bash
-developer@devbox:~$ docker compose version
-Docker Compose version v2.15.1
+(main) expert@expert-cws:~$ docker compose version
+Docker Compose version v2.2.3
 ```
 
-We will use the same setup we used in the previous post but now 
-
-Intro using Docker compose to build the app and lb containers including the networks we defined...
-
-create docker-compose.yaml file
+Now we create docker-compose.yml file
 
 ```bash
 docker run -itd \
