@@ -6,11 +6,11 @@ categories: Containers
 comments_id: 15
 ---
 
-This is part two of the DevNet Expert series about Containers using Docker and Kubernetes. It continues where we were at the end from the first part [DevNet Expert series - Docker part 1](https://blog.kuhlcloud.de/containers/2022/12/16/docker-part1.html){:target="_blank"}. If you do not like to go through the first part you can find the source files on the [Github repository](https://github.com/daniel1820815/devnet-expert-lab/){:target="_blank"}. You can simply clone it and start through with the second part.
+This is part two of the DevNet Expert series about Containers using Docker and Kubernetes. It continues where we were at the end from the first part [DevNet Expert series - Docker part 1](https://blog.kuhlcloud.de/containers/2022/12/16/docker-part1.html){:target="_blank"}. If you do not like to go through the first part you can find the source files on the [Github repository](https://github.com/daniel1820815/blog/tree/main/containers/docker-part1){:target="_blank"}. You can simply clone it and start through with the second part.
 
 During the first part we focused on section 4.1 from the [exam blueprint](https://learningnetwork.cisco.com/s/devnet-expert-exam-topics-lab){:target="_blank"} which is about creating a Docker image using Dockerfile. We ignored Docker networking to keep it simple, but maybe it was not a good idea to put all Docker containers into the same network and also using the Docker default bridge network. We will take a closer look at Docker networking now according to section 4.4. which is called "Create, consume, and troubleshoot a Docker host and bridge-based networks and integrate them with external networks". Sounds interesting, right? I will show you how to expand our application framework example using the benefits of Docker networking.
 
-I am still using a simple lab setup in [Cisco Modeling Labs (CML)](https://developer.cisco.com/modeling-labs/){:target="_blank"} with a Ubuntu 20.04 machine as devbox running Docker and external connectivity. My lab topology file is available [here](https://github.com/daniel1820815/devnet-expert-lab/blob/main/blog/docker/){:target="_blank"} for download and import into CML. You could also use the official Candidate Workstation available for download on the [Cisco Learning Network](https://learningnetwork.cisco.com/s/article/devnet-expert-equipment-and-software-list){:target="_blank"}.
+I am still using a simple lab setup in [Cisco Modeling Labs (CML)](https://developer.cisco.com/modeling-labs/){:target="_blank"} with a Ubuntu 20.04 machine as devbox running Docker and external connectivity. My lab topology file is available [here](https://github.com/daniel1820815/blog/blob/main/containers/docker-part1/docker-lab.yaml){:target="_blank"} for download and import into CML. You could also use the official Candidate Workstation available for download on the [Cisco Learning Network](https://learningnetwork.cisco.com/s/article/devnet-expert-equipment-and-software-list){:target="_blank"}.
 
 Hope you are also excited about this second part of the Containers series like I am and you follow my journey towards the Cisco Certified DevNet Expert. Let's start!
 
@@ -350,7 +350,7 @@ developer@devbox:~$ docker inspect myapp1
 <output omitted>
 ```
 
-So far so good with the application containers. Before we start the load balancer container we need to adjust the *nginx.conf* file and update the image as we use other IP addresses than in part one. You can simply edit the existing files or make a copy of the files and edit the copy. I have created a new folder in the repository I used for this blog posts which you can find [here](https://github.com/daniel1820815/devnet-expert-lab/tree/main/blog/docker){:target="_blank"}. Switch to the *lb* directory, open the *nginx.conf* file, and update the IP addresses according the network diagram.
+So far so good with the application containers. Before we start the load balancer container we need to adjust the *nginx.conf* file and update the image as we use other IP addresses than in part one. You can simply edit the existing files or make a copy of the files and edit the copy. I have created a new folder in the repository I used for this blog posts which you can find [here](https://github.com/daniel1820815/blog/tree/main/containers/docker-part2){:target="_blank"}. Switch to the *lb* directory, open the *nginx.conf* file, and update the IP addresses according the network diagram.
 
 ```conf
 events {}
