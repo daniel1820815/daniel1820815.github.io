@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "Cisco U. - A first review"
+title: "Cisco U. - A short review"
 date: 2023-05-29 12:00:00 +0200
 categories: Certifications
 #comments_id: # CREATE AND ADD ISSUE NO.
 ---
 
-Earlier this week it was announced that [Cisco U. is now available to everyone](https://blogs.cisco.com/learning/now-available-for-it-training-cisco-u?ccid=ciscou&dtid=web-cln-home&oid=parmerat-fy23-q4-0000-welcometociscou-ww){:target="_blank"}. There was an early access phase from last year on. I was lucky to get one early access and could test Cisco U. for some time. Now it is available for everyone for free until July 29, 2023. During that time there are special introductory pricing for your subscription after the free trial period.
+Earlier this week it was announced that [Cisco U. is now available to everyone](https://blogs.cisco.com/learning/now-available-for-it-training-cisco-u?ccid=ciscou&dtid=web-cln-home&oid=parmerat-fy23-q4-0000-welcometociscou-ww){:target="_blank"}. There was an early access phase from last year on. I was lucky to get an early access and I was able to test Cisco U. for some time. At the Cisco Learning & Certification booth at Cisco Live 2023 in Las Vegas back in June last year there was also the opportunity to do some beta testing with the Cisco U. user interface. Now it is available for everyone for free until July 29, 2023. During that time there are special introductory pricing for your subscription after the free trial period. I encourage everyone who have not tried to use the time wisely to decide if there is a subscription plan for you and which one is right for you. But let's check what is available there.
 
 ## Subscription plans
 
@@ -25,16 +25,14 @@ I saw some critical discussions on Social Media about the prices of the subscrip
 
 ## Room for improvements
 
-However there is always room for improvements, especially the user interface could be improved while you are in a course. Forward and backward navigation through the sections of a course and returning back to the course overview seems to me not quite intuitive. After spending some time with a course it's getting better because I have arranged with the navigation. The courses itself I was going through were a mixture between pre- and post-assessment questions, videos, reading, and hands-on labs which is a pretty good combination to learn in general. The pre-assessment tests at each section will check your knowledge about the contents. Based on your results Cisco U. recommends which sections you could skip because you have proficient knowledge and which you should do. At the end of each course section there are also some content review questions.
-
-Post-assesments
+However there is always room for improvements, especially the user interface could be improved while you are in a course. Forward and backward navigation through the sections and subsections of a course and returning back to the course overview seems to me not quite intuitive. After spending some time with a course it's getting better because I have arranged with the navigation. The courses itself I was going through were a mixture between pre- and post-assessment questions, videos, reading, and hands-on labs which is a pretty good combination to learn in general. The pre-assessment tests at each section will check your knowledge about the contents. Based on your results Cisco U. recommends which sections you could skip because you have proficient knowledge and which sections you should work on. At the end of each subsection there are also some content review questions. The self-paced hands-on labs provide a virtual lab environment similar from the Cisco Learning Network Store courses including an introduction video and detailed step-by-step guidance through the the lab. After each main section there is a post-assessment to verify your knowledge again providing a score report of the subsections. I am not 100% sure if the pre- and post-assessments contain the same questions but it seems so.
 
 ## Conclusion
 
-Cisco U. provides high quality learning content and brings a lot of value to the students in my opinion. The close linking to the Cisco Learning Network is another great benefit to stay in contact with the community, ask for help, share your knowledge and experience from courses, labs or learning paths, and help others when running into problems. I hope you like my quick review post about Cisco U. and please leave a comment if you like.
+Cisco U. provides high quality learning content and brings a lot of value to the students in my opinion. The courses vary from technology categories like Software Networking, Security, Cloud and Computing, Security, Data Center, Mobility and Wireless, and others. Besides courses for Cisco certifications and products there are also Microsoft, AWS, and vendor independent trainings. The close linking to the Cisco Learning Network community is another great benefit to stay in contact with study peers. The opportunity to ask for help, share your knowledge and experience from courses, labs or learning paths, and help others when running into problems, shows again that learning is easier with a collaborative community. I hope you like my quick review post about Cisco U. and please leave a comment if you like. Thank you for reading!
 
 ### Links
 
-- Cisco U
+- [Cisco U](https://u.cisco.com){:target="_blank"}
 
-- Cisco Learning Network
+- [Cisco Learning Network](https://learningnetwork.cisco.com){:target="_blank"}
