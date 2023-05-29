@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Cisco U. - A short review"
-date: 2023-05-29 12:00:00 +0200
+date: 2023-05-28 12:00:00 +0200
 categories: Certifications
 #comments_id: # CREATE AND ADD ISSUE NO.
 ---
@@ -12,7 +12,7 @@ Earlier this week it was announced that [Cisco U. is now available to everyone](
 
 The three different subscription plans **Free**, **Essentials**, and **All Access** and they are obviously slightly different. **All Access** is pretty clear, it gives you access to the full feature set and all digital content available. A price of $6,000 ($4,800 with current discount) or 48 Cisco Learning Credits (CLCs) seems a proud price. The  **Essentials** plan takes only one feature away which is the *All self-paced hands-on labs* and but keeps the *Essential self-paced hands-on labs* feature which could be good enough for many students.
 
-cisco-u-subscription.png
+![Cisco U. subscription plans](/images/cisco-u-subscription.png "Cisco U. subscription plans")
 
 Depending on your knowledge level, learning and certification goals the major drawback will be the missing *Professional-level certification Learning Paths* content within the **Essentials** subscription. More or less important in this context could also be the removed *Cisco product Learning Paths* and
 *Cisco solution Learning Paths*. In my opinion the **Essentials** subscription looks good and with a regular price of $1,800 ($1,500 with current discount) per year seems to be a fair price considering the amount of content you get. You could also use 15 Cisco Learning Credits (CLCs) to purchase it.
