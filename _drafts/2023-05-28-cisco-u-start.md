@@ -17,7 +17,7 @@ The three different subscription plans **Free**, **Essentials**, and **All Acces
 Depending on your knowledge level, learning and certification goals the major drawback will be the missing *Professional-level certification Learning Paths* content within the **Essentials** subscription. More or less important in this context could also be the removed *Cisco product Learning Paths* and
 *Cisco solution Learning Paths*. In my opinion the **Essentials** subscription looks good and with a regular price of $1,800 ($1,500 with current discount) per year seems to be a fair price considering the amount of content you get. You could also use 15 Cisco Learning Credits (CLCs) to purchase it.
 
-cisco-u-plans.png
+![Compare Cisco U. plans](/images/cisco-u-plans.png "Compare Cisco U. plans")
 
 The **Free** plan consists the same features from the **Essentials** except the *Essential self-paced hands-on labs* and the digital content is limited to *Podcasts*, *Webinars*, *Tutorials*, and *Videos*. The missing opportunity to do self-paced labs could be a exclusion criterion, but one key point about the **Free** plan is the opportunity to earn *Continuing Education (CE) credits* from the content provided. Today it is really important to stay relevant in the industry and maintain your Cisco certifications.
 
