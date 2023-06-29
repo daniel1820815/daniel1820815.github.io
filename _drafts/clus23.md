@@ -6,9 +6,11 @@ categories: Personal
 #comments_id: # CREATE AND ADD ISSUE NO.
 ---
 
-Three weeks ago Cisco Live US 2023 in Las Vegas closed the doors. Now a save the date announcement for [Cisco Live US 2024](https://www.ciscolive.com/global/cisco-live-2024.html#:~:text=Cisco%20Live%20will%20be%20held,2024%20in%20Las%20Vegas%2C%20Nevada.){:target="_blank"} in Las Vegas reached me and motivated to write down six reasons to attend next years event. Obviously there are many more reasons but I want to highlight the most important ones to me personal. Feel free to use the comment section to add other reasons.
+Three weeks ago Cisco Live US 2023 in Las Vegas closed the doors. Now a save the date announcement for [Cisco Live US 2024](https://www.ciscolive.com/global/cisco-live-2024.html#:~:text=Cisco%20Live%20will%20be%20held,2024%20in%20Las%20Vegas%2C%20Nevada.){:target="_blank"} reached me and motivated me to write down six reasons to attend next years event. In 2024, Cisco Live US will be held again in Las Vegas, Nevada. Obviously there are many more reasons to attend but I want to highlight the most important ones to me personal. Feel free to use the comment section to add more reasons.
 
-Cisco Live 2023 was a real last for me.
+Besides the stressful traveling from Europe with an eleven hour flight (fortunately direct flights round trip for me) and managing the time difference of nine hours, Cisco Live US 2023 was again a real blast for me overall.
+
+ADD MORE INTRO
 
 ## The six reasons
 
