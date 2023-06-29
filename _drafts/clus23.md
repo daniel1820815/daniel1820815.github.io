@@ -12,23 +12,25 @@ Besides the stressful traveling from Europe with an eleven hour flight (fortunat
 
 ADD MORE INTRO
 
-## The six reasons
+## My six reasons
 
-1. The People
+### 1. The People
 
-2. The Sessions
+Cisco Live is all about the people and the people make this event to an awesome event. You will meet friends, coworkers, or ex-coworkers which you haven't see for some time. You will meet virtual friends from several social media platforms again or for the first time which is a great experience getting to know each other face to face rather than online. You will make new friends and get to know new business partners and much more. Don't miss the chance to book a Meet the Engineer (MTE) to connect and exchange with outstanding tech people from Cisco. The opportunity to meet and connect with people face to face is an underestimate value in live which can't be compensated using online meetings. Attend Cisco Live because of the people!
 
-3. The DevNet Zone
+### 2. The Sessions
 
-4. The World of Solutions
+### 3. The DevNet Zone
 
-5. Learning & Certification
+### 4. The World of Solutions
 
-6. The Party
+### 5. Learning & Certification
+
+### 6. The Party
 
 ## Conclusion
 
-meeting old friends, met virtual friends and new friends
+
 
 temperature adjusted
 
