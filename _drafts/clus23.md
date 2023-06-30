@@ -20,6 +20,18 @@ Cisco Live is all about the people and the people make this event to an awesome 
 
 ### 2. The Sessions
 
+Breakouts, Broadcasts, Customer Success Stories, Demos, DevNet, Instructor-led Labs, IT Leadership, Innovation Talks, Keynotes, Partner Case Studies, Techtorial, Workshops or whatever session you booked, in very most cases you will not be disappointed about the content delivered to you. For the sessions I attended, I could see a slightly increase in the quality of contents and how the presentations were being held. I would like to highlight five sessions I attended which are from different session type:
+
+- BRKATO-2106 - Ansible Network Automation, GitOps for NetOps
+
+- DEVNET-3008 - Extending CML: Terraforming the Lost City
+
+- DEVWKS-2033 - Hands-on HVAC Python SDK!
+
+- CISCOU-3000 - The Future of Network Operations in the Age of Artificial Intelligence
+
+- LTRCRT-3100 - Building Python Applications for DevNet Professional and Expert Candidates
+
 ### 3. The DevNet Zone
 
 ### 4. The World of Solutions
