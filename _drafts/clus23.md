@@ -20,17 +20,29 @@ Cisco Live is all about the people and the people make this event to an awesome 
 
 ### 2. The Sessions
 
-Breakouts, Broadcasts, Customer Success Stories, Demos, DevNet, Instructor-led Labs, IT Leadership, Innovation Talks, Keynotes, Partner Case Studies, Techtorial, Workshops or whatever session you booked, in very most cases you will not be disappointed about the content delivered to you. For the sessions I attended, I could see a slightly increase in the quality of contents and how the presentations were being held. I would like to highlight five sessions I attended which are from different session type:
+Breakouts, Broadcasts, Customer Success Stories, Demos, DevNet, Instructor-led Labs, IT Leadership, Innovation Talks, Keynotes, Partner Case Studies, Techtorial, Workshops or whatever session you booked, in very most cases you will not be disappointed about the content delivered to you. For the sessions I attended, I could see a slightly increase in the quality of contents and how the presentations were being held. The same increase was for the Instructor-led Lab sessions. I would like to highlight and recommend five sessions I attended which are all from a different type of session:
 
 - BRKATO-2106 - Ansible Network Automation, GitOps for NetOps
 
+A presentation style session type with a duration between 45-90 minutes. In this case it was a 60 minutes deep dive into Ansible used within GitOps for NetOps. The session was a split presentation between between Sean Cavanaugh from RedHat and Adrian Iliesiu from Cisco DevNet.
+
 - DEVNET-3008 - Extending CML: Terraforming the Lost City
+
+A 20 or 45 minutes DevNet presentation session. Quinn Snyder took us into the Lost City and showed us how to use Terraform and Atlantis how to track changes in Pull-Requests for review and approve.
 
 - DEVWKS-2033 - Hands-on HVAC Python SDK!
 
+A 20 or 45 minutes DevNet workshop session with hands-on following a step-by-step lab guide while Kareem Iskander guided us through it. Hashicorp Vault is a really great tool to manage your app secrets or credentials. Its API is easy to consume.
+
 - CISCOU-3000 - The Future of Network Operations in the Age of Artificial Intelligence
 
+A 20 to 45 minutes session presentation at the Cisco U. theater held at the Cisco Learning & Certification booth. The magician John Capobianco brought his assistant ChatGBT and showed us some magic tricks how AI could potentially support with network monitoring and troubleshooting. You can watch all session recordings on the [Cisco U. YouTube channel](https://www.youtube.com/@CiscoUtube){:target="_blank"}.
+
 - LTRCRT-3100 - Building Python Applications for DevNet Professional and Expert Candidates
+
+A four hour instructor-led lab session including a short introduction and then hands-on experiences till the end. It is an extra paid session which need to be booked in advance. Hank Preston and Akhila Pamukuntla provided an awesome lab with three challenges where we had to build Python applications. I can highly recommend this lab for all DevNet Professional and Expert candidates.
+
+Please click the following link to find out more about the [different session types at Cisco Live](https://www.ciscolive.com/global/learn/technical-education/session-catalog/session-types.html){:target="_blank"}. Most of the Cisco Live sessions are availbable on-demand on the [Cisco Live website](https://www.ciscolive.com/on-demand.html?zid=pp){:target="_blank"}.
 
 ### 3. The DevNet Zone
 
