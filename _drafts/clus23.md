@@ -6,11 +6,7 @@ categories: Personal
 #comments_id: # CREATE AND ADD ISSUE NO.
 ---
 
-Four weeks ago Cisco Live US 2023 in Las Vegas closed the doors. Now a save the date announcement for [Cisco Live US 2024](https://www.ciscolive.com/global/cisco-live-2024.html#:~:text=Cisco%20Live%20will%20be%20held,2024%20in%20Las%20Vegas%2C%20Nevada.){:target="_blank"} reached me and motivated me to write down six reasons to attend next years event. In 2024, Cisco Live US will be held again in Las Vegas, Nevada. Obviously there are many more reasons to attend but I want to highlight the most important ones to me personal. Feel free to use the comment section to add more reasons.
-
-Besides the stressful traveling from Europe with an eleven hour flight (fortunately direct flights round trip for me) and managing the time difference of nine hours, Cisco Live US 2023 was again a real blast for me overall.
-
-ADD MORE INTRO
+Four weeks ago Cisco Live US 2023 in Las Vegas closed the doors. These days a save the date announcement for [Cisco Live US 2024](https://www.ciscolive.com/global/cisco-live-2024.html#:~:text=Cisco%20Live%20will%20be%20held,2024%20in%20Las%20Vegas%2C%20Nevada.){:target="_blank"} reached me and motivated me to write down six reasons to attend next years event. In 2024, Cisco Live US will be held again in Las Vegas, Nevada. Obviously there are many more reasons to attend but I want to highlight the most important ones to me personally. Besides the stressful traveling from Europe with an eleven hour flight (fortunately direct flights round trip for me) and managing the time difference of nine hours, Cisco Live US 2023 was again a real blast for me overall.
 
 ## My six reasons
 
@@ -50,7 +46,7 @@ The Cisco Learning & Certification booth is the place to meet and connect with y
 
 ### 4. The DevNet Zone
 
-Apart from the session presentations and workshops, Cisco's developer community is present in the DevNet Zone. If you want to learn, code, inspire an connect, this is the right place where you can innovate with Cisco technologies and platforms. Check out [Five Reasons You Need To Visit the DevNet Zone Every Day of Cisco Live](https://blogs.cisco.com/developer/5reasons01){:target="_blank"} and add it to my six reasons for next year. As I am preparing for the DevNet Expert lab exam. I spent a lot of time here and attended may DevNet sessions and workshops.
+Apart from the session presentations and workshops, Cisco's developer community is present in the DevNet Zone. If you want to learn, code, inspire an connect, this is the right place where you can innovate with Cisco technologies and platforms. Check out [Five Reasons You Need To Visit the DevNet Zone Every Day of Cisco Live](https://blogs.cisco.com/developer/5reasons01){:target="_blank"} and add it to my six reasons for next year. As I am preparing for the [DevNet Expert lab exam]({:target="_blank"}) right now, I spent a lot of time here and attended may DevNet sessions and workshops.
 
 ### 5. The World of Solutions
 
@@ -62,6 +58,6 @@ The party is final the highlight after an intense week full of learning. Enjoy g
 
 ## Conclusion
 
-No matter which Cisco Live you can attend, it is always worth it. There is no question about it. The people you meet and the content you get delivered to learn is overwhelming and priceless. I hope the above mentioned reasons will help you decide whether to attend Cisco Live or even help convince your manager. You might leave out the party when you propose to your boss, but other than that there are certainly good reasons to attend. Hope to see you in Amsterdam or Las Vegas next year!
+No matter which Cisco Live you can attend, it is always worth it. There is no question about it. The people you meet and the content you get delivered to learn is overwhelming and priceless. I hope the above mentioned reasons will help you decide whether to attend Cisco Live or even help convince your manager. You might leave out the party when you propose to your boss, but other than that there are certainly good reasons to attend. Hope to see you in Amsterdam or Las Vegas next year and feel free to use the comment section to leave a comment or even add your personal reasons to attend.
 
 ### Links
