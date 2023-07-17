@@ -20,17 +20,22 @@ In this first blog post I will try to cover...
 
   - 1.1.d Infrastructure: monitoring, observability, and metrics (e.g., instrument placement and instrument deployment)
 
-Please keep in mind that this blog post series is a summarization from the resources I am using for my DevNet Expert lab exam preparation including my personal view on the topics. It does not mean that the topics are fully covered or that there are no other good resources which could be taken into account.
-
-Let us start and tackle the major bullet point 1.1 which is about designing a solution.
+Please keep in mind that this blog post series is a summarization from the resources I am using for my DevNet Expert lab exam preparation including my personal view on the topics. It does not mean that the topics are fully covered or that there are no other good resources which could be taken into account. Let us start and tackle the major bullet point 1.1 which is about designing a solution.
 
 ## Designing a solution
 
-When designing a software solution you have to consider different factors like maintainability, modularity, high availability, resiliency, scalability, latency, rate limiting, monitoring, observability, and various metrics. Based on these factors your design should fit into one of the deployment scenarios: on-premises, hybrid, or public cloud deployment. But let us first look at the factors, which are the design requirements and constraints.
+When designing a software solution you have to consider different factors like maintainability, modularity, high availability, resiliency, scalability, latency, rate limiting, monitoring, observability, and various metrics. Based on these factors your design should fit into one of the deployment scenarios: on-premises, hybrid, or public cloud deployment. But let us first look at the factors, which are the design requirements and constraints. I will use a simple example throughout this blog post series which is a small pizza ordering application described as follows:
 
-Functional requirements: What the software should do!
+- The user can access the application through a web GUI.
+- The user can view the menu.
+- The user can view reviews of previous orders.
+- The user can create a order.
+- The user shall login/register before submitting an order.
+- The payment shall be handled by a provider (3rd party)
 
-Nonfunctional requirements: How a system should perform the functional requirements
+What I have described above here are **functional requirements**. They specify what the application should do and how it should work. Functional requirements can easily be measured, are they fulfilled or not. Usually they are described with the words *can* and *shall*. On the other hand there are **nonfunctional requirements** or quality attributes which specify how the application should fulfill the functional requirements.
+
+CONTINUE HERE!!!
 
 - Performance
 - Security
@@ -43,8 +48,19 @@ Nonfunctional requirements: How a system should perform the functional requireme
 - Interoperability
 - Serviceability
 
-It is always helpful to gather the business requirements (functional requirements) first that you can decide what non-functional requirements need to prioritized.
+From a quick design point of view, the application should have six components:
 
+```mermaid
+mindmap
+    root((User-Interface))
+        Auth
+        Menu
+        Orders
+        Payment<br>3rd Party
+        Reviews
+```
+
+It is always helpful to gather the business requirements (functional requirements) first that you can decide what non-functional requirements need to prioritized.
 
 Importance of non-functional requirements
 
@@ -61,8 +77,6 @@ Dependant on specific cases you have to focus on the right nonfunctional require
 ## Performance
 
 ## Monitor, Observe, and measure the Metrics
-
-
 
 ## Maintainability through Design
 
