@@ -20,11 +20,31 @@ In this first blog post I will try to cover...
 
   - 1.1.d Infrastructure: monitoring, observability, and metrics (e.g., instrument placement and instrument deployment)
 
+Please keep in mind that this blog post series is a summarization from the resources I am using for my DevNet Expert lab exam preparation including my personal view on the topics. It does not mean that the topics are fully covered or that there are no other good resources which could be taken into account.
+
+Let us start and tackle the major bullet point 1.1 which is about designing a solution.
+
+## Designing a solution
+
+When designing a software solution you have to consider different factors like maintainability, modularity, high availability, resiliency, scalability, latency, rate limiting, monitoring, observability, and various metrics. Based on these factors your design should fit into one of the deployment scenarios: on-premises, hybrid, or public cloud deployment. But let us first look at the factors, which are the design requirements and constraints.
+
 Functional requirements: What the software should do!
 
 Nonfunctional requirements: How a system should perform the functional requirements
 
-NOTE: Add Examples
+- Performance
+- Security
+- Availability
+- Resiliency
+- Modifiability
+- Reliability
+- Usability
+- Testability
+- Interoperability
+- Serviceability
+
+It is always helpful to gather the business requirements (functional requirements) first that you can decide what non-functional requirements need to prioritized.
+
 
 Importance of non-functional requirements
 
@@ -33,6 +53,16 @@ make maintenance much easier when prioritizing observability and modularity in t
 avoid technical debt and the potential cost of reworking or rebuilding a system. This will happen if you have chosen the fast and easy way without thinking about nonfunctional requirements. It will guide you to the dark side.
 
 Dependant on specific cases you have to focus on the right nonfunctional requirements. For example for small-scale apps which are expected to grow quickly, you need to take scalability and extensibility more into account and put on top of your prioritization list than other requirements.
+
+## Maintainable and Modular
+
+## High available and Resilient
+
+## Performance
+
+## Monitor, Observe, and measure the Metrics
+
+
 
 ## Maintainability through Design
 
