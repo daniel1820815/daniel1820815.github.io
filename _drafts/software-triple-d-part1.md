@@ -29,24 +29,8 @@ When designing a software solution you have to consider different factors like m
 - The user can access the application through a web GUI.
 - The user can view the menu.
 - The user can view reviews of previous orders.
-- The user can create a order.
-- The user shall login/register before submitting an order.
+- The user shall login/register before creating an order.
 - The payment shall be handled by a provider (3rd party)
-
-What I have described above here are **functional requirements**. They specify what the application should do and how it should work. Functional requirements can easily be measured, are they fulfilled or not. Usually they are described with the words *can* and *shall*. On the other hand there are **nonfunctional requirements** or quality attributes which specify how the application should fulfill the functional requirements.
-
-CONTINUE HERE!!!
-
-- Performance
-- Security
-- Availability
-- Resiliency
-- Modifiability
-- Reliability
-- Usability
-- Testability
-- Interoperability
-- Serviceability
 
 From a quick design point of view, the application should have six components:
 
@@ -60,15 +44,20 @@ mindmap
         Reviews
 ```
 
-It is always helpful to gather the business requirements (functional requirements) first that you can decide what non-functional requirements need to prioritized.
+What I have described above the diagram are **functional requirements**, also well known as use cases or as user stories from the Agile development approach. They specify what the application should do and how it should work. Functional requirements can easily be measured, are they fulfilled or not. On the other hand there are **nonfunctional requirements** or quality attributes which specify how the application should fulfill the functional requirements. As you can see from the list below, you will find some of the terms from exam topics:
 
-Importance of non-functional requirements
+- Performance
+- Security
+- Availability
+- Resiliency
+- Modifiability
+- Reliability
+- Usability
+- And many more...
 
-make maintenance much easier when prioritizing observability and modularity in the beginning of the application development
+Nonfunctional requirements are closely connected and affect each other, so it is a good idea to take them into consideration as a group and not single requirements. If you need to decide which nonfunctional requirements need to prioritized, it is always helpful to gather first the business, administrative, user, and system requirements (functional requirements). With the right nonfunctional requirements in mind, maintenance for example will be much much easier when prioritizing observability and modularity in the beginning of the application development. Try to avoid technical debt and the potential cost of reworking or rebuilding a system. This will happen if you have chosen the fast and easy way without thinking about nonfunctional requirements. It will guide you to the dark side.
 
-avoid technical debt and the potential cost of reworking or rebuilding a system. This will happen if you have chosen the fast and easy way without thinking about nonfunctional requirements. It will guide you to the dark side.
-
-Dependant on specific cases you have to focus on the right nonfunctional requirements. For example for small-scale apps which are expected to grow quickly, you need to take scalability and extensibility more into account and put on top of your prioritization list than other requirements.
+Keep in mind that dependant on specific cases you have to focus on different nonfunctional requirements. For example for our small-scale app like the pizza ordering application without any plans to grow fast, you do not need to take scalability and extensibility much into account but put usability and performance on top of your prioritization list instead to have a good user experience in the beginning.
 
 ## Maintainable and Modular
 
