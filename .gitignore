@@ -260,3 +260,6 @@ _site
 .jekyll-cache
 .jekyll-metadata
 vendor
+
+# VS Code settings
+.vscode
