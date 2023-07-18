@@ -53,13 +53,13 @@ Nonfunctional requirements are closely connected and affect each other, so it is
 
 Keep in mind that dependant on specific cases and functional requirements you have to focus on different nonfunctional requirements. For example for our small-scale app like the pizza ordering application without any plans to grow fast (for now), you do not need to take scalability and extensibility much into account, but put usability and performance on top of your prioritization list instead to have a good user experience in the beginning. Let us now dive into the subsections and explore the nonfunctional requirements in detail.
 
-## Maintainable and Modular
+### Maintainable & Modular
 
-## High available and Resilient
+## High available & Resilient
 
 ## Performance
 
-## Monitor, Observe, and measure the Metrics
+## Monitor, Observe & Measure the Metrics
 
 ## Maintainability through Design
 
