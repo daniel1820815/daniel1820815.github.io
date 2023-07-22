@@ -53,92 +53,39 @@ Nonfunctional requirements are closely connected and affect each other, so it is
 
 Keep in mind that dependant on specific cases and functional requirements you have to focus on different nonfunctional requirements. For example for our small-scale app like the pizza ordering application without any plans to grow fast (for now), you do not need to take scalability and extensibility much into account, but put usability and performance on top of your prioritization list instead to have a good user experience in the beginning. Let us now dive into the subsections and explore the nonfunctional requirements in detail.
 
-### Maintainable & Modular
+## A Maintainable & Modular Deployment
 
-## High available & Resilient
+Why should we create our small-scale pizza ordering app maintainable? The answer is simple: Cost! It is about money and maintenance is cost. Imagine we need to implement missing functionalities like extending the menu but the code for that part is bad written and not documented at all, it would take hours or even days to add more dishes to the menu. Another thing is fixing bugs which could be even harder. It is all cost and maintainability saves you time and resources. Maintainability could be achieved using different best practices.
 
-## Performance
+Using **coding standards** increase consistency in your code and a consistent code within your implementation team can help a lot to avoid high maintenance times. Your team should use **common tool sets**. It means the usage of common development tools, programming languages and techniques which helps to achieve consistency. For example when using [Python](https://www.python.org) as programming language use linters to analyze your code and style guides to improve consistency and code quality. Try to avoid the DRY (Don't repeat yourself) principle and create reusable code. Here is a very good resource how to achieve [Python Code Quality](https://realpython.com/python-code-quality/) with tools and best practices.
 
-## Monitor, Observe & Measure the Metrics
+Another important thing are **naming conventions** in the code and in **technical documentation** to increase observability and standardize your application. A clean and structured documentation using a straight naming convention help additional developers to quickly jump into the project and have a smooth onboarding.
 
-## Maintainability through Design
+The usage of a **software configuration management and version control** should be standard in the software development world. You need a tool to maintain your code, track changes and issues, and work collaborative on those topics.
 
-saves you time and resources
+It is good to use an **object oriented design (OOD)** which makes it easier for others to follow. It brings again the benefit to easily add additional developers to your project. I would recommend to look at the SOLID design principle which main purpose is to make the object oriented design more understandable, maintainable, and extendable. The SOLID design principle consists five principles:
 
-Modular design, makes it easier to replace components
-Naming conventions to increase observability and standardize
-software configuration management (using Git to track and control changes)
-Coding standards increased consistency
-common toolset to enable more developers and technologies
-object oriented design for looser coupling and independent classes
+1. Single responsibility principle (SRP)
+2. Open-closed principle (OCP)
+3. Liskov's subsitution principle (LSP)
+4. Interface segregation principle (ISP)
+5. Dependency inversion principle (DIP)
 
-SOLID design principle
+I will not go into the details for the SOLID design principle as it would go beyond the scope of this post. You can find a very good and detailed explanation including code examples in the [Cisco Certified DevNet Professional (DEVCOR 350-901) Official Cert Guide](https://www.ciscopress.com/store/cisco-certified-devnet-professional-devcor-350-901-9780137370443){:target="_blank"} in chapter 3.
 
-The main purpose of the SOLID design principle is to create maintainable and extendable software.
+Last but not least, maintainability goes hand in hand with modularity. A **Modular design**, makes it easier to make changes on a small parts of the application or even replace components without affecting the entire system. As we already saw on the diagram of our pizza ordering application, it is about dividing the application into several separate modules. Those smaller functional modules are easier to understand and take less effort to maintain which is our main goal here. As mentioned before it creates more flexibility and extendability. Your code becomes more reusable and it is easier to build new modules or replace modules.
 
-1. Single responsibility principle
+**Microservices** are the perfect solution for a modular design. They are loosely coupled and each microservice has a single functionality. The communication between the microservices through their specific interfaces is often realized by APIs. The concept of microservices helps to build reusable modules which are independent of the underlying hardware. It is possible to build and maintain microservices without taking care of other microservices which allows rapid and frequent deployments or releases.
 
-    Goes along with modular design that you have a single functionality and responsibility for example in a class.
+Bringing all of the mentioned best practices into our pizza ordering application will help us to achieve reduced maintenance times through a good design and implementation. We should be well prepared to go live or not? What happens if the server on which our application is running crashes? We have not thought about how to achieve a high available and resilient application. So let us take a look at section 1.1.b Reliability: high availability and resiliency.
 
-2. Open-closed principle
+### High available & Resilient
 
-    Your components should be open for extensions but closed for modifications which means for example be open for other vendors within your code but closed for modifying out of standards for vendor specific modifications which could potentially break your code.
+Deployment models
 
-3. Liskov's subsitution principle
+### Performance
 
-    If you extend your code you do not want to change the base types, it should return the same types
-
-4. Interface segregation principle
-
-    Your code should be written in a way that someone else could easily use it without to depend on interfaces they do not use
-
-5. Dependency inversion principle
-
-    always program towards an interface not an implementation. Implementation can come and go but interfaces stay
-
-## Maintainability through Implementation
-
-During the design phase, the requirements were gathered and major decisions should have been made. But as within every project the decisions can be revised based on observations during the implementation phase.
-
-consistent code within your implementation team is important and helps a lot
-
-use common tools, languages and techniques, to achieve consistency for example using linters to analyze your code and style guides, avoid DRY principle and create reusable code
-
-technical documentation, version control, and be aware bus factor
-
-All reduced maintenance times through a good implementation
-
-## Modularity
-
-divide an application int several separate modules
-
-smaller modules are easier to understand and take less effort to fix
-
-as mentioned before it creates more flexibility and extendability. your code becomes more reusable and it is easier to build new modules 
-
-- Composability <-> Decomposability
-
-  It is better to have High cohesity & loose coupling instead of low cohesity & tight coupling. reduce the amount of communication between modules
-  keep the number of functionalities per module at a minimum it will also help to easier understand the modules which takes us to ...
-
-- Understandability
-- Continuity
-- Protection
-
-example of Moduluarity in microservers
-
-example of pizza ordering application
-
-- UI
-- Auth
-- Payment (3rd Party)
-- orders
-- menu
-- reviews
-
-each microservice has a single functionality
-communication through API
-reusable microservices
+### Monitor, Observe & Measure the Metrics
 
 ### Links & Sources
 
