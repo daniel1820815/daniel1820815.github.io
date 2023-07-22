@@ -6,7 +6,7 @@ categories: Software
 #comments_id: # CREATE AND ADD ISSUE NO.
 ---
 
-This blog post series is about the software triple D which is better know as **Software Design, Development, and Deployment** from the [Cisco DevNet Expert lab exam topics](https://learningnetwork.cisco.com/s/devnet-expert-exam-topics-lab){:target="_blank"}. This topic is already covered very well on the Cisco DevNet Professional core exam which is the [350-901 DEVCOR: Developing Applications Using Cisco Core Platforms and APIs](https://learningnetwork.cisco.com/s/devcor-exam-topics){:target="_blank"}. All parts of section 1.0 from the DEVCOR exam topics are about **Software Development and Design** and it is a really a good foundation to build on top of it for the lab exam. The 350-901 DEVCOR exam is currently the prerequisites to book the lab exam. In this first blog post I will cover section 1.1 including the subsections:
+This blog post series is about the software triple D which is better know as **Software Design, Development, and Deployment** from the [Cisco DevNet Expert lab exam topics](https://learningnetwork.cisco.com/s/devnet-expert-exam-topics-lab){:target="_blank"}. This topic is already covered very well on the Cisco DevNet Professional core exam which is the [350-901 DEVCOR: Developing Applications Using Cisco Core Platforms and APIs](https://learningnetwork.cisco.com/s/devcor-exam-topics){:target="_blank"}. All parts of section 1.0 from the DEVCOR exam topics are about **Software Development and Design** and it is a really a good foundation to build on top of it for the lab exam. The 350-901 DEVCOR exam is currently the prerequisites to book the lab exam. In this first blog post I will cover section 1.1 including its subsections:
 
 - 1.1 Design a solution based on an on-premises, hybrid, or public cloud deployment, considering these factors
 
@@ -22,7 +22,7 @@ Please keep in mind that this blog post series is a summarization from the resou
 
 ## Designing a solution
 
-When designing a software solution you have to consider different factors like maintainability, modularity, high availability, resiliency, scalability, latency, rate limiting, monitoring, observability, and various metrics. Based on these factors your design should fit into one of the deployment scenarios: on-premises, hybrid, or public cloud deployment. But let us first look at the factors before looking at the deployment. These factors are the design requirements and constraints. I will use a simple example throughout this blog post series which is a small pizza ordering application described as follows:
+When designing a software solution you have to consider different factors like maintainability, modularity, high availability, resiliency, scalability, latency, rate limiting, monitoring, observability, and various metrics. Based on these factors your design should fit into one of the deployment scenarios: on-premises, hybrid, or public cloud deployment. But let us first look at the factors themselves before looking at those deployment. The factors are the design requirements and constraints. I will use a simple example throughout this blog post series which is a small pizza ordering application described as follows:
 
 - The user can access the application through a web GUI.
 - The user can view the menu.
@@ -47,7 +47,7 @@ On the other hand there are ***nonfunctional requirements***, also called qualit
 - Usability
 - And many more...
 
-Nonfunctional requirements are closely connected and affect each other, so it is a good idea to take them into consideration as a group and not as single requirements. If you need to decide which nonfunctional requirements need to be prioritized, it is always helpful to gather business, administrative, user, and system requirements (functional requirements) first. With the right nonfunctional requirements in mind, maintenance for example will be much much easier when prioritizing observability and modularity in the beginning of the application development. It is a good practice to avoid technical debt and the potential cost of reworking or rebuilding a system. This will happen if you have chosen the fast and easy way without thinking about nonfunctional requirements. It will guide you to the dark side.
+Nonfunctional requirements are closely connected and affect each other, so it is a good idea to take them into consideration as a group and not as single requirements. If you need to decide which nonfunctional requirements need to be prioritized, it is always helpful to gather business, administrative, user, and system requirements (functional requirements) first. With the right nonfunctional requirements in mind, maintenance for example will be much much easier when prioritizing observability and modularity in the beginning of the application development. It is a good practice to avoid technical debt and the potential cost of reworking or rebuilding a system. This will happen if you have chosen the fast and easy way during designing without thinking about nonfunctional requirements. It will guide you to the dark side.
 
 ![Dark side](/images/dark-side.jpg "Dark side")
 
