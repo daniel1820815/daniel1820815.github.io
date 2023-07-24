@@ -18,7 +18,7 @@ This blog post series is about the software triple D which is better know as **S
 
   - 1.1.d Infrastructure: monitoring, observability, and metrics (e.g., instrument placement and instrument deployment)
 
-Please keep in mind that this blog post series is a summarization from the resources I am using for my DevNet Expert lab exam preparation including my personal view on the topics. It does not mean that the topics are fully covered or that there are no other good resources which could be taken into account. Let us start and tackle the major bullet point 1.1 which is about designing a solution.
+Please keep in mind that this blog post series is just a summarization from the resources I am using for my DevNet Expert lab exam preparation including my personal view on the topics. It does not mean that the topics are fully covered or that there are no other good resources which could be taken into account. Let us start and tackle the major bullet point 1.1 which is about designing a solution.
 
 ## Designing a solution
 
@@ -104,7 +104,10 @@ isolation of system
 predictive analysis, historic data available, telemetry, logs and monitoring, normal behavior, before, during, after a failure
 automation is a great way to achieve code consistency as mentioned before during design and deployment, and can help to eliminate potential hunan errors
 
-Deployment models
+planning high availability
+to create a high availability design you need to consider three main aspects: High availability, continuous operations, and disaster recovery. All three aspects are part of the the business continuity plan (BCP) and obviously it contains the disaster recovery plan (DRP). It depends on the business requirements of the organization how those plans need to be designed. There are many dependencies based on the business operations and therefore how to run the IT operations including the application landscape. Based on those requirements and dependencies you can design a sufficient business continuity plan (BCP) including a disaster recovery plan (DRP).
+
+Deployment models for high availability
 
 ### Performance
 
