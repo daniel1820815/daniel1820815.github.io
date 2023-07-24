@@ -109,6 +109,8 @@ to create a high availability design you need to consider three main aspects: Hi
 
 Deployment models for high availability
 
+![High Availability Deployment Models](/images/ha-deployment-models.png "High Availability Deployment Models")
+
 ### Performance
 
 ### Monitor, Observe & Measure the Metrics
