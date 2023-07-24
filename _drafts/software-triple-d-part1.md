@@ -81,6 +81,29 @@ Bringing all of the mentioned best practices into our pizza ordering application
 
 ### High available & Resilient
 
+how many time between failures and how many time to repair these failures
+detect prevent and recover
+
+detection
+monitoring
+self-testing or self-monitoring
+heartbeat or 'hello packets'
+simple ping or ICMP echo request/reply
+sanity checks
+
+recovery
+redundancy to remove the single point of failure and ensure fast recovery
+redundant system in active redundancy mode, also known as hot standby, syncing the state and taking over in case of missing heartbeats or in passive (warm standby) or spare (cold standby)
+retries
+timeouts
+upgrade
+rollback
+
+prevention
+isolation of system
+predictive analysis, historic data available, telemetry, logs and monitoring, normal behavior, before, during, after a failure
+automation is a great way to achieve code consistency as mentioned before during design and deployment, and can help to eliminate potential hunan errors
+
 Deployment models
 
 ### Performance
