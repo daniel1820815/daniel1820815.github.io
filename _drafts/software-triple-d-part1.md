@@ -51,7 +51,7 @@ Nonfunctional requirements are closely connected and affect each other, so it is
 
 ![Dark side](/images/dark-side.jpg "Dark side")
 
-Keep in mind that dependant on specific cases and functional requirements you have to focus on different nonfunctional requirements. For example for our small-scale app like the pizza ordering application without any plans to grow fast (for now), you do not need to take scalability and extensibility much into account, but put usability and performance on top of your prioritization list instead to have a good user experience in the beginning. Let us now dive into the subsections and explore the nonfunctional requirements in detail.
+Keep in mind that dependant on specific cases and functional requirements you have to focus on different nonfunctional requirements. For example for our small-scale app like the pizza ordering application without any plans to grow fast (for now), you do not need to take scalability and extensibility much into account, but put usability and performance on top of your prioritization list instead to have a good user experience in the beginning. Let us now dive into the subsections and explore the nonfunctional requirements in detail. We will start with subsection 1.1.a Deployment: maintainability, modularity.
 
 ## A Maintainable & Modular Deployment
 
