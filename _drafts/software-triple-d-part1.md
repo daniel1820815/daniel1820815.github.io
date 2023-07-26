@@ -87,19 +87,13 @@ So what does it mean behind the scenes? It is again about money as you can imagi
 
 **Detection** is the one important thing you want to have in place. If there is no proper *monitoring*, *self-testing*, or *self-monitoring* in place you will not detect failures in time. We always need to know if our pizza ordering application is available and ready to take orders. Based on the systems you are running in your environment, there are also mechanisms like *heartbeat* or *hello packets* to quickly detect when a cluster member goes down or is not reachable anymore for any reason. *Simple ping* or *ICMP echo request/reply* checks are also common methods of monitoring systems to measure if a system is still alive.
 
+![Droids](/images/droids.jpg "Droids")
+
 Let us now assume there is a failure on a component in our pizza ordering application and a potential danger that the application goes down during business hours. Then the **recovery** plays the next import role for high availability and resiliency. To ensure a fast recovery from a failure it is always recommended to build a level of *redundancy* and remove any *single point of failure* in your application design. The best level is a redundant system in *active mode*, also known as *hot standby*, syncing the state and taking over in case of missing heartbeats. Then there is the *passive* or *warm standby* mode, which does not sync the state constantly. In case of a failure the passive or standby system takes over but it needs to learn the proper state before it is fully functional. A very basic redundancy method is the *spare* or *cold standby* mode which means it is not operational or not even powered on. This mode requires a manual process to bring the spare system online and is obviously the worst solution at least for our pizza ordering application when there is a potential danger to go down during business hours.
 
-retries
-timeouts
-upgrade
-rollback
+Other types are *retries* and *timeouts* which are working together closely in redundancy methods for example when in comes to the point to declare a cluster member as down. If there is a software bug found in the software you are using which causes a failure there is also the option of an *software or system upgrade* to a stable version to recover your application. Same goes for a *rollback* from a change made which ended in a failure.
 
-prevention
-isolation of system
-predictive analysis, historic data available, telemetry, logs and monitoring, normal behavior, before, during, after a failure
-automation is a great way to achieve code consistency as mentioned before during design and deployment, and can help to eliminate potential hunan errors
-
-![Droids](/images/droids.jpg "Droids")
+There are a lot of things we could do to recover our systems from failure but would it be even better to prevent from failures or downtimes at all? So let us talk about the **prevention**. Sometimes it is helpful to isolate a system from the application in case of failure to get the opportunity for a deeper analysis and learn from the failure to build even better prevention or recovery. Unfortunately, based on your high availability deployment, it is not possible to remove a faulty system without an impact to the whole application functionality. As mentioned before, monitoring is a important part of detection, but there is also the *predictive analysis* using *historic data* like *log messages* or *telemetry data*. The data is the new gold and with that data you could determine the normal behavior of your systems and compare it with the states *before*, *during*, and *after a failure*. Out of it you are able to improve your mechanisms of detecting, recovering, and preventing furthermore. Needless to say that *automation* is a great way to achieve code consistency as mentioned before during design and deployment, and it can help to eliminate potential human errors as prevention method.
 
 planning high availability
 to create a high availability design you need to consider three main aspects: High availability, continuous operations, and disaster recovery. All three aspects are part of the the business continuity plan (BCP) and obviously it contains the disaster recovery plan (DRP). It depends on the business requirements of the organization how those plans need to be designed. There are many dependencies based on the business operations and therefore how to run the IT operations including the application landscape. Based on those requirements and dependencies you can design a sufficient business continuity plan (BCP) including a disaster recovery plan (DRP).
