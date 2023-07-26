@@ -59,9 +59,7 @@ Why should we create our small-scale pizza ordering app maintainable? The answer
 
 Using **coding standards** increase consistency in your code and a consistent code within your implementation team can help a lot to avoid high maintenance times. Your team should use **common tool sets**. It means the usage of common development tools, programming languages and techniques which helps to achieve consistency. For example when using [Python](https://www.python.org) as programming language use linters to analyze your code and style guides to improve consistency and code quality. Try to avoid the DRY (Don't repeat yourself) principle and create reusable code. Here is a very good resource how to achieve [Python Code Quality](https://realpython.com/python-code-quality/) with tools and best practices.
 
-Another important thing are **naming conventions** in the code and in **technical documentation** to increase observability and standardize your application. A clean and structured documentation using a straight naming convention help additional developers to quickly jump into the project and have a smooth onboarding.
-
-The usage of a **software configuration management and version control** should be standard in the software development world. You need a tool to maintain your code, track changes and issues, and work collaborative on those topics.
+Another important thing are **naming conventions** in the code and in **technical documentation** to increase observability and standardize your application. A clean and structured documentation using a straight naming convention help additional developers to quickly jump into the project and have a smooth onboarding. The usage of a **software configuration management and version control** should be standard in the software development world. You need a tool to maintain your code, track changes and issues, and work collaborative on those topics.
 
 It is good to use an **object oriented design (OOD)** which makes it easier for others to follow. It brings again the benefit to easily add additional developers to your project. I would recommend to look at the SOLID design principle which main purpose is to make the object oriented design more understandable, maintainable, and extendable. The SOLID design principle consists five principles:
 
@@ -79,7 +77,7 @@ Last but not least, maintainability goes hand in hand with modularity. A **Modul
 
 Bringing all of the mentioned best practices into our pizza ordering application will help us to achieve reduced maintenance times through a good design and implementation. We should be well prepared to go live or not? What happens if the server on which our application is running crashes? We have not thought about how to achieve a high available and resilient application. So let us take a look at section 1.1.b Reliability: high availability and resiliency.
 
-### Built it High Available & Resilient
+## Built It High Available & Resilient
 
 What does it mean to build a high available and resilient pizza ordering application? It means that the application needs to be available for ordering pizza during the business hours and it should have no downtime until closing of business day. Pretty simple in our case, right? Of course there many other businesses which have higher requirements and need to be always online. Those business need to have much higher service level agreements (SLAs) than our pizza ordering application, but I want to keep it simple. You can find more about high availability requirements and service level agreements (SLAs) in chapter 2 of the [Cisco Certified DevNet Professional (DEVCOR 350-901) Official Cert Guide](https://www.ciscopress.com/store/cisco-certified-devnet-professional-devcor-350-901-9780137370443){:target="_blank"}.
 
@@ -107,9 +105,9 @@ No matter which design you create and which model would best suit the requiremen
 
 In case of our pizza ordering application the on-premises deployment could be a good starting point if there is a proper infrastructure already available that meets the requirements in the beginning. That would be a cost efficient way to begin with. For further growth we should design and build the application to be portable to a cloud deployment model and take all the advantages. A cloud deployment can provide *scale and performance*, *low maintenance*, *low cost* (it depends), *mobility and easy access*, and *high availability* and *disaster recovery* if your application is designed to leverage those features. The bad part of it is the *limited functionality* by the cloud provider, *security* topics, and *technical support* if needed. As said often enough, it all depends on the application design and the dependencies and requirements and then plays a larger or smaller role in your deployment. Now we move on to subsection 1.1.c Performance: scalability, latency, and rate limiting.
 
-### All About Performance
+## All About Performance
 
-### Monitor, Observe & Measure the Metrics
+## Monitor, Observe & Measure the Metrics
 
 ### Links & Sources
 
