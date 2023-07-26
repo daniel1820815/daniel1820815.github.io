@@ -79,21 +79,16 @@ Last but not least, maintainability goes hand in hand with modularity. A **Modul
 
 Bringing all of the mentioned best practices into our pizza ordering application will help us to achieve reduced maintenance times through a good design and implementation. We should be well prepared to go live or not? What happens if the server on which our application is running crashes? We have not thought about how to achieve a high available and resilient application. So let us take a look at section 1.1.b Reliability: high availability and resiliency.
 
-### High available & Resilient
+### Built it High Available & Resilient
 
-how many time between failures and how many time to repair these failures
-detect prevent and recover
+What does it mean to build a high available and resilient pizza ordering application? It means that the application needs to be available for ordering pizza during the business hours and it should have no downtime until closing of business day. Pretty simple in our case, right? Of course there many other businesses which have higher requirements and need to be always online. Those business need to have much higher service level agreements (SLAs) than our pizza ordering application, but I want to keep it simple.
 
-detection
-monitoring
-self-testing or self-monitoring
-heartbeat or 'hello packets'
-simple ping or ICMP echo request/reply
-sanity checks
+So what does it mean behind the scenes? It is again about money as you can imagine from terms like "available during business hours" or "no downtime during business hours". Time is money and therefore is about the time between failures and how many time does it take to repair these failures. There are three main topics you should address to build a high available and resilient application, because you want to detect any failures, prevent any failures, and recover from any failure as fast as possible.
 
-recovery
-redundancy to remove the single point of failure and ensure fast recovery
-redundant system in active redundancy mode, also known as hot standby, syncing the state and taking over in case of missing heartbeats or in passive (warm standby) or spare (cold standby)
+**Detection** is the one important thing you want to have in place. If there is no proper *monitoring*, *self-testing*, or *self-monitoring* in place you will not detect failures in time. We always need to know if our pizza ordering application is available and ready to take orders. Based on the systems you are running in your environment, there are also mechanisms like *heartbeat* or *hello packets* to quickly detect when a cluster member goes down or is not reachable anymore for any reason. *Simple ping* or *ICMP echo request/reply* checks are also common methods of monitoring systems to measure if a system is still alive.
+
+Let us now assume there is a failure on a device in our pizza ordering application and a potential danger that the application goes down during business hours. Then the **recovery** plays the next import role for high availability and resiliency. To ensure a fast recovery from a failure it is always recommended to build a level of *redundancy* and remove the *single point of failure* in your application design. The best level are redundant system in *active mode*, also known as *hot standby*, syncing the state and taking over in case of missing heartbeats. Then there is the *passive* or *warm standby* mode, which does not sync the state constantly. In case of a failure the passive or standby system takes over but it needs to learn the proper state before it is fully functional. A very basic redundancy method is the *spare* or *cold standby* mode which means it is not operational or not even powered on. This mode requires a manual process to bring the spare system online and is obviously the worst solution at least for our pizza ordering application when there is a potential danger to go down during business hours.
+
 retries
 timeouts
 upgrade
@@ -103,6 +98,8 @@ prevention
 isolation of system
 predictive analysis, historic data available, telemetry, logs and monitoring, normal behavior, before, during, after a failure
 automation is a great way to achieve code consistency as mentioned before during design and deployment, and can help to eliminate potential hunan errors
+
+![Druids](/images/druids.jpg "Druids")
 
 planning high availability
 to create a high availability design you need to consider three main aspects: High availability, continuous operations, and disaster recovery. All three aspects are part of the the business continuity plan (BCP) and obviously it contains the disaster recovery plan (DRP). It depends on the business requirements of the organization how those plans need to be designed. There are many dependencies based on the business operations and therefore how to run the IT operations including the application landscape. Based on those requirements and dependencies you can design a sufficient business continuity plan (BCP) including a disaster recovery plan (DRP).
@@ -117,6 +114,6 @@ Deployment models for high availability
 
 ### Links & Sources
 
-- [Developing Applications Using Cisco Core Platforms and APIs (DEVCOR 1.0) on CiscoU.](https://u.cisco.com/path/14){:target="_blank"}
+- [Developing Applications Using Cisco Core Platforms and APIs (DEVCOR 1.0) on Cisco U.](https://u.cisco.com/path/14){:target="_blank"}
 
-- [Cisco Certified DevNet Professional (DEVCOR 350-901) Official Cert Guide](https://www.ciscopress.com/store/cisco-certified-devnet-professional-devcor-350-901-9780137370443){:target="_blank"}
+- [Cisco Certified DevNet Professional (DEVCOR 350-901) Official Cert Guide on Cisco Press](https://www.ciscopress.com/store/cisco-certified-devnet-professional-devcor-350-901-9780137370443){:target="_blank"}
