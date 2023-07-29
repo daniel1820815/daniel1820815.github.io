@@ -189,10 +189,10 @@ According to IONOS, data collection is completely anonymous so that it cannot be
 
 If a corresponding consent has been requested, processing takes place exclusively on the basis of Art. 6 Para. 1 lit. a GDPR; the consent can be revoked at any time.
 
-Further information on data collection and processing by IONOS WebAnalytics can be found in the [IONOS data protection declaration](https://www.ionos.de/terms-gtc/index.php?id=6) following the link provided.
+Further information on data collection and processing by [IONOS WebAnalytics](https://www.ionos.de/hilfe/datenschutz/datenverarbeitung-von-webseitenbesuchern-ihres-11-ionos-produktes/webanalytics/){:target="_blank"} can be found in the link provided.
 
 #### Order processing
 
 The website operator has concluded an order processing contract with IONOS. This contract is intended to ensure that IONOS handles your personal data in accordance with data protection regulations.
 
-Source text templates: <https://www.e-recht24.de>
+Source text templates: [https://www.e-recht24.de](https://www.e-recht24.de){:target="_blank"}
