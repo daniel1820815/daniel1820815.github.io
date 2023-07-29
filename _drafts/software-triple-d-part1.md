@@ -109,6 +109,8 @@ In case of our pizza ordering application the on-premises deployment could be a 
 
 scalability???
 
+The first impression from an application for a user is the performance. In first place the user does not get any idea about how maintainable, high available, resilient, or scalable is the application built. But the performance plays a big role for the first user experience. Is there a bad performance on our pizza ordering application because of slow response times of the menu for example then the user experience is bad too.
+
 performance parameters
 latency, throughput, round-trip time (RTT)
 describe the differences in networking and software for latency
