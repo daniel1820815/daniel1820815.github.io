@@ -28,7 +28,7 @@ This blog post series is about the software triple D which is better know as **S
 
 Please keep in mind that this blog posts are just a summarization from the resources I am using for my DevNet Expert lab exam preparation including my personal view on the topics. It does not mean that the topics are fully covered or that there are no other good resources which could be taken into account. In the first part I will take a look at 1.1.a and 1.1.b including a general view on the topic. Let us start and tackle the major bullet point 1.1 which is about designing a solution.
 
-## Designing a solution
+## Designing a Solution
 
 {: style="text-align: justify" }
 
@@ -163,8 +163,11 @@ No matter which design you create and which model would best suit the requiremen
 
 In case of our pizza ordering application the on-premises deployment could be a good starting point if there is a proper infrastructure already available that meets the requirements in the beginning. That would be a cost efficient way to begin with. For further growth we should design and build the application to be portable to a cloud deployment model and take all the advantages. A cloud deployment can provide *scale and performance*, *low maintenance*, *low cost* (it depends), *mobility and easy access*, and *high availability* and *disaster recovery* if your application is designed to leverage those features. The bad part of it is the *limited functionality* by the cloud provider, *security* topics, and *technical support* if needed. As said often enough, it all depends on the application design and the dependencies and requirements and then plays a larger or smaller role in your deployment.
 
-1.1.c Performance: scalability, latency, and rate limiting.
-1.1.d Infrastructure: monitoring, observability, and metrics (e.g., instrument placement and instrument deployment)
+## Conclusion
+
+{: style="text-align: justify" }
+
+So far so good. Thank you very much for reading until here. I hope you liked it. In this posts I covered section *1.1 Design a solution based on an on-premises, hybrid, or public cloud deployment*, considering these factors from subsections *1.1.a Deployment: maintainability, modularity* and *1.1.b Reliability: high availability and resiliency*. We learned that designing an application is not pretty straight forward. You have to consider requirements and constraints which have connections in different subject areas and are partly dependent on each other or with each other. We will see that a high available and resilient solution has its trade-offs when I will continue with sections *1.1.c Performance: scalability, latency, and rate limiting* and *1.1.d Infrastructure: monitoring, observability, and metrics* in the second part. I hope you will be with me again then. Please leave a comment here or on one of Social Media posts about this post. Take care and may the force be with you!
 
 ### Links & Sources
 
