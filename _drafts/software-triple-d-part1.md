@@ -69,7 +69,7 @@ It is good to use an **object oriented design (OOD)** which makes it easier for 
 4. Interface segregation principle (ISP)
 5. Dependency inversion principle (DIP)
 
-I will not go into the details for the SOLID design principle as it would go beyond the scope of this post. You can find a very good and detailed explanation including code examples in in chapter 3 of the [Cisco Certified DevNet Professional (DEVCOR 350-901) Official Cert Guide](https://www.ciscopress.com/store/cisco-certified-devnet-professional-devcor-350-901-9780137370443){:target="_blank"}.
+I will not go into the details for the SOLID design principle as it would go beyond the scope of this post. You can find a very good and detailed explanation including code examples in chapter 3 of the [Cisco Certified DevNet Professional (DEVCOR 350-901) Official Cert Guide](https://www.ciscopress.com/store/cisco-certified-devnet-professional-devcor-350-901-9780137370443){:target="_blank"}.
 
 Last but not least, maintainability goes hand in hand with modularity. A **Modular design**, makes it easier to make changes on a small parts of the application or even replace components without affecting the entire system. As we already saw on the diagram of our pizza ordering application, it is about dividing the application into several separate modules. Those smaller functional modules are easier to understand and take less effort to maintain which is our main goal here. As mentioned before it creates more flexibility and extendability. Your code becomes more reusable and it is easier to build new modules or replace modules.
 
