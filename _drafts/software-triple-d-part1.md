@@ -107,6 +107,42 @@ In case of our pizza ordering application the on-premises deployment could be a 
 
 ## All About Performance
 
+scalability???
+
+performance parameters
+latency, throughput, round-trip time (RTT)
+describe the differences in networking and software for latency
+
+TCP and UDP differences on performance parameters
+
+other factors can affect those performance parameters for example
+network issues along the path routers, switches, firewalls and many more components
+hardware failures or less resource availability during a period of time
+software issues or bugs
+wrong or suboptimal network configurations for example routing
+geographically distributed systems or users
+
+there are three architecture trade offs and it is not easy to build low latency and high performance applications while fulfilling the different requirements and constraints we talked about
+from business point of view the most important things is money and therefore the cost
+availability and performance: high availability systems through building redundant components often affects latency
+scalability and performance: more scalability often means distributing resources among multiple devices. these devices need to communicate with each other which can affect performance
+
+rate limiting
+meraki dashboard API has a rate limiting of X requests per user per second to avoid overloeading
+control the amount of users accessing the pizza ordering application at the same time, for example the webserver can handle 100 requests per second
+
+image rate limiting
+
+examples for rate limits
+number of requests
+user actions
+server-bound traffic
+concurrent connections for user experience and security
+
+parallel processing
+
+exponential backoff
+
 ## Monitor, Observe & Measure the Metrics
 
 ### Links & Sources
