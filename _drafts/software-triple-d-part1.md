@@ -26,7 +26,11 @@ This blog post series is about the software triple D which is better know as **S
 
 {: style="text-align: justify" }
 
-Please keep in mind that this blog posts are just a summarization from the resources I am using for my DevNet Expert lab exam preparation including my personal view on the topics. It does not mean that the topics are fully covered or that there are no other good resources which could be taken into account. In the first part I will take a look at 1.1.a and 1.1.b including a general view on the topic. Let us start and tackle the major bullet point 1.1 which is about designing a solution.
+In the first part I will start with the major bullet point 1.1 which is about **designing a solution**. Then I will continue with subsections 1.1.a which is about the **deployment** while considering *maintainability* and *modularity*. Last but not least I will check how to ensure **reliability** through *high availability* and *resiliency*. So let us start!
+
+{: style="text-align: justify" }
+
+> Please keep in mind that this blog posts are just my personal summarization from the resources I am using for my DevNet Expert lab exam preparation including my personal view on the topics. It does not mean that the topics are fully covered or that there are no other good resources which could be taken into account.
 
 ## Designing a Solution
 
