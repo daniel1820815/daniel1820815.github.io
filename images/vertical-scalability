@@ -1,0 +1,11 @@
+# Vertical Scalability
+
+```mermaid
+flowchart LR
+    direction LR1
+    Clients --> |requests| LB[VIRTUAL<br>LOADBALANCER<br>CLUSTER]
+    LB --> A1[APP SERVER1<br>Memory++]
+    LB --> A2[APP SERVER2<br>Memory++]
+    style A1 stroke:red
+    style A2 stroke:red
+```

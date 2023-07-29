@@ -34,17 +34,33 @@ This is the second part of the two part blog post series. The major bullet point
 
 ## All About Performance
 
-The first impression from an application for a user is the performance. In first place the user does not get any idea about how maintainable, high available, resilient, or modular the application is built. The performance plays a big role for the first user experience. Is there a bad performance on our pizza ordering application because of slow response times of the menu for example then the user experience is bad too.
+{: style="text-align: justify" }
+
+The first impression from an application for a user is the performance in my opinion. In first place the user does not get any idea about how maintainable, high available, resilient, or modular the application is built. Those factors are not visible to the user, but the performance plays a big role for the first user experience. Is there a bad performance on our pizza ordering application for example because of slow response times of the menu then the user experience is bad too. Maybe the users move on to another pizza ordering application and you will loose money.
+
+![Yoda](/images/yoda.jpg "Yoda")
+
+{: style="text-align: justify" }
 
 **Scalability**, which is closely linked with modularity, is another hidden aspect but it directly affects performance. Scalability is about any sizing up the application and that's much easier when it was built modular. There are two types of scalability, **horizontal** and **vertical scalability**.
 
-Horizontal scalability, also mentioned as *Scaling out*, means adding additional resources to an application and distributing the load. From our example above for high availability deployment models we are simply adding another application server to the cluster to scale out from 2 to 3. The database servers were removed for simplicity. Load balancing, server load balancing or clustering is usually used for horizontal scaling.
+{: style="text-align: justify" }
+
+Horizontal scalability, also mentioned as *Scaling out*, means adding additional resources to an application and distributing the load. From the example high availability deployment models from the first part we are simply adding another application server to the cluster to scale out from 2 to 3. The database servers were removed for simplicity. *Load balancing*, *server load balancing* or *clustering* is usually used for horizontal scaling.
 
 ![Horizontal Scalability](/images/horizontal-scalability.png "Horizontal Scalability")
 
-**Diagram 2:** *Horizontal Scalability*
+**Diagram 1:** *Horizontal Scalability*
+
+{: style="text-align: justify" }
 
 Vertical scalability on the other hand is about adding additional resources to a single physical or virtual server. It means *scaling up* the server with memory, storage, or whatever resource needs more power. Whatever way of scaling you choose or you need to choose based on new requirements you will quickly find out that designing your application as modular as possible helps a lot and makes it much easier to scale out or up. Keep in mind that nonfunctional requirements need to be measurable and scalability can be measured to determine the **performance**.
+
+![Vertical Scalability](/images/vertical-scalability.png "Vertical Scalability")
+
+**Diagram 2:** *Vertical Scalability*
+
+{: style="text-align: justify" }
 
 There are some important performance indicators like **latency**, **throughput**, and **round-trip time (RTT)** which can define a good or bad user experience, depending on how well they are managed.
 
