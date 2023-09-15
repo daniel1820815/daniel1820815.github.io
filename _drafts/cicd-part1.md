@@ -6,7 +6,11 @@ categories: [Containers, Python]
 #comments_id: # CREATE AND ADD ISSUE NO.
 ---
 
+{: style="text-align: justify" }
+
 In this SEVEN part blog post series I will go through the process of building a GitLab CI/CD pipeline for automated network configuration changes including pre and post validation. The pipeline will consist several components which will be prepared separately and be brought together in the end to a complete automated framework.
+
+{: style="text-align: justify" }
 
 a OSPF configuration deployed using Ansible and validating the status of the network before and after the changes using pyATS test framework.
 
