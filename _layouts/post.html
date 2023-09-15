@@ -30,10 +30,9 @@ layout: default
         {% else %}
           {% assign categories = page.categories %}
         {% endif %}
-        {% for category in categories %}
-        Categorized as <a href="{{site.baseurl}}/categories/#{{category|slugize}}">{{category}}</a>
+        Categorized as {% for category in categories %}<a href="{{site.baseurl}}/categories/#{{category|slugize}}">{{category}}</a>
         {% unless forloop.last %}&nbsp;{% endunless %}
-        {% endfor %}
+        {%- endfor %}
       </div>
   </header>
 
