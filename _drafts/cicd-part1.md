@@ -46,13 +46,21 @@ In the third part of the blog post series I will show you how to spin up a virtu
 
 ### Docker image creation
 
+{: style="text-align: justify" }
+
 As described before, the GitLab runner is the agent which is responsible for running the pipeline jobs. The pipeline jobs will run in a Docker container using the default image or a specified image. In my CI/CD pipeline I will create my own Docker image and upload it to DockerHub. The image will contain all packages like Ansible and pyATS. The advantage of using your own image is that you have control of package and software versions. In the forth part of the blog post series I will go into the details of the Docker image creation.
 
 ### Ansible for configuration
 
-Ansible is the flexible automation solution tool for the network configuration management in the CI/CD pipeline. It supports various network hardware/software vendors and provides modules for example for Cisco IOS (usable for IOS-XE) and NX-OS software which I will use in my case. Ansible will make sure that the interfaces for OSPF (Open Shortest Path First) routing in my network will be configured based on YAML (Yet Another Markup Language) files containing the intended network configuration. I will explain the details of the pre and post network configuration in the fifth part of the blog post series.
+{: style="text-align: justify" }
+
+Ansible is the flexible automation solution tool for the network configuration management in the CI/CD pipeline. It supports various network hardware/software vendors and provides modules for example for Cisco IOS (usable for IOS-XE) and NX-OS software which I will use in my case. I will create an Ansible playbook which will make sure that the interfaces for OSPF (Open Shortest Path First) routing in my network will be configured based on YAML (Yet Another Markup Language) files containing the intended network configuration. I will explain the details of the pre and post network configuration in the fifth part of the blog post series.
 
 ### pyATS for validation
+
+{: style="text-align: justify" }
+
+Pre and post validation of network changes and the network state are key in an automated frameworks like CI/CD pipelines. pyATS (Python Automated Test Systems) is a Python based test automation infrastructure. In part six of the blog post series I will show you how to use pyATS ability to connect to the lab devices, defined in a testbed file, and use the build-in **parse** and **learn** functions to evaluate the network changes and network state prior and after the Ansible configuration playbook run. Then I will compare the outputs and print a diff into the logs.
 
 ### GitLab CI/CD pipeline
 
