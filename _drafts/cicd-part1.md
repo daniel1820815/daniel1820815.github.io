@@ -50,6 +50,8 @@ As described before, the GitLab runner is the agent which is responsible for run
 
 ### Ansible for configuration
 
+Ansible is the flexible automation solution tool for the network configuration management in the CI/CD pipeline. It supports various network hardware/software vendors and provides modules for example for Cisco IOS (usable for IOS-XE) and NX-OS software which I will use in my case. Ansible will make sure that the interfaces for OSPF (Open Shortest Path First) routing in my network will be configured based on YAML (Yet Another Markup Language) files containing the intended network configuration. I will explain the details of the pre and post network configuration in the fifth part of the blog post series.
+
 ### pyATS for validation
 
 ### GitLab CI/CD pipeline
