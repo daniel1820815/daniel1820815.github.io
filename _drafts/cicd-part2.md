@@ -6,4 +6,4 @@ categories: [Containers, Python]
 #comments_id: # CREATE AND ADD ISSUE NO.
 ---
 
-Test
+#### CI/CD pipeline part 2 - GitLab Docker container
