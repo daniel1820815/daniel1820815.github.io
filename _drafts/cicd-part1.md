@@ -18,6 +18,8 @@ The idea and inspiration for this blog post series comes from the videos from Ad
 
 ## Components
 
+{: style="text-align: justify" }
+
 Here is an high-level overview of the CI/CD components used in this automated framework. More details on each components will come with each post addressing one of the components in detail and how to setup and build it. There is also my GitHub repository available to review and download all the files I have used during this process.
 
 ![CICD components](/images/cicd_components.png "CICD components")
@@ -43,6 +45,8 @@ Cisco Modeling Labs is the platform I am using for simulating the network device
 In the third part of the blog post series I will show you how to spin up a virtual lab in Cisco Modeling Labs automatically using Terraform. The lab will have an external connector and an un-managed switch for out-of-band management of the devices. Then we will have two Cisco CAT8000V IOS-XE routers as core layer and two Cisco Nexus 9000v switches as distribution layer running NX-OS. Terraform will help to create the lab, the lab devices, all connections, and start the devices using an initial configuration.
 
 ### Docker image creation
+
+As described before, the GitLab runner is the agent which is responsible for running the pipeline jobs. The pipeline jobs will run in a Docker container using the default image or a specified image. In my CI/CD pipeline I will create my own Docker image and upload it to DockerHub. The image will contain all packages like Ansible and pyATS. The advantage of using your own image is that you have control of package and software versions. In the forth part of the blog post series I will go into the details of the Docker image creation.
 
 ### Ansible for configuration
 
