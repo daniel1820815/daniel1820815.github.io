@@ -64,11 +64,15 @@ Pre and post validation of network changes and the network state are key in an a
 
 ### GitLab CI/CD pipeline
 
+{: style="text-align: justify" }
+
+At the end of the series in part 7 we finally get back to GitLab and do the actual CI/CD pipeline creation. I will build the three stages of the CI/CI pipeline. There will be two stages for the pre and post validation using pyATS, and the configuration stage using Ansible. All job stages will run in the Docker image we created during part three of the blog post series. I will also show some tests and variations using the CI/CD pipeline.
+
 ## Preparation
 
 {: style="text-align: justify" }
 
-After explaining all the components of the framework we need a machine to work on. For this I will use a virtual machine on ESXi (7.0 Update 3) with a [CentOS 9 Stream](https://www.centos.org/download/){:target="_blank"} installation. The virtual machine consists 4vCPUs, 16 GB RAM, and 64 GB disk space. It is placed on the same virtual network subnet as the Cisco Modeling Labs server.
+After explaining all the components of the automated framework we need a machine to work on. There is nothing better than a Linux machine and in this case I will use a virtual machine on ESXi (7.0 Update 3) with a [CentOS 9 Stream](https://www.centos.org/download/){:target="_blank"} installation. The virtual machine consists 4vCPUs, 16 GB RAM, and 64 GB disk space. It is placed on the same virtual network subnet as the Cisco Modeling Labs server.
 
 ![CentOS VM settings](/images/cicd_vm.png "CentOS VM settings")
 *Screenshot 1: CentOS 9 VM settings*
