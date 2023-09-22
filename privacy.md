@@ -85,6 +85,13 @@ Elgendorfer Str. 57
 Germany
 ```
 
+### Content Delivery Network (CDN)
+
+The CDN service (Content Delivery Network) is provided by IONOS SE via the technology partner CloudFlare Inc., based in the USA. For the CDN service, content data is processed worldwide on CloudFlare servers for the purpose of improving performance. For more information about CloudFlare Inc.'s privacy and security policies and terms of use, please visit the following links:
+
+- <https://www.cloudflare.com/security-policy>
+- <https://www.cloudflare.com/terms>
+
 ### Contract for order processing
 
 In order to ensure data protection compliant processing, we have concluded an order processing contract with our hoster.
