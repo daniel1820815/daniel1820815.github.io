@@ -85,6 +85,13 @@ Elgendorfer Str. 57
 Germany
 ```
 
+### Content Delivery Network (CDN)
+
+The CDN service (Content Delivery Network) is provided by IONOS SE via the technology partner CloudFlare Inc., based in the USA. For the CDN service, content data is processed worldwide on CloudFlare servers for the purpose of improving performance. For more information about CloudFlare Inc.'s privacy and security policies and terms of use, please visit the following links:
+
+- <https://www.cloudflare.com/security-policy>
+- <https://www.cloudflare.com/terms>
+
 ### Contract for order processing
 
 In order to ensure data protection compliant processing, we have concluded an order processing contract with our hoster.
@@ -189,10 +196,10 @@ According to IONOS, data collection is completely anonymous so that it cannot be
 
 If a corresponding consent has been requested, processing takes place exclusively on the basis of Art. 6 Para. 1 lit. a GDPR; the consent can be revoked at any time.
 
-Further information on data collection and processing by IONOS WebAnalytics can be found in the [IONOS data protection declaration](https://www.ionos.de/terms-gtc/index.php?id=6) following the link provided.
+Further information on data collection and processing by [IONOS WebAnalytics](https://www.ionos.de/hilfe/datenschutz/datenverarbeitung-von-webseitenbesuchern-ihres-11-ionos-produktes/webanalytics/){:target="_blank"} can be found in the link provided.
 
 #### Order processing
 
 The website operator has concluded an order processing contract with IONOS. This contract is intended to ensure that IONOS handles your personal data in accordance with data protection regulations.
 
-Source text templates: <https://www.e-recht24.de>
+Source text templates: [https://www.e-recht24.de](https://www.e-recht24.de){:target="_blank"}
