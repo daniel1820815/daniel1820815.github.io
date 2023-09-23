@@ -23,6 +23,7 @@ mastodon:
   - username: daniel1820815
     instance: techhub.social
 issues_repo: daniel1820815/daniel1820815.github.io
+google_analytics: G-NSG0M9B3Y6
 
 header_pages:
   - about.md
