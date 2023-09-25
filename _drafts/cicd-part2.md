@@ -7,3 +7,5 @@ categories: [Containers, Python]
 ---
 
 #### CI/CD pipeline part 2 - GitLab Docker container
+
+Install make using ```sudo yum install make```

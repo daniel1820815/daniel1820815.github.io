@@ -72,17 +72,38 @@ At the end of the series in part 7 we finally get back to GitLab and do the actu
 
 {: style="text-align: justify" }
 
-After explaining all the components of the automated framework we need a machine to work on. There is nothing better than a Linux machine and in this case I will use a virtual machine on ESXi (7.0 Update 3) with a [CentOS 9 Stream](https://www.centos.org/download/){:target="_blank"} installation. The virtual machine consists 4vCPUs, 16 GB RAM, and 64 GB disk space. It is placed on the same virtual network subnet as the Cisco Modeling Labs server.
+After explaining all the components of the automated framework I need a machine to work on. There is nothing better than a Linux machine and in this case I will use a virtual machine on ESXi (7.0 Update 3) with a [CentOS 9 Stream](https://www.centos.org/download/){:target="_blank"} installation. The virtual machine consists 4vCPUs, 16 GB RAM, and 64 GB disk space. It is placed on the same virtual network subnet as the Cisco Modeling Labs server. Before starting the installation don't forget to mount the downloaded CentOS ISO file as CD/DVD drive.
 
 ![CentOS VM settings](/images/cicd_vm.png "CentOS VM settings")
-*Screenshot 1: CentOS 9 VM settings*
+*Screenshot 2: CentOS 9 VM settings*
 
-packages to be installed:
+{: style="text-align: justify" }
 
-- docker
-- docker compose
-- make
+During the installation process choose the standard settings, create a user, and configure your network interface with IP address, subnet mask, default gateway, and DNS servers, so that you are able to download and install software packages. After the installation you should be able to connect to the Linux machine via SSH using the user account you created. Before starting to install any new packages you should update the system to the latest status using the build-in packet management YUM (Yellowdog Updater, Modified) with the ```sudo yum update``` command. This requires your confirmation and then it will take a while. In my case it needs to install only 4 packages, but upgrade 115 packages.
 
-Docker installation
+![CentOS 9 updates and upgrades](/images/cicd_centos.png "CentOS 9 updates and upgrades")
+*Screenshot 3: CentOS 9 updates and upgrades*
+
+{: style="text-align: justify" }
+
+After all updates were completed you can continue by following the instructions to install [Docker for CentOS](https://docs.docker.com/engine/install/centos/){:target="_blank"}. The first step is removing older versions of Docker, but there should be nothing there to remove when using the fresh install as I described. In other cases it could make sense to remove older versions depending what setup you are using. Then I would use the recommended installation method using the [Docker's repositories](https://docs.docker.com/engine/install/centos/#install-using-the-repository){:target="_blank"}.
+
+![Docker packages](/images/docker_packages.png "Docker packages")
+*Screenshot 4: Docker packages*
+
+{: style="text-align: justify" }
+
+This method worked well for me and should be easy to follow. The steps from the documentation should display the same Docker packages on your screen to be installed. The installation should not take not much time.
+
+![Docker installation completed](/images/docker_install.png "Docker installation completed")
+*Screenshot 5: Docker installation completed*
+
+{: style="text-align: justify" }
+
+After the Docker installation was completed successfully and the output looks like the screenshot above please follow the further instructions to start and test your Docker setup. If you can successfully run and display the output of the hello-world container everything is good. Please complete also the [Linux postinstall](https://docs.docker.com/engine/install/linux-postinstall){:target="_blank"} to be able to run Docker without ```sudo```.
+
+{: style="text-align: justify" }
+
+So far so good. This was pretty much the introduction and preparation. I hope it was described in a understandable way and that it was easy to follow if you have decided to follow along the journey to build the CI/CI pipeline with me. If there are any questions or any comments please reach out to me, I am always happy for feedback. In case there is anything unclear or you faced into issues while following along, please don't hesitate to contact me. Stay tuned for part 2 of the blog post series which will be about the GitLab Docker container.
 
 ## Links
