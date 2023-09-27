@@ -7,3 +7,6 @@ categories: [Containers, Python]
 ---
 
 #### CI/CD pipeline part 3 - Cisco Modeling Labs lab using Terraform
+
+https://developer.cisco.com/modeling-labs/
+https://developer.cisco.com/docs/modeling-labs/
