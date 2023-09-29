@@ -16,18 +16,20 @@ ADD DIAGRAM
 
 ADD THE INTRO FOR THE PYTHON SCRIPT HERE
 
-You can follow along step-by-step the creating of the Docker containers in this post or you can clone my GitHub repository with all files used in this blog post series. When using the CentOS 9 Linux machine we created in the first blog post then you need to install git first using ```sudo yum install git```. 
+{: style="text-align: justify" }
+
+You can follow along step-by-step the creating of the Docker containers in this post or you can clone my GitHub repository with all files used in this blog post series. When using the CentOS 9 Linux machine we created in the first blog post then you need to install git first using ```sudo yum install git```.
 
 ![Installation of Git](/images/cicd_git_install.png "Installation of Git")
 *Screenshot 1: Installation of Git*
 
-It will install *git* with all its dependencies as you can see from the screenshot above. Then you will be able to clone my repository from GitHub:
+{: style="text-align: justify" }
+
+It will install *git* with all its dependencies as you can see from the screenshot above. Then you will be able to clone my repository from GitHub. All the files used to create the Docker containers can be found under *create_env* and the its subfolder *gitlab*.
 
 ```bash
 git clone https://github.com/daniel1820815/cicd-pipeline.git
 ```
-
-All the files used to create the Docker containers can be found under *create_env* and the its subfolder *gitlab*.
 
 ## Docker Compose overview
 
@@ -51,16 +53,59 @@ Docker Compose caches the configuration used to create a container and when you 
 
 There are more Docker Compose key features and uses cases. If you would like to dive deeper into it, I highly recommend taking a look at the documentation pages which are very good written and designed in my opinion. Start with [Docker Compose overview](https://docs.docker.com/compose/){:target="_blank"} and take it from there. Let's take a look now at the Docker Compose file for the Gitlab setup.
 
-## Docker Compose file
+## Docker Compose file creation
 
-The Docker Compose file is used to configure your Docker application's services, networks, volumes, and more. The default file name in your working directory is *compose.yaml* or *compose.yml*, but also *docker-compose.yaml* and *docker-compose.yml* are supported for backwards compatibility of earlier versions.
+{: style="text-align: justify" }
 
+The Docker Compose file is used to configure your Docker application's services, networks, volumes, and more. The default file name in your working directory is ```compose.yaml``` or ```compose.yml```, but also ```docker-compose.yaml``` and ```docker-compose.yml``` are supported for backwards compatibility of earlier versions. I will use ```compose.yml``` as file name and start with defining the **services** as top-level element. The services define the computing components of an application. In our case we have two services ```gitlab``` and ```runner``` to define as mentioned before. The keys of the top-level services element are the names of the services and the values are service definitions.
 
+```yaml
+services:
+  gitlab:
+  runner:
+```
 
-explain docker compose file
-version
-services: gitlab and runner
-volumes
+In the next step we give the gitlab service container a hostname. CHECK WITH AND WITHOUT HOSTNAME
+
+{: style="text-align: justify" }
+
+We specify the **images** which will be used in each services containers. The image must follow the Open Container [addressable image format](https://github.com/opencontainers/org/blob/master/docs/docs/introduction/digests.md){:target="_blank"}. We use ```image: gitlab/gitlab-ce``` and ```image: gitlab/gitlab-runner``` respectively. The [GitLab CE](https://hub.docker.com/r/gitlab/gitlab-ce) and [GitLab Runner](https://hub.docker.com/r/gitlab/gitlab-runner){:target="_blank"} images are available on [Docker Hub](https://hub.docker.com){:target="_blank"} for your reference. The images will be pulled from Docker Hub during the first run if not present locally and stored, so that they do not need to be pulled every time. We add the definition ```restart: always``` to both services, because by default a container does not restart in case of a termination under any circumstances. The restart policy always restarts the container until its removal.
+
+```yaml
+services:
+  gitlab:
+    hostname: gitlab
+    image: gitlab/gitlab-ce
+    restart: always
+  runner:
+    image: gitlab/gitlab-runner
+    restart: always
+```
+
+{: style="text-align: justify" }
+
+The services communicate with each other through **networks**. They store and share persistent data into **volumes**. In our case, we do not need any specific networks because we are using the default Docker network for both services to ensure they can communicate. But we want to use defined volumes to store our GitLab data. Therefore we define the volumes as another top-level element with two entries used for GitLab configuration files as ```gitlab-config``` and GitLab data files as ```gitlab-data``` specifying to use the local volume driver of the system with ```driver: local```. Then the volumes need to be defined under the service using ```VOLUME:CONTAINER_PATH``` syntax. Additionally you could specify the access mode with ```VOLUME:CONTAINER_PATH:ACCESS_MODE``` using ```rw``` or ```ro``` for example, but the default value is read and write access which is fine for us.
+
+```yaml
+services:
+  gitlab:
+    hostname: gitlab
+    image: gitlab/gitlab-ce
+    restart: always
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-data:/var/opt/gitlab
+  runner:
+    image: gitlab/gitlab-runner
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+volumes:
+  gitlab-config:
+    driver: local
+  gitlab-data:
+    driver: local
+```
 
 within the services:
 gitlab:
