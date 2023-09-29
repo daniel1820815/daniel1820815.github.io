@@ -16,8 +16,18 @@ ADD DIAGRAM
 
 ADD THE INTRO FOR THE PYTHON SCRIPT HERE
 
-Install git using ```sudo yum install git``` to clone the repository
-screenshot
+You can follow along step-by-step the creating of the Docker containers in this post or you can clone my GitHub repository with all files used in this blog post series. When using the CentOS 9 Linux machine we created in the first blog post then you need to install git first using ```sudo yum install git```. 
+
+![Installation of Git](/images/cicd_git_install.png "Installation of Git")
+*Screenshot 1: Installation of Git*
+
+It will install *git* with all its dependencies as you can see from the screenshot above. Then you will be able to clone my repository from GitHub:
+
+```bash
+git clone https://github.com/daniel1820815/cicd-pipeline.git
+```
+
+All the files used to create the Docker containers can be found under *create_env* and the its subfolder *gitlab*.
 
 ## Docker Compose overview
 
@@ -40,6 +50,12 @@ Docker Compose caches the configuration used to create a container and when you 
 {: style="text-align: justify" }
 
 There are more Docker Compose key features and uses cases. If you would like to dive deeper into it, I highly recommend taking a look at the documentation pages which are very good written and designed in my opinion. Start with [Docker Compose overview](https://docs.docker.com/compose/){:target="_blank"} and take it from there. Let's take a look now at the Docker Compose file for the Gitlab setup.
+
+## Docker Compose file
+
+The Docker Compose file is used to configure your Docker application's services, networks, volumes, and more. The default file name in your working directory is *compose.yaml* or *compose.yml*, but also *docker-compose.yaml* and *docker-compose.yml* are supported for backwards compatibility of earlier versions.
+
+
 
 explain docker compose file
 version
