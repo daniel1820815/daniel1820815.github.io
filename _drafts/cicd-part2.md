@@ -60,7 +60,7 @@ There are more Docker Compose key features and uses cases. If you would like to 
 The Docker Compose file is used to configure your Docker application's services, networks, volumes, and more. The default file name in your working directory is ```compose.yaml``` or ```compose.yml```, but also ```docker-compose.yaml``` and ```docker-compose.yml``` are supported for backwards compatibility of earlier versions. I will use ```compose.yml``` as file name and start with defining the **services** as top-level element. The services define the computing components of an application. In our case we have two services ```gitlab``` and ```runner``` to define as mentioned before. The keys of the top-level services element are the names of the services and the values are service definitions.
 
 ```yaml
-services: # The keys of the services are the name
+services:                       # The keys of the services are the name
   gitlab: 
   runner:
 ```
@@ -84,7 +84,11 @@ services:
 
 {: style="text-align: justify" }
 
-The services communicate with each other through **networks**. They store and share persistent data into **volumes**. In our case, we do not need any specific networks because we are using the default Docker network for both services to ensure they can communicate. But we want to use defined volumes to store our GitLab data. Therefore we define the volumes as another top-level element with two entries used for GitLab configuration files as ```gitlab-config``` and GitLab data files as ```gitlab-data``` specifying to use the local volume driver of the system with ```driver: local```. Then the volumes need to be defined under the service using ```VOLUME:CONTAINER_PATH``` syntax. Additionally you could specify the access mode with ```VOLUME:CONTAINER_PATH:ACCESS_MODE``` using ```rw``` or ```ro``` for example, but the default value is read and write access which is fine for us.
+The services communicate with each other through **networks**. They store and share persistent data into **volumes**. In our case, we do not need any specific networks because we are using the Docker default network for both services to ensure they can communicate. By default, each container for a service joins the default network and is both reachable by other containers on that network, and discoverable by them at a hostname identical to the container name.
+
+{: style="text-align: justify" }
+
+But other than the networks we want to use defined volumes to store our GitLab data. Therefore we define the volumes as another top-level element with two entries used for GitLab configuration files as ```gitlab-config``` and GitLab data files as ```gitlab-data``` specifying to use the local volume driver of the system with ```driver: local```. Then the volumes need to be defined under the service using ```VOLUME:CONTAINER_PATH``` syntax. Additionally you could specify the access mode with ```VOLUME:CONTAINER_PATH:ACCESS_MODE``` using ```rw``` or ```ro``` for example, but the default value is read and write access which is fine for us.
 
 ```yaml
 services:
@@ -92,15 +96,15 @@ services:
     hostname: gitlab
     image: gitlab/gitlab-ce
     restart: always
-    volumes:                            # add the volumes specified as top-level element
+    volumes:                    # add the volumes specified as top-level element
       - gitlab-config:/etc/gitlab
       - gitlab-data:/var/opt/gitlab
   runner:
     image: gitlab/gitlab-runner
     restart: always
-    volumes:                            # mount local Docker service into container
+    volumes:                    # mount local Docker service into container
       - /var/run/docker.sock:/var/run/docker.sock
-volumes:                                # top-level volumes using local volume driver
+volumes:                        # top-level volumes using local volume driver
   gitlab-config:
     driver: local
   gitlab-data:
@@ -124,14 +128,14 @@ services:
     volumes:
       - gitlab-config:/etc/gitlab
       - gitlab-data:/var/opt/gitlab
-    ports:                              # expose TCP port 80 from host to container
+    ports:                      # expose TCP port 80 from host to container
       - "80:80"
   runner:
     image: gitlab/gitlab-runner
     restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    extra_hosts:                        # specify extra hosts for /etc/hosts file
+    extra_hosts:                # specify extra hosts for /etc/hosts file
       - "devbox-cicd:192.168.11.220"
 volumes:
   gitlab-config:
@@ -140,19 +144,57 @@ volumes:
     driver: local
 ```
 
+{: style="text-align: justify" }
 
+The last parts of the Docker compose file are the ```environment``` variables that we need to inject into the containers to run the services properly. In case of the gitlab service we set the password for the root using ```GITLAB_ROOT_PASSWORD``` and the initial registration token used for runners with ```GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN```. With ```GITLAB_HOST``` we set the URL of the GitLab server and the ```VIRTUAL_HOST``` variable needs to be the name of the host.
 
-within the services:
-gitlab:
-restart
-image
-hostname
-volumes
-ports
-environment
-runner:
-explain the values used with the options described before
-extra hosts
+```yaml
+services:
+  gitlab:
+    hostname: gitlab
+    image: gitlab/gitlab-ce
+    restart: always
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-data:/var/opt/gitlab
+    ports:
+      - "80:80"
+    environment:                # set environment variables for the gitlab service
+      - GITLAB_ROOT_PASSWORD=1234QWer!
+      - GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN=gitlabrunners
+      - GITLAB_HOST=http://devbox-cicd
+      - VIRTUAL_HOST=devbox-cicd
+  runner:
+    image: gitlab/gitlab-runner
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    extra_hosts:
+      - "devbox-cicd:192.168.11.220"
+    environment:                # set environment variables for the runner service
+      - REGISTRATION_TOKEN=gitlabrunners
+      - RUNNER_NAME=runner1
+      - RUNNER_EXECUTOR=docker
+      - CI_SERVER_URL=http://devbox-cicd
+      - CLONE_URL=http://devbox-cicd
+      - REGISTER_NON_INTERACTIVE=true
+      - DOCKER_IMAGE=alpine
+      - DOCKER_EXTRA_HOSTS=devbox:192.168.11.220
+      - DOCKER_PULL_POLICY=if-not-present
+volumes:
+  gitlab-config:
+    driver: local
+  gitlab-data:
+    driver: local
+```
+
+{: style="text-align: justify" }
+
+The GitLab runner service needs some more ```environment``` variables to be defined. ```CI_SERVER_URL```, ```REGISTRATION_TOKEN```, ```RUNNER_NAME```, and ```RUNNER_EXECUTOR``` are used to register the runner on GitLab service. It makes sense to add the initial registration token on the runner to the same value as the gitlab service using ```REGISTRATION_TOKEN```. We want an unattended registration and therefore set ```REGISTER_NON_INTERACTIVE=true```. The ```CLONE_URL``` variable overwrites the default URL used to clone or fetch.
+
+{: style="text-align: justify" }
+
+The default ```DOCKER_IMAGE``` to be used will be **alpine** Linux from Docker Hub for now, but we will create our own Docker image later and specify to use it in the CI/CD pipeline file. We also add a host-to-IP mapping using ```DOCKER_EXTRA_HOSTS``` to inject the mapping into the Docker-in-Docker container. If the Docker image is not present locally we want to pull it and set ```DOCKER_PULL_POLICY=if-not-present```. Other possible settings could be ```never``` or ```always``` in this case. Maybe you need to avoid or force to use the latest version of a specific image.
 
 create and explain shell scripts
 setup.sh
