@@ -60,8 +60,8 @@ There are more Docker Compose key features and uses cases. If you would like to 
 The Docker Compose file is used to configure your Docker application's services, networks, volumes, and more. The default file name in your working directory is ```compose.yaml``` or ```compose.yml```, but also ```docker-compose.yaml``` and ```docker-compose.yml``` are supported for backwards compatibility of earlier versions. I will use ```compose.yml``` as file name and start with defining the **services** as top-level element. The services define the computing components of an application. In our case we have two services ```gitlab``` and ```runner``` to define as mentioned before. The keys of the top-level services element are the names of the services and the values are service definitions.
 
 ```yaml
-services:
-  gitlab:
+services: # The keys of the services are the name
+  gitlab: 
   runner:
 ```
 
@@ -74,12 +74,12 @@ We specify the **images** which will be used in each services containers. The im
 ```yaml
 services:
   gitlab:
-    hostname: gitlab
-    image: gitlab/gitlab-ce
-    restart: always
+    hostname: gitlab            # added a hostname to EXPLAIN
+    image: gitlab/gitlab-ce     # using the GitLab CE image from Docker Hub
+    restart: always             # restart the service in case of a termination
   runner:
-    image: gitlab/gitlab-runner
-    restart: always
+    image: gitlab/gitlab-runner # using the GitLab runner image on Docker Hub
+    restart: always             # restart the service in case of a termination
 ```
 
 {: style="text-align: justify" }
@@ -92,20 +92,55 @@ services:
     hostname: gitlab
     image: gitlab/gitlab-ce
     restart: always
-    volumes:
+    volumes:                            # add the volumes specified as top-level element
       - gitlab-config:/etc/gitlab
       - gitlab-data:/var/opt/gitlab
   runner:
     image: gitlab/gitlab-runner
     restart: always
+    volumes:                            # mount local Docker service into container
+      - /var/run/docker.sock:/var/run/docker.sock
+volumes:                                # top-level volumes using local volume driver
+  gitlab-config:
+    driver: local
+  gitlab-data:
+    driver: local
+```
+
+{: style="text-align: justify" }
+
+Docker needs to be available in the context of the image and for this to work we need to mount ```/var/run/docker.sock``` into the launched runner container as you can see above. If I understood this process correctly, it makes sure that we can run Docker-in-Docker which we need later in our CI/CD pipeline to start a Docker container running in GitLab Docker container.
+
+{: style="text-align: justify" }
+
+Now we get to specify the ```ports``` and add the entry ```80:80``` which exposes TCP port 80 of the host to TCP port 80 of the container. You could add the protocol values ```tcp``` or ```udp``` using the ```[HOST:]CONTAINER[/PROTOCOL]``` syntax to restrict the ports. By default ```tcp``` is used and therefore fine for us. At the runner service container we define ```devbox-cicd:192.168.11.220``` as ```extra_hosts``` which adds the hostname mapping to the container ```/etc/hosts``` network configuration file. In this case we add our of the Cent OS Linux machine hostname and IP address as mapping.
+
+```yaml
+services:
+  gitlab:
+    hostname: gitlab
+    image: gitlab/gitlab-ce
+    restart: always
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-data:/var/opt/gitlab
+    ports:                              # expose TCP port 80 from host to container
+      - "80:80"
+  runner:
+    image: gitlab/gitlab-runner
+    restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    extra_hosts:                        # specify extra hosts for /etc/hosts file
+      - "devbox-cicd:192.168.11.220"
 volumes:
   gitlab-config:
     driver: local
   gitlab-data:
     driver: local
 ```
+
+
 
 within the services:
 gitlab:
