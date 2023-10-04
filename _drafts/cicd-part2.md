@@ -10,9 +10,10 @@ categories: [Containers]
 
 {: style="text-align: justify" }
 
-After the [introduction post]() of this blog post series I will start with the first and foremost component of the automated framework and CI/CD pipeline in part two of the series: **The GitLab Docker containers**. As described in the previous post the GitLab setup contains of two Docker containers: [GitLab CE (community edition)](https://gitlab.com/rluna-gitlab/gitlab-ce){:target="_blank"} and the GitLab runner. GitLab CE will be used as version control system for the code. The GitLab runner, which is registered to the GitLab CE container, is the agent that is responsible for all of the GitLab CI/CD features like running the pipeline jobs. I will use Docker Compose to create and run both containers.
+After the [introduction post]() of this blog post series I will start with the first and foremost component of the automated framework and CI/CD pipeline in part two of the series: **The GitLab Docker containers**. As described in the previous post the GitLab setup contains of two Docker containers: **GitLab CE (community edition)** and the **GitLab runner**. GitLab CE will be used as version control system for the code. The GitLab runner, which is registered to the GitLab CE container, is the agent that is responsible for all of the GitLab CI/CD features like running the pipeline jobs. I will use Docker Compose to create and run both containers.
 
-ADD DIAGRAM
+![GitLab on Docker](/images/cicd_docker_part2.png "GitLab on Docker"){:style="display:block; margin-left:auto; margin-right:auto"}
+*Diagram 1: GitLab and GitLab Runner on Docker*
 
 ADD THE INTRO FOR THE PYTHON SCRIPT HERE
 
@@ -194,7 +195,7 @@ The GitLab runner service needs some more ```environment``` variables to be defi
 
 {: style="text-align: justify" }
 
-The default ```DOCKER_IMAGE``` to be used will be **alpine** Linux from Docker Hub for now, but we will create our own Docker image later and specify to use it in the CI/CD pipeline file. We also add a host-to-IP mapping using ```DOCKER_EXTRA_HOSTS``` to inject the mapping into the Docker-in-Docker container. If the Docker image is not present locally we want to pull it and set ```DOCKER_PULL_POLICY=if-not-present```. Other possible settings could be ```never``` or ```always``` in this case. Maybe you need to avoid or force to use the latest version of a specific image.
+The default ```DOCKER_IMAGE``` to be used will be **alpine** Linux from Docker Hub for now, but we will create our own Docker image later and specify to use it in the CI/CD pipeline file. We also add a host-to-IP mapping using ```DOCKER_EXTRA_HOSTS``` to inject the mapping into the Docker-in-Docker container. If the Docker image is not present locally we want to pull it and set ```DOCKER_PULL_POLICY=if-not-present```. Other possible settings could be ```never``` or ```always``` in this case. Maybe you want to avoid or force to use the latest version of a specific image.
 
 create and explain shell scripts
 setup.sh
