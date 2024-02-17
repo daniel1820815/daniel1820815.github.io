@@ -6,15 +6,12 @@ categories: [Automation, Python]
 comments_id: 21
 ---
 
-In this blog post I would like to explain how to create proper XML payload using the native YANG models for IOS-XE and the OpenConfig YANG models for NX-OS to send configuration data with NETCONF.
-
-At this point you will ask yourself why should I use NETCONF with creepy XML payload and complicated YANG models to configure my network devices when there are many other easier ways to do it?
-
-With the help of [RFC6241](https://datatracker.ietf.org/doc/html/rfc6241){:target="_blank"}, let's briefly describe what is NETCONF.
+{: style="text-align: justify" }
+In this blog post I would like to explain how to create proper XML payload using the native YANG models for IOS-XE and the OpenConfig YANG models for NX-OS to send configuration data to network devices with NETCONF. At this point you will ask yourself why should I use NETCONF with creepy XML payload and complicated YANG models to configure my network devices when there are many other easier ways to do it? You might be right but first of all, let's briefly describe NETCONF with the a little help from [RFC6241](https://datatracker.ietf.org/doc/html/rfc6241){:target="_blank"} and then take a look at the advantages.
 
 The Network Configuration Protocol (NETCONF) provides mechanisms to install, manipulate, and delete the configuration of network devices. It uses XML-based (Extensible Markup Language) data encoding for the configuration data and the protocol messages.
 
-   remote procedure call (RPC) between a client which is your workstation for example and a server which is the network device. a secure, connection-oriented session
+remote procedure call (RPC) between a client which is your workstation for example and a server which is the network device. a secure, connection-oriented session
 
 
 
