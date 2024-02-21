@@ -160,10 +160,27 @@ So far so good. The complete XML config payload for Router1 from IOS-XE native m
 
 #### Router2 - XML config payload using the OpenConfig YANG model for IOS-XE
 
-Like we did for Router1, we select *IOS-XE* on the **YANG Set** from the Dropdown menu, search and select the ** module and load the modules
+For the usage of OpenConfig YANG modules you need to choose all the single modules you need to build XML payload for and not only the single native module like we did for Router1 before. We select *IOS-XE* on the **YANG Set** from the Dropdown menu, but this time we search and select the following OpenConfig YANG modules:
 
-![Native YANG Interfaces](/images/netconf_native_interfaces1.png "Native YANG Interfaces")
-*Screenshot 3: GigabitEthernet list from interface container of the Cisco-IOS-XE-native module*
+- *openconfig-interfaces*
+- *openconfig-if-ip*
+- *openconfig-network-instance*
+- *openconfig-policy-types*
+
+You can find out how the various modules are linked together by using right click on the mouse while on a module in the YANG tree and choose **properties**. There is a lot of good information about the modules and which other submodules linked to it.
+
+![OpenConfig YANG Module properties](/images/netconf_openconfig_properties.png "OpenConfig YANG Module properties")
+*Screenshot 5: OpenConfig YANG Module properties*
+
+Load the modules and make sure you selected the NETCONF operation ```<edit-config>```. Expand the **openconfig-interface** module as well as the **interfaces** container and the **interface** list element. Add the **name** *GigabitEthernet2* which is the key of the list element like it was for the native model. Expand the **config** container, add gain the interface **name**, choose *ianaift:ethernetCsmacd* for the **type** leaf, and select *true* for the **enabled** leaf element.
+
+![OpenConfig YANG Interfaces](/images/netconf_openconfig_interfaces1.png "OpenConfig YANG Interfaces")
+*Screenshot 6: OpenConfig YANG Interfaces*
+
+The IP configuration is a little bit hided in the OpenConfig YANG models. Scroll down to the **subinterfaces** container, expand it, and expand **subinterface**. The key **index** needs to be *0* in the case you do not have a real subinterface which is some kind of confusing. Move on expand **oc-ip:ipv4 -> oc-ip:addresses -> oc-ip:address** and add *10.0.10.2* as **oc-ip:ip**. Expand the **oc-ip:config** container, add the IP address at **oc-ip:ip** again, and add *24* as **oc-ip:prefix-length**.
+
+![OpenConfig YANG Interfaces IP settings](/images/netconf_openconfig_interfaces2.png "OpenConfig YANG Interfaces IP settings")
+*Screenshot 7: OpenConfig YANG Interfaces IP settings*
 
 ```xml
 <config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
