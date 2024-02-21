@@ -44,7 +44,7 @@ For the NETCONF communication between the client (my workstation) and the server
 
 *Screenshot 1: NETCONF Lab overview in Cisco Modeling Labs*
 {: style="text-align: justify" }
-For the initial lab setup please refer to my [DevNet Expert Lab on Cisco Modeling Labs](https://github.com/daniel1820815/devnet-expert-cml-lab){:target="_blank"} GitHub repository. There are only the management interfaces and some basic features configured, everything else like the interfaces and BGP configuration will be done via NETCONF.
+For the initial lab setup please refer to my [DevNet Expert Lab on Cisco Modeling Labs](https://github.com/daniel1820815/devnet-expert-cml-lab){:target="_blank"} GitHub repository. There are only the management interfaces and some basic features configured, everything else like the interfaces with IP addressing and BGP configuration will be done via NETCONF.
 
 Before communicating with the devices using NETCONF, the NETCONF Agent must be enabled. The NETCONF Agent is enabled or disabled by entering the ```netconf-yang``` command on IOS-XE and ```feature netconf``` command on NX-OS. Additionally you need to enable OpenConfig on NX-OS using the ```feature openconfig``` command. Make also sure you have a user with appropriate privileges configured on your devices and connectivity from your workstation via SSHv2 on TCP port 830 is possible. NETCONF does not support SSH version 1. That's all part of the initial lab configuration in my example.
 
@@ -54,34 +54,43 @@ Before communicating with the devices using NETCONF, the NETCONF Agent must be e
 The XML configuration data, also named payload, will be created with the help of [Cisco YANG Suite](https://developer.cisco.com/yangsuite/){:target="_blank"}. It provides a set of tools and plugins to learn, test, and adopt YANG programmable interfaces such as NETCONF, RESTCONF, gNMI and more. I am using the DevNet Expert Candidate Workstation VM on which Cisco YANG Suite is already installed and is available on <http://localhost:8480>. For installation option please refer to the [Cisco YANG Suite documentation](https://developer.cisco.com/docs/yangsuite/){:target="_blank"}.
 
 {: style="text-align: justify" }
-If it is your first time running YANG Suite, you should start at the [Getting Started](https://developer.cisco.com/docs/yangsuite/#!welcome-to-cisco-yang-suite/getting-started){:target="_blank"} section and create Device profiles and download the supported YANG models from the devices or upload YANG model files from your workstation or from public [YANG Github repository](https://github.com/YangModels/yang){:target="_blank"}. After that you can create YANG module sets for IOS-XE and NX-OS with the supported modules you need.
+If it is your first time running YANG Suite, you should start at the [Getting Started](https://developer.cisco.com/docs/yangsuite/#!welcome-to-cisco-yang-suite/getting-started){:target="_blank"} section from the documentation and create Device profiles and download the supported YANG models from the devices or upload YANG model files from your workstation or from public [YANG Github repository](https://github.com/YangModels/yang){:target="_blank"} at the Setup menu on the right. After that you can create YANG module sets for IOS-XE and NX-OS with the supported modules you need.
 
 ![YANG Module Sets](/images/netconf_yang_module_sets.png "YANG Module Sets")
 
 {: style="text-align: justify" }
-Now we can take a closer look how to create the XML payload and use these models to send NETCONF at “Protocols –> NETCONF” in YANG Suite.
+Now we can take a closer look how to create the XML payload and use these models to send NETCONF at **Protocols –> NETCONF** in YANG Suite.
 
 ### Create XML Payloads with Cisco YANG Suite
 
 #### Router1 - XML config payload using the Native YANG model for IOS-XE
 
-Let us start with creating the...
+{: style="text-align: justify" }
+Let us start with creating the XML configuration payload for the IOS-XE Router1 using the Native YANG model. Go to **Protocols –> NETCONF** in YANG Suite, select *IOS-XE* on the **YANG Set** from the Dropdown menu, search and select the *Cisco-IOS-XE-native* module and load the modules. Then choose the NETCONF operation, ```<edit-config>``` in our case, and select **Router1** as device. Before we start browsing through the YANG tree, click on the "YANG Tree -> Options" and choose *NETCONF XML (RPC parameters only)* from **Display as RPC(s) as** to show only the configuration payload parameters.
 
 ![YANG Tree Settings](/images/netconf_yang_tree_settings.png "YANG Tree Settings")
+*Screenshot 2: YANG Tree Settings in YANG Suite*
 
-more text
+{: style="text-align: justify" }
+Now we can start browsing the YANG tree and look for the **interfaces** container. Unfortunately there is no option to sort the YANG tree in alphabetical order, therefore I recommend using the search option from the browser. Expand the **interfaces** container, look for the **GigabitEthernet** list element and expand it. The small key symbol at the **name** leaf tells you that this leaf is the key of the list item and mandatory. Add the interface number *2* in the value field of the **name**. Another important setting is the **shutdown** leaf which has only a checkbox. Check the box in the **Value** column and add the *remove* operation in the **Operation** column. This setting enables the interface and is the equivalent to the *no shutdown* CLI command.
 
 ![Native YANG Interfaces](/images/netconf_native_interfaces1.png "Native YANG Interfaces")
+*Screenshot 3: GigabitEthernet list from interface container of the Cisco-IOS-XE-native module*
 
-more text
+{: style="text-align: justify" }
+Scroll further down to the **ip** container, expand it, and then choose **address-choice -> address -> address -> address-choice -> fixed case -> primary**. Add the IP address *10.0.10.1* at the **address** leaf and the subnet mask *255.255.255.0* at the **mask** leaf. After that click Build RPC and the XML config payload is generated on the right side.
 
 ![Native YANG Interfaces](/images/netconf_native_interfaces2.png "Native YANG Interfaces")
+*Screenshot 3: First XML config payload for interfaces from the Cisco-IOS-XE-native module*
 
-more text
+{: style="text-align: justify" }
+You could use YANG Suite now and click **Run RPC(s)** which will then do a RPC to **Router1** in a new browser tab and send the payload. But for now we move on to the BGP configuration part which can be found at the **router** container and the **ios-bgp:bgp** list element. The leaf **ios-bgp:id** is the key and it represents the AS number *65001* in our case. Expand the list element **ios-bgp:neighbor**, add the neighbor ID *10.0.10.2* as value of the **ios-bgp:ip** leaf item, and add *65002* to the **ios-bgp:remote-as** leaf item. Click the red **Clear RPC(s)** button to clear the XML payload section and click **Build RPC(s)** again to re-create the XML payload. 
 
 ![Native YANG BGP](/images/netconf_native_bgp.png "Native YANG BGP")
+*Screenshot 4: All XML config payload parts from the Cisco-IOS-XE-native module*
 
-Then we can replicate what we have put together so far for the other interfaces and other BGP neighbors to create the full XML payload based on the Native YANG model for Router1:
+{: style="text-align: justify" }
+Now we have all XML payload configuration parts ready. Then we can replicate what we have put together so far for the other interfaces and BGP neighbors to create the full XML configuration payload for **Router1**:
 
 ```xml
 <config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
@@ -145,7 +154,16 @@ Then we can replicate what we have put together so far for the other interfaces 
 </config>
 ```
 
-#### Router2 - XML config payload using the Native YANG model for IOS-XE
+*Example 2: Complete XML config payload for Router1 from IOS-XE native model*
+{: style="text-align: justify" }
+So far so good. The complete XML config payload for Router1 from IOS-XE native models is ready. Now let us move on to the XML configuration payload for **Router2**, but this time we will use the OpenConfig YANG model.
+
+#### Router2 - XML config payload using the OpenConfig YANG model for IOS-XE
+
+Like we did for Router1, we select *IOS-XE* on the **YANG Set** from the Dropdown menu, search and select the ** module and load the modules
+
+![Native YANG Interfaces](/images/netconf_native_interfaces1.png "Native YANG Interfaces")
+*Screenshot 3: GigabitEthernet list from interface container of the Cisco-IOS-XE-native module*
 
 ```xml
 <config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
@@ -272,6 +290,163 @@ Then we can replicate what we have put together so far for the other interfaces 
 </config>
 ```
 
+#### Nexus1 - XML config payload using the Native + OpenConfig YANG model for NX-OS
+
+First interfaces to layer3
+
+```xml
+<config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <System xmlns="http://cisco.com/ns/yang/cisco-nx-os-device">
+    <intf-items>
+      <phys-items>
+        <PhysIf-list>
+          <id>eth1/1</id>
+          <layer>Layer3</layer>
+        </PhysIf-list>
+        <PhysIf-list>
+          <id>eth1/2</id>
+          <layer>Layer3</layer>
+        </PhysIf-list>
+      </phys-items>
+    </intf-items>
+  </System>
+</config>
+```
+
+then ip addressing on interfaces...
+
+```xml
+<config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <interfaces xmlns="http://openconfig.net/yang/interfaces">
+    <interface>
+      <name>eth1/1</name>
+      <config>
+        <name>eth1/1</name>
+        <type xmlns:ianaift="urn:ietf:params:xml:ns:yang:iana-if-type">ianaift:ethernetCsmacd</type>
+        <enabled>true</enabled>
+      </config>
+      <subinterfaces>
+        <subinterface>
+          <index>0</index>
+          <ipv4 xmlns="http://openconfig.net/yang/interfaces/ip">
+            <addresses>
+              <address>
+                <ip>10.0.30.3</ip>
+                <config>
+                  <ip>10.0.30.3</ip>
+                  <prefix-length>24</prefix-length>
+                </config>
+              </address>
+            </addresses>
+          </ipv4>
+        </subinterface>
+      </subinterfaces>
+    </interface>
+    <interface>
+      <name>eth1/2</name>
+      <config>
+        <name>eth1/2</name>
+        <type xmlns:ianaift="urn:ietf:params:xml:ns:yang:iana-if-type">ianaift:ethernetCsmacd</type>
+        <enabled>true</enabled>
+      </config>
+      <subinterfaces>
+        <subinterface>
+          <index>0</index>
+          <ipv4 xmlns="http://openconfig.net/yang/interfaces/ip">
+            <addresses>
+              <address>
+                <ip>10.0.40.3</ip>
+                <config>
+                  <ip>10.0.40.3</ip>
+                  <prefix-length>24</prefix-length>
+                </config>
+              </address>
+            </addresses>
+          </ipv4>
+        </subinterface>
+      </subinterfaces>
+    </interface>
+  </interfaces>
+</config>
+```
+
+last but not least the bgp configuration including neighbor statements
+
+```xml
+<config>
+  <network-instances xmlns="http://openconfig.net/yang/network-instance">
+    <network-instance>
+      <name>default</name>
+      <config>
+        <type xmlns:oc-ni-types="http://openconfig.net/yang/network-instance-types">oc-ni-types:DEFAULT_INSTANCE</type>
+        <enabled-address-families xmlns:oc-types="http://openconfig.net/yang/openconfig-types">oc-types:IPV4</enabled-address-families>
+      </config>
+      <protocols>
+        <protocol>
+          <name>bgp</name>
+          <identifier xmlns:oc-pol-types="http://openconfig.net/yang/policy-types">oc-pol-types:BGP</identifier>
+          <config>
+            <identifier xmlns:oc-pol-types="http://openconfig.net/yang/policy-types">oc-pol-types:BGP</identifier>
+            <name>bgp</name>
+          </config>
+          <bgp>
+            <global>
+              <config>
+                <as>65003</as>
+                <router-id>3.3.3.3</router-id>
+              </config>
+            </global>
+            <neighbors>
+              <neighbor>
+                <neighbor-address>10.0.30.1</neighbor-address>
+                <config>
+                  <neighbor-address>10.0.30.1</neighbor-address>
+                  <peer-as>65001</peer-as>
+                </config>
+                <afi-safis>
+                  <afi-safi>
+                    <afi-safi-name xmlns:oc-bgp-types="http://openconfig.net/yang/bgp-types">oc-bgp-types:IPV4_UNICAST</afi-safi-name>
+                    <ipv4-unicast>
+                    <config>
+                      <send-default-route>false</send-default-route>
+                    </config>
+                    </ipv4-unicast>
+                    <config>
+                      <afi-safi-name xmlns:oc-bgp-types="http://openconfig.net/yang/bgp-types">oc-bgp-types:IPV4_UNICAST</afi-safi-name>
+                    </config>
+                  </afi-safi>
+                </afi-safis>
+              </neighbor>
+              <neighbor>
+                <neighbor-address>10.0.40.2</neighbor-address>
+                <config>
+                  <neighbor-address>10.0.40.2</neighbor-address>
+                  <peer-as>65002</peer-as>
+                </config>
+                <afi-safis>
+                  <afi-safi>
+                    <afi-safi-name xmlns:oc-bgp-types="http://openconfig.net/yang/bgp-types">oc-bgp-types:IPV4_UNICAST</afi-safi-name>
+                    <ipv4-unicast>
+                    <config>
+                      <send-default-route>false</send-default-route>
+                    </config>
+                    </ipv4-unicast>
+                    <config>
+                      <afi-safi-name xmlns:oc-bgp-types="http://openconfig.net/yang/bgp-types">oc-bgp-types:IPV4_UNICAST</afi-safi-name>
+                    </config>
+                  </afi-safi>
+                </afi-safis>
+              </neighbor>
+            </neighbors>
+          </bgp>
+        </protocol>
+      </protocols>
+    </network-instance>
+  </network-instances>
+</config>
+```
+
+
 ### Pushing the configs using ncclient
 
 ```python
@@ -310,10 +485,23 @@ for device in iosxe_devices:
         router.edit_config(payload, target="running")
 ```
 
-Assume the folliwing configuration in place
-features for bgp
+### Verification & Validation
 
-- Preparing For Installation (Download / Upload)
-- Installation
+show example of an error message
 
-not need from version x.z on
+in our case everything went well and we got an ```<ok/>``` message back from the devices...
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="urn:uuid:42aeb554-42a7-4dc6-abb3-47776dc9e635">
+    <ok/>
+</rpc-reply>
+```
+
+Verification
+
+manually
+
+But we could also use YANG Suite to vaidate our changes...
+
+The next steps could be to build another Python script using NETCONF with ```<get>``` operation to validate the changes but this is something for the another blog post.
