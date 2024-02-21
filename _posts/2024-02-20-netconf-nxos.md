@@ -47,10 +47,12 @@ Before communicating with the devices using NETCONF, the NETCONF Agent must be e
 {: style="text-align: justify" }
 The XML configuration data, also named payload, will be created with the help of [Cisco YANG Suite](https://developer.cisco.com/yangsuite/){:target="_blank"}. It provides a set of tools and plugins to learn, test, and adopt YANG programmable interfaces such as NETCONF, RESTCONF, gNMI and more. I am using the DevNet Expert Candidate Workstation VM on which Cisco YANG Suite is already installed and is available on <http://localhost:8480>. For installation option please refer to the [Cisco YANG Suite documentation](https://developer.cisco.com/docs/yangsuite/){:target="_blank"}.
 
+{: style="text-align: justify" }
 If it is your first time running YANG Suite, you should start at the [Getting Started](https://developer.cisco.com/docs/yangsuite/#!welcome-to-cisco-yang-suite/getting-started){:target="_blank"} section and create Device profiles and download the supported YANG models from the devices or upload YANG model files from your workstation or from public [YANG Github repository](https://github.com/YangModels/yang){:target="_blank"}. After that you can create YANG module sets for IOS-XE and NX-OS with the supported modules you need.
 
 ![YANG Module Sets](/images/netconf_yang_module_sets.png "YANG Module Sets")
 
+{: style="text-align: justify" }
 Now we can take a closer look how to create the XML payload and use these models to send NETCONF at “Protocols –> NETCONF” in YANG Suite.
 
 ### Create XML Payload with Cisco YANG Suite
