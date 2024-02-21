@@ -42,17 +42,20 @@ For the initial lab setup please refer to my [DevNet Expert Lab on Cisco Modelin
 
 Before communicating with the devices using NETCONF, the NETCONF Agent must be enabled. The NETCONF Agent is enabled or disabled by entering the ```netconf-yang``` command on IOS-XE and ```feature netconf``` command on NX-OS. Additionally you need to enable OpenConfig on NX-OS using the ```feature openconfig``` command. Make also sure you have a user with appropriate privileges configured on your devices and connectivity from your workstation via SSHv2 on TCP port 830 is possible. NETCONF does not support SSH version 1. That's all part of the initial lab configuration in my example.
 
-### YANG suite
+### Intro to Cisco YANG Suite
 
-The XML configuration data, also named payload, will be created with the help of [YANG suite](https://developer.cisco.com/yangsuite/){:target="_blank"}. It provides a set of tools and plugins to learn, test, and adopt YANG programmable interfaces such as NETCONF, RESTCONF, gNMI and more. Let's take a closer look how to create the XML payload in YANG suite.
+{: style="text-align: justify" }
+The XML configuration data, also named payload, will be created with the help of [Cisco YANG Suite](https://developer.cisco.com/yangsuite/){:target="_blank"}. It provides a set of tools and plugins to learn, test, and adopt YANG programmable interfaces such as NETCONF, RESTCONF, gNMI and more. I am using the DevNet Expert Candidate Workstation VM on which Cisco YANG Suite is already installed and is available on <http://localhost:8480>. For installation option please refer to the [Cisco YANG Suite documentation](https://developer.cisco.com/docs/yangsuite/){:target="_blank"}.
 
-- Prepare Yang suite
-- Build payload with Yang suite
-- Use payload with ncclient
+If it is your first time running YANG Suite, you should start at the [Getting Started](https://developer.cisco.com/docs/yangsuite/#!welcome-to-cisco-yang-suite/getting-started){:target="_blank"} section and create Device profiles and download the supported YANG models from the devices or upload YANG model files from your workstation or from public [YANG Github repository](https://github.com/YangModels/yang){:target="_blank"}. After that you can create YANG module sets for IOS-XE and NX-OS with the supported modules you need.
 
-### XML Payload with Native YANG model
+![YANG Module Sets](/images/netconf_yang_module_sets.png "YANG Module Sets")
 
-### XML Payload with OpenConfig YANG model
+Now we can take a closer look how to create the XML payload and use these models to send NETCONF at “Protocols –> NETCONF” in YANG Suite.
+
+### Create XML Payload with Cisco YANG Suite
+
+text
 
 ### Pushing the configs using ncclient
 
