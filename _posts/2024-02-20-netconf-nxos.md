@@ -88,7 +88,7 @@ Scroll further down to the **ip** container, expand it, and then choose **addres
 *Screenshot 5: First XML config payload for interfaces from the Cisco-IOS-XE-native module.*
 
 {: style="text-align: justify" }
-You could use YANG Suite now to do a RPC to **Router1** in a new browser tab and send the payload when clicking on **Run RPC(s)**. But for now we move on to the BGP configuration part which can be found at the **router** container and the **ios-bgp:bgp** list element. The leaf **ios-bgp:id** is the key and it represents the AS number *65001* in our case. Expand the list element **ios-bgp:neighbor**, add the neighbor ID *10.0.10.2* as value of the **ios-bgp:ip** leaf item, and add *65002* to the **ios-bgp:remote-as** leaf item. Click the red **Clear RPC(s)** button to clear the XML payload section and click **Build RPC(s)** again to re-create the XML payload.
+You could use YANG Suite now to do a RPC to **Router1** in a new browser tab and send the payload when clicking on **Run RPC(s)**. But for now we move on to the BGP configuration part which can be found at the **router** container and the **ios-bgp:bgp** list element. The leaf **ios-bgp:id** is the key and it represents the AS number *65001* in our case. Expand the list element **ios-bgp:neighbor**, add the neighbor ID *10.0.10.2* as value of the **ios-bgp:ip** leaf item, and add *65002* to the **ios-bgp:remote-as** leaf item. Click the red **Clear RPC(s)** button to clear the XML payload section before clicking **Build RPC(s)** again otherwise the new added XML payload data will be added to the existing data instead of re-creating the whole thing.
 
 ![Native YANG BGP](/images/netconf_native_bgp.png "Native YANG BGP")
 *Screenshot 6: All XML config payload parts from the Cisco-IOS-XE-native module.*
@@ -165,6 +165,7 @@ So far so good. The complete XML config payload for Router1 from IOS-XE native m
 
 #### Router2 - XML config payload using the OpenConfig YANG model for IOS-XE
 
+{: style="text-align: justify" }
 For the usage of OpenConfig YANG modules you need to choose all the single modules you need to build XML payload for and not only the single native module like we did for Router1 before. We select *IOS-XE* on the **YANG Set** from the Dropdown menu, but this time we search and select the following OpenConfig YANG modules:
 
 - *openconfig-interfaces*
@@ -172,20 +173,50 @@ For the usage of OpenConfig YANG modules you need to choose all the single modul
 - *openconfig-network-instance*
 - *openconfig-policy-types*
 
-You can find out how the various modules are linked together by using right click on the mouse while on a module in the YANG tree and choose **properties**. There is a lot of good information about the modules and which other submodules linked to it.
+{: style="text-align: justify" }
+You can find out how the various modules are linked together by using right click on the mouse while on a module in the YANG tree and choose **properties**. There is a lot of useful information about the modules and which other submodules linked to it. The same option is available from left menu at **Explore -> YANG** where you can load the individual modules and explore the details.
 
 ![OpenConfig YANG Module properties](/images/netconf_openconfig_properties.png "OpenConfig YANG Module properties")
 *Screenshot 5: OpenConfig YANG Module properties*
 
-Load the modules and make sure you selected the NETCONF operation ```<edit-config>```. Expand the **openconfig-interface** module as well as the **interfaces** container and the **interface** list element. Add the **name** *GigabitEthernet2* which is the key of the list element like it was for the native model. Expand the **config** container, add gain the interface **name**, choose *ianaift:ethernetCsmacd* for the **type** leaf, and select *true* for the **enabled** leaf element.
+{: style="text-align: justify" }
+Load the modules and make sure you selected the NETCONF operation ```<edit-config>```. You do not need to select a device as we will not do NETCONF RPC from YANG Suite for now. Expand the **openconfig-interface** module as well as the **interfaces** container and the **interface** list element. Add the **name** *GigabitEthernet2* which is the key of the list element like it was for the native model. Expand the **config** container, add gain the interface **name**, choose *ianaift:ethernetCsmacd* for the **type** leaf, and select *true* for the **enabled** leaf element.
 
 ![OpenConfig YANG Interfaces](/images/netconf_openconfig_interfaces1.png "OpenConfig YANG Interfaces")
 *Screenshot 6: OpenConfig YANG Interfaces*
 
-The IP configuration is a little bit hided in the OpenConfig YANG models. Scroll down to the **subinterfaces** container, expand it, and expand **subinterface**. The key **index** needs to be *0* in the case you do not have a real subinterface which is some kind of confusing. Move on expand **oc-ip:ipv4 -> oc-ip:addresses -> oc-ip:address** and add *10.0.10.2* as **oc-ip:ip**. Expand the **oc-ip:config** container, add the IP address at **oc-ip:ip** again, and add *24* as **oc-ip:prefix-length**.
+{: style="text-align: justify" }
+The IP address configuration is a little bit hided in the OpenConfig YANG models. Scroll down to the **subinterfaces** container, expand it, then expand the **subinterface** list element. The key **index** needs to be *0* in the case that you do not have a subinterface which is some kind of confusing but the IP addresses need to be set there. Move on expand **oc-ip:ipv4 -> oc-ip:addresses -> oc-ip:address** and add *10.0.10.2* as **oc-ip:ip**. Expand the **oc-ip:config** container, add the IP address at **oc-ip:ip** again, and add *24* as **oc-ip:prefix-length**. Make sure that you have cleaned the XML payload section before you hit **Build RPC(s)** to take a look what we have so far.
 
 ![OpenConfig YANG Interfaces IP settings](/images/netconf_openconfig_interfaces2.png "OpenConfig YANG Interfaces IP settings")
 *Screenshot 7: OpenConfig YANG Interfaces IP settings*
+
+{: style="text-align: justify" }
+Let us move to the **openconfig-network-instance** model to create the configuration for BGP on Router2. Expand the **network-instances** container and the **network-instance** list element. The network instances are the layer-2, layer-3, or layer-2+layer-3 forwarding instances on a NX-OS device. In our case we are using the *default* network instance as **name** which is the key of the list. As the **default** network instance is already present on the device we do not need to use the **config** container in the **network-instance** and can move on to the **protocols** container.
+
+![OpenConfig YANG Network Instances](/images/netconf_openconfig_network_instances.png "OpenConfig YANG Network Instances")
+*Screenshot 8: OpenConfig YANG Network Instances*
+
+{: style="text-align: justify" }
+Expand the **protocols** container and the **protocol** list element. Now it is getting a little bit more complicated. The **identifier** of the protocol needs to be added as *oc-pol-types:INSTALL_PROTOCOL_TYPE* which is in our case *oc-pol-types:BGP*. Click into the value field before and then you see that there is a reference down to the **config** container, expand it, and you have a drop down where you can see the valid values to choose from.
+
+![OpenConfig YANG Protocols in Network Instances](/images/netconf_openconfig_protocols1.png "OpenConfig YANG Protocols in Network Instances")
+*Screenshot 9: OpenConfig YANG Protocols in Network Instances*
+
+{: style="text-align: justify" }
+As mentioned before we use *oc-pol-types:BGP* as **identifier** in the **protocol** list and in the **config** container. We do the same with *65002* for the **name** which is a unique name for the protocol instance. You can add whatever string you want but for better correlation I decided to use the BGP AS number.
+
+![OpenConfig YANG BGP Protocol in Network Instances](/images/netconf_openconfig_protocols2.png "OpenConfig YANG BGP Protocol in Network Instances")
+*Screenshot 10: OpenConfig YANG BGP Protocol in Network Instances*
+
+{: style="text-align: justify" }
+Scroll further down to the **bgp** container and expand it. Expand the **global** container as well and add the **as** number *65002* and the **router-id** of *2.2.2.2*. The move on to the **neighbor** container, expand it, and under the **neighbor** list element add the **neighbor-address** of Router1 which is *10.0.10.1*. Add the same value under the **config** container at the **neighbor-address** and use *65001* as **peer-as** which is the equivalent of the *remote-as* on the neighbor statement on the CLI.
+
+![OpenConfig YANG BGP Config](/images/netconf_openconfig_bgp.png "OpenConfig YANG BGP Config")
+*Screenshot 11: OpenConfig YANG BGP Config*
+
+{: style="text-align: justify" }
+Remember to clear the XML payload section using the **Clear RPC(s)** button and then hit **Build RPC(s)**. Similar as we did for Router1, we are able to replicate the XML payload for the other interfaces and BGP neighbors to complete the full XML payload for Router2. It should then look like example 3 below. Now there is only the NX-OS device **Nexus1** left.
 
 ```xml
 <config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
@@ -312,7 +343,12 @@ The IP configuration is a little bit hided in the OpenConfig YANG models. Scroll
 </config>
 ```
 
+*Example 3: Complete XML config payload for Router2 from OpenConfig YANG models.*
+
 #### Nexus1 - XML config payload using the Native + OpenConfig YANG model for NX-OS
+
+{: style="text-align: justify" }
+For the NX-OS device I had several challenges during testing. Initially I wanted to use only the OpenConfig YANG modules to create the XML payload for the configuration. It quickly turned out that not all functions of the CLI were implemented in the OpenConfig YANG model for NX-OS, for example it is not possible to change an interface from a layer-2 to a layer-3 interface. On the CLI you would simply enter *no switchport* at the interface configuration and that's it. So I decided to use a combination of both YANG modules, the Native Cisco-NX-OS-device module and the OpenConfig modules. Furthermore I thought it would be a good idea to keep the configuration parts separated in to single files and send it later via NETCONF sequentially to the NX-OS device.
 
 First interfaces to layer3
 
@@ -334,6 +370,8 @@ First interfaces to layer3
   </System>
 </config>
 ```
+
+*Example 4: Physical interface XML config payload for Nexus1 from .*
 
 then ip addressing on interfaces...
 
