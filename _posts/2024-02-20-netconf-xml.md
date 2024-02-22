@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "NETCONF XML payload with YANG models"
+title: "NETCONF XML Payload with YANG models"
 date: 2024-02-22 21:00:00 +0200
 categories: [Automation, Python]
 comments_id: 28
