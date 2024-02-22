@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "NETCONF XML payload with YANG models"
-date: 2024-02-16 09:00:00 +0200
+date: 2024-02-22 21:00:00 +0200
 categories: [Automation, Python]
-comments_id: 21
+comments_id: 28
 ---
 
 {: style="text-align: justify" }
@@ -49,7 +49,7 @@ For the NETCONF communication between the client (my workstation) and the server
 For the initial lab setup please refer to my [DevNet Expert Lab on Cisco Modeling Labs](https://github.com/daniel1820815/devnet-expert-cml-lab){:target="_blank"} GitHub repository. There are only the management interfaces and some basic features configured, everything else like the interfaces with IP addressing and BGP configuration will be done via NETCONF.
 
 {: style="text-align: justify" }
-Before communicating with the devices using NETCONF, the NETCONF Agent must be enabled. The NETCONF Agent is enabled or disabled by entering the ```netconf-yang``` command on IOS-XE and ```feature netconf``` command on NX-OS. Additionally you need to enable OpenConfig on NX-OS using the ```feature openconfig``` command. Make also sure you have users with appropriate privileges configured on your devices that is *privilege level 15 on IOS-XE* and *network-admin or dev-ops role on NX-OS*. Last but not least you need connectivity from your workstation via SSHv2 on TCP port 830. NETCONF does not support SSH version 1. That's all part of the initial lab configuration in my example.
+Before communicating with the devices using NETCONF, the NETCONF Agent must be enabled. The NETCONF Agent is enabled or disabled by entering the ```netconf-yang``` command on IOS-XE and ```feature netconf``` command on NX-OS. Additionally you need to enable OpenConfig on NX-OS using the ```feature openconfig``` command. Make sure you have users with appropriate privileges configured on your devices that is *privilege level 15 on IOS-XE* and *network-admin or dev-ops role on NX-OS*. You need connectivity from your workstation via SSHv2 on TCP port 830. NETCONF does not support SSH version 1. That's all part of the initial lab configuration in my example.
 
 ### Intro to Cisco YANG Suite
 
@@ -70,7 +70,7 @@ Now we can take a closer look how to create the XML payload and use these models
 #### Router1 - XML config payload using the Native YANG model for IOS-XE
 
 {: style="text-align: justify" }
-Let us start with creating the XML configuration payload for the IOS-XE Router1 using the Native YANG model. Go to **Protocols –> NETCONF** in YANG Suite, select *IOS-XE* on the **YANG Set** from the Dropdown menu, search and select the *Cisco-IOS-XE-native* module and load the modules. Then choose the NETCONF operation, ```<edit-config>``` in our case, and select **Router1** as device. Before we start browsing through the YANG tree, click on the "YANG Tree -> Options" and choose *NETCONF XML (RPC parameters only)* from **Display as RPC(s) as** to show only the configuration payload parameters.
+Let us start with creating the XML configuration payload for the IOS-XE **Router1** using the Native YANG model. Go to **Protocols –> NETCONF** in YANG Suite, select *IOS-XE* on the **YANG Set** from the Dropdown menu, search and select the *Cisco-IOS-XE-native* module and load the modules. Then choose the NETCONF operation, ```<edit-config>``` in our case, and select **Router1** as device. Before we start browsing through the YANG tree, click on the "YANG Tree -> Options" and choose *NETCONF XML (RPC parameters only)* from **Display as RPC(s) as** to show only the configuration payload parameters.
 
 ![YANG Tree Settings](/images/netconf_yang_tree_settings.png "YANG Tree Settings")
 *Screenshot 3: YANG Tree Settings in YANG Suite.*
@@ -348,9 +348,16 @@ Remember to clear the XML payload section using the **Clear RPC(s)** button and 
 #### Nexus1 - XML config payload using the Native + OpenConfig YANG model for NX-OS
 
 {: style="text-align: justify" }
-For the NX-OS device I had several challenges during testing. Initially I wanted to use only the OpenConfig YANG modules to create the XML payload for the configuration. It quickly turned out that not all functions of the CLI were implemented in the OpenConfig YANG model for NX-OS, for example it is not possible to change an interface from a layer-2 to a layer-3 interface. On the CLI you would simply enter *no switchport* at the interface configuration and that's it. So I decided to use a combination of both YANG modules, the Native Cisco-NX-OS-device module and the OpenConfig modules. Furthermore I thought it would be a good idea to keep the configuration parts separated in to single files and send it later via NETCONF sequentially to the NX-OS device.
+For the NX-OS device I had several challenges during testing. Initially I wanted to use only the OpenConfig YANG modules to create the XML payload for the configuration. It quickly turned out that not all functions of the CLI were implemented in the OpenConfig YANG model for NX-OS, for example it is not possible to change an interface from a layer-2 to a layer-3 interface. On the CLI you would simply enter *no switchport* at the interface configuration and that's it. So I decided to use a combination of both YANG modules, the *Native Cisco-NX-OS-device* module and the *OpenConfig* modules. Furthermore I thought it would be a good idea to keep the configuration parts separated in to single files and send it later via NETCONF sequentially to the NX-OS device.
 
-First interfaces to layer3
+{: style="text-align: justify" }
+Before being able to configure an IP address on an NX-OS interfaces we need to make it a layer-3 interface as described above. For this configuration we have to use the *Native Cisco-NX-OS-device*. Load the modules as we did it before and search the YANG module for the **intf-items** container with the **phys-items** sub-container. Expand the **PhysIf-list** list item and enter *eth1/1* as key **id**. Scroll further down for the **layer** leaf and choose *Layer3* from the dropdown.
+
+![Native Cisco-NX-OS-device physical interface](/images/netconf_openconfig_bgp.png "Native Cisco-NX-OS-device physical interface")
+*Screenshot 12: Native Cisco-NX-OS-device physical interface*
+
+{: style="text-align: justify" }
+Build the RPC as we did before, replicate the configuration for *eth1/2**, and save the XML payload as *nxos_native_interfaces.xml* file. This is the first configuration part we will send to the NX-OS device. The XML payload should look like the example 4 below.
 
 ```xml
 <config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
@@ -371,9 +378,10 @@ First interfaces to layer3
 </config>
 ```
 
-*Example 4: Physical interface XML config payload for Nexus1 from .*
+*Example 4: Physical interface XML config payload for Nexus1 from Native Cisco-NX-OS-device.*
 
-then ip addressing on interfaces...
+{: style="text-align: justify" }
+Then the next step is to create the configuration part for IP addressing on the interfaces. We already used the OpenConfig modules for the interface IP addressing on Router2, so we can use it as example and do not need to browse through the YANG model again and out the configuration together. Copy the XML payload for the interfaces from Router2 and replace the interfaces and IP addresses. Save the XML payload as *nxos_openconfig_interfaces.xml* file and it should look like example 5 below.
 
 ```xml
 <config xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
@@ -430,17 +438,16 @@ then ip addressing on interfaces...
 </config>
 ```
 
-last but not least the bgp configuration including neighbor statements
+*Example 5: IP addressing XML config payload for Nexus1 from OpenConfig modules.*
+
+{: style="text-align: justify" }
+Last but not least we create the XML payload for the BGP configuration including neighbor statements using the OpenConfig modules. As we did before we could copy the example from Router2 and use it here, but there are some differences in the NX-OS implementation of the **openconfig-network-instance** module compared to IOS-XE. The first thing is the **name** leaf at the **protocol** list element under the **protocols** container. In the NX-OS implementation it has to match the protocol name you want to use, in our case *bgp*. The second thing is the address family specific configuration per neighbor at the **afi-safis** container under the **neighbor** list element which needs to be added on NX-OS. We have to add *oc-bgp-types:IPv4_UNICAST* as **afi-safi-name** key and under the **config** container for each neighbor statement. Example 6 shows you the complete BGP XML payload.
 
 ```xml
 <config>
   <network-instances xmlns="http://openconfig.net/yang/network-instance">
     <network-instance>
       <name>default</name>
-      <config>
-        <type xmlns:oc-ni-types="http://openconfig.net/yang/network-instance-types">oc-ni-types:DEFAULT_INSTANCE</type>
-        <enabled-address-families xmlns:oc-types="http://openconfig.net/yang/openconfig-types">oc-types:IPV4</enabled-address-families>
-      </config>
       <protocols>
         <protocol>
           <name>bgp</name>
@@ -466,11 +473,6 @@ last but not least the bgp configuration including neighbor statements
                 <afi-safis>
                   <afi-safi>
                     <afi-safi-name xmlns:oc-bgp-types="http://openconfig.net/yang/bgp-types">oc-bgp-types:IPV4_UNICAST</afi-safi-name>
-                    <ipv4-unicast>
-                    <config>
-                      <send-default-route>false</send-default-route>
-                    </config>
-                    </ipv4-unicast>
                     <config>
                       <afi-safi-name xmlns:oc-bgp-types="http://openconfig.net/yang/bgp-types">oc-bgp-types:IPV4_UNICAST</afi-safi-name>
                     </config>
@@ -486,11 +488,6 @@ last but not least the bgp configuration including neighbor statements
                 <afi-safis>
                   <afi-safi>
                     <afi-safi-name xmlns:oc-bgp-types="http://openconfig.net/yang/bgp-types">oc-bgp-types:IPV4_UNICAST</afi-safi-name>
-                    <ipv4-unicast>
-                    <config>
-                      <send-default-route>false</send-default-route>
-                    </config>
-                    </ipv4-unicast>
                     <config>
                       <afi-safi-name xmlns:oc-bgp-types="http://openconfig.net/yang/bgp-types">oc-bgp-types:IPV4_UNICAST</afi-safi-name>
                     </config>
@@ -506,8 +503,12 @@ last but not least the bgp configuration including neighbor statements
 </config>
 ```
 
+*Example 6: BGP XML config payload for Nexus1 from OpenConfig modules.*
 
-### Pushing the configs using ncclient
+### Pushing the XML payload configs using ncclient
+
+{: style="text-align: justify" }
+Now we are ready tp push the XML payload configurations using the Python library [ncclient](https://ncclient.readthedocs.io/en/latest/){:target="_blank"}. I have prepared a script for this which loops through the list of devices, opens the XML payload for the configuration, and sends it to the device using NETCONF with the ```<edit-config>``` operation. There is a list of configurations for the NX-OS device **Nexus1** which will be used in an additional loop and sends all three XML payloads sequentially to the device. Should be pretty straight forward as you can see in example 7 below.
 
 ```python
 '''Python script to push XML configuration payload to devices via NETCONF'''
@@ -517,13 +518,13 @@ from ncclient import manager
 logging.basicConfig(level=logging.DEBUG)
 
 # List of devices IOSXE devices
-iosxe_devices = ["192.168.255.51", "192.168.255.52", "192.168.255.53"]
+devices = ["192.168.255.51", "192.168.255.52", "192.168.255.53"]
 
 # List of NX-OS device configurations
 nxos_configs = ["native_interfaces", "openconfig_interfaces", "openconfig_bgp"]
 
 # Loop through the devices and connect to it
-for device in iosxe_devices:
+for device in devices:
     router = manager.connect(
         host=device,
         username="expert",
@@ -545,11 +546,29 @@ for device in iosxe_devices:
         router.edit_config(payload, target="running")
 ```
 
+*Example 7: Python script to send the configuration to the devices.*
+
 ### Verification & Validation
 
-show example of an error message
+{: style="text-align: justify" }
+As you might saw I imported the **logging** module and sat the logging level to *DEBUG* with ```logging.basicConfig(level=logging.DEBUG)```. It could be commented in the code but for troubleshooting it is very helpful. Below in example 8 there is an error message from the debug messages which shows you exactly what was wrong with your XML payload.
 
-in our case everything went well and we got an ```<ok/>``` message back from the devices...
+```xml
+<rpc-reply xmlns="urn:ietf:params:xml:ns:netconf:base:1.0" message-id="urn:uuid:a3bdb31a-db79-46f1-9d6e-c915b94777a8">
+    <rpc-error>
+        <error-type>protocol</error-type>
+        <error-tag>invalid-value</error-tag>
+        <error-severity>error</error-severity>
+        <error-message xml:lang="en">List Merge Failed: [ERR] Invalid DN sys/isis/inst, wrong rn prefix inst at position 13</error-message>
+        <error-path>/network-instances/network-instance/protocols/protocol/name</error-path>
+    </rpc-error>
+</rpc-reply>
+```
+
+*Example 8: NETCONF RPC reply error message.*
+
+{: style="text-align: justify" }
+Not every time are the error messages that helpful and you have to dig into the YANG models to find out what was wrong. I can tell you that I went through a lot of trial & error testing phases. In our case everything went well and we got an ```<ok/>``` message back from the devices which looks like the one in example 9.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -558,10 +577,25 @@ in our case everything went well and we got an ```<ok/>``` message back from the
 </rpc-reply>
 ```
 
-Verification
+*Example 9: NETCONF RPC reply ok message.*
 
-manually
+{: style="text-align: justify" }
+Now there is only one thing left which is the validation of our changes. We know that the NETCONF operations via the Python script using ncclient went well but is the configuration working on the devices? We could login to the device and quickly check it manually, but we could also use YANG Suite to validate our changes. Let me show you how it works for IOS-XE for example. Load the Native *Cisco-IOS-XE-bgp-oper* model and choose the ```<get>``` operation with the *Router1* as device. Expand the **bgp-state-data** container and the **neighbors** container. Mark the checkbox at the **neighbor** list and click into the value field of the **neighbor-id** wihtout entering anything. Then build the XML payload using the **Build RPC(s)** button and run it with **Run RPC(s)**.
 
-But we could also use YANG Suite to vaidate our changes...
+![BGP neighbor validation using Cisco-IOS-XE-bgp-oper model](/images/netconf_native_validation.png "BGP neighbor validation using Cisco-IOS-XE-bgp-oper model")
+*Screenshot 13: BGP neighbor validation using Cisco-IOS-XE-bgp-oper model*
 
-The next steps could be to build another Python script using NETCONF with ```<get>``` operation to validate the changes but this is something for the another blog post.
+{: style="text-align: justify" }
+A new browser tab will be opened where you can follow the complete RPC with all details similar to the debug from the Python script. You can see the successful RPC reply message showing the neighbors from Router1.
+
+![BGP neighbor validation reply message](/images/netconf_native_validation_reply.png "BGP neighbor validation reply message")
+*Screenshot 14: BGP neighbor validation reply message.*
+
+{: style="text-align: justify" }
+For the OpenConfig YANG models there are no operation models like for the Native models and you need to use the same models as for the configuration parts, but then for the state data. The next steps could be to build another Python script using NETCONF with the ```<get>``` operation to validate the changes in a programmatic way, but this is something for the another blog post.
+
+{: style="text-align: justify" }
+I hope it was easy to follow and to replicate on your own setup. You can find all files from the examples used in this post in my GitHub repository [netconf-example](https://github.com/daniel1820815/netconf-example){:target="_blank"}. If you face into any issues with the setup or if you found any errors please let me know and/or leave a comment using the Github issues.
+
+{: style="text-align: justify" }
+Thank you for reading this blog post and following along until the end. Please leave a feedback in the comments!
