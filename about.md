@@ -23,6 +23,4 @@ Thank you for visiting my blog site. Don’t hesitate to contact me in any case 
 
 ## Achievements
 
-Since 2021 I am part of Cisco Champions program and from 2022 also part of the [Cisco Designated VIP](https://learningnetwork.cisco.com/s/meet-the-vips){:target="_blank"} program.
-
-Most of my verified achievements and obtained certifications are available on [Credly](https://www.credly.com/users/daniel-kuhl/badges?sort=-state_updated_at&page=1){:target="_blank"}.
+Since 2021 I am part of Cisco Champions program and from 2022 also part of the [Cisco Designated VIP](https://learningnetwork.cisco.com/s/meet-the-vips){:target="_blank"} program. Most of my verified achievements and obtained certifications are available on [Credly](https://www.credly.com/users/daniel-kuhl/badges?sort=-state_updated_at&page=1){:target="_blank"}.
