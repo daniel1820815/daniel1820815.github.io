@@ -592,7 +592,19 @@ A new browser tab will be opened where you can follow the complete RPC with all 
 *Screenshot 14: BGP neighbor validation reply message.*
 
 {: style="text-align: justify" }
-For the OpenConfig YANG models there are no operation models like for the Native models and you need to use the same models as for the configuration parts, but then for the state data. The next steps could be to build another Python script using NETCONF with the ```<get>``` operation to validate the changes in a programmatic way, but this is something for the another blog post.
+For the OpenConfig YANG models there are no operation models like for the Native models and you need to use the same models as for the configuration parts, but then for the state data. Load the OpenConfig *openconfig-network-instance* model, but leave the ```<get>``` operation and *Router1* as device. Add the *default* value to the **name** leaf of the **network-instance** container and then move further down to the **protocol** list element under the **protocols** container. Expand the **bgp** and **neighbors** containers, mark the **neighbor** list element and click into the **neighbor-address** field without adding anything. Expand the **state** container and click into the **neighbor-address** value field also without adding anything.
+
+![BGP neighbor validation using OpenConfig model](/images/netconf_openconfig_validation.png "BGP neighbor validation using OpenConfig model")
+*Screenshot 15: BGP neighbor validation using OpenConfig model*
+
+{: style="text-align: justify" }
+Clear the XML payload section using **Clear RPC(s)** again and create a new RPC using the **Build RPC(s)** button and it should look like the screenshot 15 above. Run the RPC with **Run RPC(s)** and you should get the same RPC reply message from **Router1** as show in screenshot 16. The results are the same, but this time with the OpenConfig YANG model.
+
+![BGP neighbor validation reply message with OpenConfig](/images/netconf_openconfig_validation_reply.png "BGP neighbor validation reply message with OpenConfig")
+*Screenshot 16: BGP neighbor validation reply message with OpenConfig.*
+
+{: style="text-align: justify" }
+The next steps could be to build another Python script using NETCONF with the ```<get>``` operation to validate the changes in a programmatic way, but this is something for the another blog post.
 
 {: style="text-align: justify" }
 I hope it was easy to follow and to replicate on your own setup. You can find all files from the examples used in this post in my GitHub repository [netconf-example](https://github.com/daniel1820815/netconf-example){:target="_blank"}. If you face into any issues with the setup or if you found any errors please let me know and/or leave a comment using the Github issues.
