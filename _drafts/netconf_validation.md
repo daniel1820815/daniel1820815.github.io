@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "NETCONF XML Payload Validation"
+title: "Validating NETCONF XML Configuration"
 date: 2024-02-21 10:00:00 +0200
 categories: [Automation, Python]
 comments_id: 29
@@ -8,6 +8,14 @@ comments_id: 29
 
 {: style="text-align: justify" }
 In my previous blog post [NETCONF XML Payload with YANG models](https://blog.kuhlcloud.de/automation/python/2024/02/22/netconf-xml.html){:target="_blank"} I explained how to create proper XML payload using the Native YANG model and the OpenConfig YANG model for IOS-XE and NX-OS to send configuration data to the devices with NETCONF. I wrote that the next steps could be to build another Python script using NETCONF with the ```<get>``` operation to validate the changes I made in a programmatic way. Here we are!
+
+I will show you the following two different options for the config validation:
+
+✅ IOS-XE config validation with Native YANG
+
+✅ NX-OS config validation with OpenConfig YANG
+
+
 
 Validation both IOS-XE router configuration using the Native YANG models
 
