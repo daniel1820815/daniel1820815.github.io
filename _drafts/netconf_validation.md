@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Validating NETCONF XML Configuration"
-date: 2024-02-21 10:00:00 +0200
+date: 2024-03-20 10:00:00 +0200
 categories: [Automation, Python]
 comments_id: 29
 ---
@@ -9,13 +9,20 @@ comments_id: 29
 {: style="text-align: justify" }
 In my previous blog post [NETCONF XML Payload with YANG models](https://blog.kuhlcloud.de/automation/python/2024/02/22/netconf-xml.html){:target="_blank"} I explained how to create proper XML payload using the Native YANG model and the OpenConfig YANG model for IOS-XE and NX-OS to send configuration data to the devices with NETCONF. I wrote that the next steps could be to build another Python script using NETCONF with the ```<get>``` operation to validate the changes I made in a programmatic way. Here we are!
 
+{: style="text-align: justify" }
 I will show you the following two different options for the config validation:
 
 ✅ IOS-XE config validation with Native YANG
 
 ✅ NX-OS config validation with OpenConfig YANG
 
+{: style="text-align: justify" }
+Let's recap first what I did in the previous blog post. For the initial lab setup please refer to my [DevNet Expert Lab on Cisco Modeling Labs](https://github.com/daniel1820815/devnet-expert-cml-lab){:target="_blank"} GitHub repository. Then I did the configuration changes described at the previous blog post [NETCONF XML Payload with YANG models](https://blog.kuhlcloud.de/automation/python/2024/02/22/netconf-xml.html){:target="_blank"}. In short I configured the interfaces with IP addressing and the BGP configuration described on the diagram below.
 
+![NETCONF Lab overview](/images/netconf_lab_overview.png "NETCONF Lab overview")
+*Screenshot 1: NETCONF Lab overview in Cisco Modeling Labs.*
+
+Each of the three devices which are Router1, Router2, and Nexus1, have their own BGP AS and neighbor configurations on all interfaces except the management interfaces. In my previous blog post I validated Now let's continue where I ended  and validate that the configuration was appliue
 
 Validation both IOS-XE router configuration using the Native YANG models
 
