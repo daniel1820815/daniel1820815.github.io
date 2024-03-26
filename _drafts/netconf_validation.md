@@ -7,7 +7,7 @@ comments_id: 29
 ---
 
 {: style="text-align: justify" }
-In my previous blog post [NETCONF XML Payload with YANG models](https://blog.kuhlcloud.de/automation/python/2024/02/22/netconf-xml.html){:target="_blank"} I explained how to create proper XML payload using the Native and the OpenConfig YANG models for IOS-XE and NX-OS to send configuration data to the devices with NETCONF. I wrote that the next steps could be to build another Python script using NETCONF with the ```<get>``` operation to validate the changes I made in a programmatic way. Here we are!
+In my previous blog post [NETCONF XML Payload with YANG models](https://blog.kuhlcloud.de/automation/python/2024/02/22/netconf-xml.html){:target="_blank"} I explained how to create proper XML payload using the Native and the OpenConfig YANG models for IOS-XE and NX-OS to send configuration data to the devices with NETCONF. I wrote that the next steps could be building another Python script using NETCONF with the ```<get>``` operation to validate the changes I made in a programmatic way. Here we are!
 
 {: style="text-align: justify" }
 I will show you the following two different options for the config validation:
@@ -23,7 +23,7 @@ Let's recap first what I did in the previous blog post. For the initial lab setu
 *Screenshot 1: NETCONF Lab overview in Cisco Modeling Labs.*
 
 {: style="text-align: justify" }
-Each of the three devices which are Router1, Router2, and Nexus1, have their own BGP AS and neighbor configurations on all interfaces except the management interfaces. In my previous blog post I validated the changes using [Cisco YANG Suite](https://developer.cisco.com/yangsuite/){:target="_blank"} with the build-in function to run RPCs to the devices. This is not a very efficient way to validate the configuration changes and BGP neighbors. Now let's continue where I ended and validate that the configuration changes were applied in a programmatic way.
+Each of the three devices which are *Router1*, *Router2*, and *Nexus1*, have their own BGP AS and neighbor configurations on all interfaces except the management interfaces. In my previous blog post I validated the changes using Cisco YANG Suite with the build-in function to run RPCs to the devices in the web browser. This is not a very efficient way to validate the configuration changes and BGP neighbors. Now let's continue where I ended and validate that the configuration changes were applied in a programmatic way.
 
 ### Validating IOS-XE config using the Native YANG model
 
@@ -40,10 +40,20 @@ Let's do a short recap about the BGP neighbor states that we can understand the 
 {: style="text-align: justify" }
 We want to see the *Established* state, because in this state, the BGP session is established and BGP neighbors exchange routes via Update messages. For more details take a look at the sample chapter [BGP Fundamentals](https://www.ciscopress.com/articles/article.asp?p=2756480&seqNum=4) from the book [Troubleshooting BGP: A Practical Guide to Understanding and Troubleshooting BGP](https://www.ciscopress.com/store/troubleshooting-bgp-a-practical-guide-to-understanding-9781587144646?w_ptgrevartcl=BGP+Fundamentals_2756480) available at Cisco Press.
 
-First show a get to the configuration data and show the state is missing
+{: style="text-align: justify" }
+Now we will use a RPC *get* request to check the BGP neighbors. We use [Cisco YANG Suite](https://developer.cisco.com/yangsuite/){:target="_blank"} to create the filters we will then use within our Python script, but let's first check using the built-in RPCs function. As mentioned in the previous post, YANG Suite provides a set of tools and plugins to learn, test, and adopt YANG programmable interfaces such as NETCONF, RESTCONF, gNMI and more. I am using the DevNet Expert Candidate Workstation VM on which Cisco YANG Suite is already installed and is available on <http://localhost:8480>. The YANG module sets for IOS-XE and NX-OS we will use now are already configured. For installation option please refer to the [Cisco YANG Suite documentation](https://developer.cisco.com/docs/yangsuite/){:target="_blank"}.
+
+{: style="text-align: justify" }
+In YANG Suite go to **Protocols –> NETCONF**, select *IOS-XE* on the **YANG Set** from the Dropdown menu, search and select the *Cisco-IOS-XE-native* module and load the modules. Then choose the NETCONF operation, ```<get>``` in this case, and select **Router1** as device. Before browsing through the YANG tree, click on the "YANG Tree -> Options" and choose *NETCONF XML (RPC parameters only)* from **Display as RPC(s) as** to show only the configuration payload parameters. We don't need the other XML overhead.
+
+{: style="text-align: justify" }
+Browse the YANG tree and look for the **router** container. Expand it and move on to the **ios-bgp:bgp** list element which also needs to be expanded. Then you will find the **ios-bgp:neighbor** list element. Click the check button in the value column and then generate the filter using the **Build RPC** button. The filter should look like screenshot 2 below.
 
 ![Validating BGP Neighbors](/images/netconf_native_bgp_neighbor_config.png "Validating BGP Neighbors")
 *Screenshot 2: Validating BGP Neighbors.*
+
+{: style="text-align: justify" }
+Next click the **Run RPC(s)** button to use the filter. A new browser tab will be opened where you can follow the complete RPC with all details including the output data of the BGP neighbors.
 
 ![BGP Neighbors reply](/images/netconf_native_bgp_neighbor_config_reply.png "BGP Neighbors reply")
 *Screenshot 3: BGP Neighbors reply.*
@@ -59,61 +69,35 @@ router bgp 65001
  neighbor 10.0.30.3 remote-as 65003
 ```
 
-Would it make more sense to request the operational data for the BGP neighbors? Yes, indeed!
+*Example 1: BGP configuration on a IOS-XE device.*
 
-Switch the ops module
+Would it make more sense to request the operational data for the BGP neighbors? Yes, indeed! Let's quickly switch to the operational YANG module which is called *Cisco-IOS-XE-bgp-oper* and load the module. Clear the RPC filter data using the red **Clear RPC(s)** button before creating a new filter.
 
-then show the operational data and operational data with state established filter
+![BGP ops neighbors filter all](/images/netconf_native_bgp_neighbor_ops_filter_all.png "BGP ops neighbors filter all")
+*Screenshot 4: BGP operational neighbors filter.*
 
-```python
-'''Python script to push XML configuration payload to devices via NETCONF'''
-from ncclient import manager
-from lxml import etree
+![BGP ops neighbors full](/images/netconf_native_bgp_neighbor_ops_all_reply.png "BGP ops neighbors full")
+*Screenshot 5: BGP operational neighbors full reply.*
 
-# List of devices IOSXE devices
-# iosxe_devices = ["192.168.255.51", "192.168.255.52", "192.168.255.53"]
-iosxe_devices = ["192.168.255.51"]
+![BGP ops neighbors filter](/images/netconf_native_bgp_neighbor_ops_filter.png "BGP ops neighbors filter")
+*Screenshot 6: BGP operational neighbors filter on neighbor id and session-state.*
 
-iosxe_native_filter = '''
-    <filter xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
-        <bgp-state-data xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-bgp-oper">
-            <neighbors>
-            <neighbor>
-                <neighbor-id/>
-            </neighbor>
-            </neighbors>
-        </bgp-state-data>
-    </filter>
-'''
+![BGP ops neighbors reply](/images/netconf_native_bgp_neighbor_ops_reply.png "BGP ops neighbors reply")
+*Screenshot 7: BGP operational neighbors reply with neighbor id and session-state.*
 
-nxos_openconfig_filter = '''
-
-'''
-
-# Loop through the devices and connect to it
-for device in iosxe_devices:
-    router = manager.connect(
-        host=device,
-        username="expert",
-        password="1234QWer!",
-        hostkey_verify=False
-        )
-
-    # Choose which filter to use
-    if device == "192.168.255.53":
-        netconf_filter = nxos_openconfig_filter
-    else:
-        netconf_filter = iosxe_native_filter
-
-    # Get BGP neighbors based on filter and print out
-    response = router.get(filter=netconf_filter)
-    xml_data = etree.tostring(
-        response.data_ele,
-        pretty_print=True
-        ).decode()
-    print(f"\nBGP neighbors for {device}:\n")
-    print(xml_data)
-    print("\n")
+```xml
+<filter xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+  <bgp-state-data xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-bgp-oper">
+    <neighbors>
+      <neighbor>
+        <neighbor-id/>
+        <session-state/>
+      </neighbor>
+    </neighbors>
+  </bgp-state-data>
+</filter>
 ```
+
+*Example 2: BGP neighbor filter on neighbor id and session-state.*
 
 Thanks to Kirk Byers [IOS-XE and NETCONF Candidate Configuration Testing, Part1](https://pynet.twb-tech.com/blog/netconf/iosxe-candidate-cfg1.html){:target="_blank"} blog post, especially the section for *Grabbing the XML Configuration* was very helpful to get an idea to convert the XML reply data.
