@@ -192,7 +192,7 @@ devices = ["192.168.255.51", "192.168.255.52", "192.168.255.53"]
 *Example 4: The top of the Python script.*
 
 {: style="text-align: justify" }
-The connect function is pretty straight forward...
+In example 5 we have the **device_connect** function which is pretty straight forward. The function takes the **dev** variable which is the IP address from the device, uses the ncclient **manager** to connect to the device, and returns the connection back.
 
 ```python
 def device_connect(dev):
@@ -207,10 +207,10 @@ def device_connect(dev):
     return con
 ```
 
-*Example 5:*
+*Example 5: The function to connect to the devices.*
 
 {: style="text-align: justify" }
-the get BGP neighbors function...
+For getting the BGP neighbors from the devices we have the **get_bgp_neighbors** function which uses the connection state variable **con** and the NETCONF **filter** variable. The **response** data will then be converted to a XML string using the **etree.tostring** function  and return the data.
 
 ```python
 def get_bgp_neighbors(con, filter):
@@ -230,7 +230,10 @@ def get_bgp_neighbors(con, filter):
 *Example 6:*
 
 {: style="text-align: justify" }
-The first part of the main function starts with a loop iterating over the **devices** list and calling the **device_connect** function using the device IP address named **device** as variable. Then we need to determine which filter we want to use as variable named **yang_type**. In case of the NX-OS device with IP address *192.168.255.53* we use the filter from OpenConfig YANG models and for both IOS-XE devices we use the IOS-XE Native YANG model. For browsing through the XML data tree using the *ElementTree XML API* we also need to specify the correct URL path based on the YANG model which we will use later. Then we open the appropriate filter file and assign it to the **netconf_filter** variable.
+Thanks to Kirk Byers [IOS-XE and NETCONF Candidate Configuration Testing, Part1](https://pynet.twb-tech.com/blog/netconf/iosxe-candidate-cfg1.html){:target="_blank"} blog post, especially the section for *Grabbing the XML Configuration* was very helpful to get an idea how to convert the XML reply data.
+
+{: style="text-align: justify" }
+The first part of the main function as shown in example 7 starts with a loop iterating over the **devices** list and calling the **device_connect** function using the device IP address named **device** as variable. Then we need to determine which filter we want to use as variable named **yang_type**. In case of the NX-OS device with IP address *192.168.255.53* we use the filter from OpenConfig YANG models and for both IOS-XE devices we use the IOS-XE Native YANG model. For browsing through the XML data tree using the *ElementTree XML API* we also need to specify the correct URL path based on the YANG model which we will use later. Then we open the appropriate filter file from filter directory and assign it to the **netconf_filter** variable.
 
 ```python
 if __name__ == '__main__':
@@ -255,7 +258,7 @@ if __name__ == '__main__':
 *Example 7: The main function part one.*
 
 {: style="text-align: justify" }
-The second part of the main function started with...
+The second part of the main function as shown in example 8 starts with calling the **get_bgp_eighbors** function and declaring the root of the XML data from the **xml_data** variable. Then we can browse through the XML reply data based on the YANG model we used before.
 
 ```python
         # Get XML data and read
@@ -278,16 +281,57 @@ The second part of the main function started with...
 
 *Example 8: The main function part two.*
 
-### Validate the BGP neighbors
+{: style="text-align: justify" }
+We need to climb down the latter of XML data, in case of the NX-OS device with IP address *192.168.255.53* the *neighbors* we need to iterate over are located at ```root[0][0][1][0][2][0]```. The variable for **address** can then be assigned using the ```neighbor[0].text``` because it is the first element in the neighbor list. Same goes for the state where we need to use the second element from the **neighbor** and the first element from the **state** which is then ```neighbor[1][0].text```. In screenshot 11 you will see how we get there.
 
-text
-
-### Closing words
-
-Thanks to Kirk Byers [IOS-XE and NETCONF Candidate Configuration Testing, Part1](https://pynet.twb-tech.com/blog/netconf/iosxe-candidate-cfg1.html){:target="_blank"} blog post, especially the section for *Grabbing the XML Configuration* was very helpful to get an idea to convert the XML reply data.
+![Neighbors from root XML data reply](/images/netconf_openconfig_ops_reply_nxos.png "Neighbors from root XML data reply")
+*Screenshot 11: BGP Neighbors from root XML data reply for OpenConfig YANG.*
 
 {: style="text-align: justify" }
-I hope it was again easy to follow and to replicate on your own setup. Here are the links to the previous blog post [NETCONF XML Payload with YANG models](https://blog.kuhlcloud.de/automation/python/2024/02/22/netconf-xml.html){:target="_blank"} and the GitHub repository [netconf-example](https://github.com/daniel1820815/netconf-example){:target="_blank"} with all files again. Please let me know using Github issues if you faced into any issues with the setup or if you found any errors.
+In case of the Native YANG model and the IOS-XE devices the XML data reply tree is a little bit easier to climb down as you can see from screenshot 12. The neighbors are located at located at ```root[0][0]``` with the **neighbor** as the same as for NX-OS with ```neighbor[0].text``` and the **state** as ```neighbor[1].text``` both on the same level.
+
+![Neighbors from root XML data reply](/images/netconf_native_ops_reply_iosxe.png "Neighbors from root XML data reply")
+*Screenshot 12: BGP Neighbors from root XML data reply for Native YANG.*
+
+Alright, we are ready to move on with the final part, bring everything together, and validate the BGP neighbors.
+
+### Finally validate the BGP neighbors
+
+{: style="text-align: justify" }
+Let's quickly recap what we have now. The complete Python script was saved as *netconf_validate.py* in the main directory of the repository. Before that we created the filters which are saved as *native_bgp_neighbor_filter.xml* from example 2 for the IOS-XE Native YANG model and *openconfig_bgp_neighbor_filter.xml* from example 3. Both filter files are located at the *filters* directory.
+
+![GitHub repository files](/images/netconf_repo_files.png "GitHub repository files")
+
+*Screenshot 13: GitHub repository files.*
+
+{: style="text-align: justify" }
+> Please make sure to follow the instructions from the GitHub repository [netconf-example](https://github.com/daniel1820815/){:target="_blank"} before running the validation script. At this time the configuration was already applied as described on the previous blog post [NETCONF XML Payload with YANG models](https://blog.kuhlcloud.de/automation/python/2024/02/22/netconf-xml.html){:target="_blank"}.
+
+{: style="text-align: justify" }
+Let's run the Python script and validate the BGP neighbors:
+
+```none
+(venv) $ python netconf_validate.py
+
+BGP neighbors for 192.168.255.51:
+Neighbor 10.0.10.2 -> fsm-established
+Neighbor 10.0.20.2 -> fsm-established
+Neighbor 10.0.30.3 -> fsm-established
+
+BGP neighbors for 192.168.255.52:
+Neighbor 10.0.10.1 -> fsm-established
+Neighbor 10.0.20.1 -> fsm-established
+Neighbor 10.0.40.3 -> fsm-established
+
+BGP neighbors for 192.168.255.53:
+Neighbor 10.0.30.1 -> ESTABLISHED
+Neighbor 10.0.40.2 -> ESTABLISHED
+```
+
+*Example 9: Validating the BGP neighbors.*
+
+{: style="text-align: justify" }
+Excellent! All devices showing established sessions between their BGP neighbors. I hope it was again easy to follow and to replicate on your own setup. Here are the links to the previous blog post [NETCONF XML Payload with YANG models](https://blog.kuhlcloud.de/automation/python/2024/02/22/netconf-xml.html){:target="_blank"} and the GitHub repository [netconf-example](https://github.com/daniel1820815/netconf-example){:target="_blank"} with all files again. Please let me know using Github issues if you faced into any issues with the setup or if you found any errors.
 
 {: style="text-align: justify" }
 Thank you for reading this blog post and following along until the end. Please leave a feedback in the comments!
