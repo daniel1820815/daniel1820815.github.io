@@ -52,6 +52,9 @@ Now we will use a RPC *get* request to check the BGP neighbors. We use [Cisco YA
 In YANG Suite go to **Protocols –> NETCONF**, select *IOS-XE* on the **YANG Set** from the Dropdown menu, search and select the *Cisco-IOS-XE-native* module and load the modules. Then choose the NETCONF operation, ```<get>``` in this case, and select **Router1** as device. Before browsing through the YANG tree, click on the "YANG Tree -> Options" and choose *NETCONF XML (RPC parameters only)* from **Display as RPC(s) as** to show only the configuration payload parameters. We don't need the other XML overhead.
 
 {: style="text-align: justify" }
+> Please note that I mentioned about creating the YANG Sets during the previous post. Check the [Getting Started](https://developer.cisco.com/docs/yangsuite/#!welcome-to-cisco-yang-suite/getting-started){:target="_blank"} section from the documentation. Create Device profiles and download the supported YANG models from the devices or upload YANG model files from your workstation or from public [YANG Github repository](https://github.com/YangModels/yang){:target="_blank"} at the Setup menu on the right. After that you can create YANG module sets for IOS-XE and NX-OS with the supported modules you need.
+
+{: style="text-align: justify" }
 Browse the YANG tree and look for the **router** container. Expand it and move on to the **ios-bgp:bgp** list element which also needs to be expanded. Then you will find the **ios-bgp:neighbor** list element. Click the checkbox in the value column and then generate the filter using the **Build RPC** button. The filter should look like screenshot 2 below.
 
 ![Validating BGP Neighbors](/images/netconf_native_bgp_neighbor_config.png "Validating BGP Neighbors")
@@ -117,11 +120,55 @@ The filter we will use later in our Python script should look like the code exam
 </filter>
 ```
 
-*Example 2: BGP neighbor filter on neighbor id and session-state.*
+*Example 2: BGP neighbor filter based on Cisco IOS-XE Native YANG model.*
 
 ### Create a filter for NX-OS using the OpenConfig YANG model
 
-text
+{: style="text-align: justify" }
+Like we did for the configuration part during the previous post, choose *NX-OS* from **YANG Set**, load the OpenConfig *openconfig-network-instance* model, and choose the ```<get>``` operation with *Nexus1* as device. Move further down to the **protocol** list element under the **protocols** container. Expand the **bgp** and **neighbors** containers, mark the **neighbor** list element and click into the **neighbor-address** field without adding anything. Expand the **state** container and click into the **session-state** value field also without adding anything. Clear the RPC filter data using the red **Clear RPC(s)** button before creating a new filter using the **Build RPC** button.
+
+![BGP ops neighbors filter](/images/netconf_openconfig_bgp_neighbor_ops_filter.png "BGP ops neighbors filter")
+*Screenshot 8: BGP operational neighbors filter on neighbor address and session-state.*
+
+The key **name** *default* for the **network-instance** was added automatically, so in case you need to use another one you have to specify it. Run the RPC using the **Run RPC(s)** button.
+
+![BGP ops neighbors reply](/images/netconf_openconfig_bgp_neighbor_ops_reply_nxos.png "BGP ops neighbors reply")
+*Screenshot 9: BGP operational neighbors reply on NX-OS.*
+
+Perfect! That looks very good. Now there is another cool thing I want to show you. Change the **Device** back to *Router1* and run the RPC again.
+
+![BGP ops neighbors reply](/images/netconf_openconfig_bgp_neighbor_ops_reply_iosxe.png "BGP ops neighbors reply")
+*Screenshot 10: BGP operational neighbors reply on IOS-XE.*
+
+Isn't it awesome? You got also the BGP neighbors for IOS-XE Router1! Obviously you can use the filter based on OpenConfig YANG models on all supported platforms, in this case on NX-OS and IOS-XE. The filter will be saved as XML file named *openconfig_bgp_neighbor_filter.xml* in the *filters* folder.
+
+```xml
+<filter>
+    <network-instances xmlns="http://openconfig.net/yang/network-instance">
+        <network-instance>
+            <name>default</name>
+            <protocols>
+                <protocol>
+                    <bgp>
+                        <neighbors>
+                            <neighbor>
+                                <neighbor-address/>
+                                <state>
+                                    <session-state/>
+                                </state>
+                            </neighbor>
+                        </neighbors>
+                    </bgp>
+                </protocol>
+            </protocols>
+        </network-instance>
+    </network-instances>
+</filter>
+```
+
+*Example 3: BGP neighbor filter based on OpenConfig YANG model.*
+
+We built the filters for the validations and saved the files. The next task is to develop a Python script for the validation in a programmatic way.
 
 ### Develop a Python script for validation
 
