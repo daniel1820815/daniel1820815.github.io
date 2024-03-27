@@ -1,9 +1,9 @@
 ---
 layout: post
 title: "Validate Configs using NETCONF + YANG"
-date: 2024-03-20 10:00:00 +0200
+date: 2024-03-27 12:00:00 +0200
 categories: [Automation, Python]
-comments_id: 29
+comments_id: 33
 ---
 
 {: style="text-align: justify" }
@@ -23,7 +23,7 @@ Let's recap first what I did in the previous blog post. For the initial lab setu
 *Screenshot 1: NETCONF Lab overview in Cisco Modeling Labs.*
 
 {: style="text-align: justify" }
-Each of the three devices which are *Router1*, *Router2*, and *Nexus1*, have their own BGP AS and neighbor configurations on all interfaces except the management interfaces. In my previous blog post I validated the changes using Cisco YANG Suite with the build-in function to run RPCs to the devices in the web browser. This is not a very efficient way to validate the configuration changes and BGP neighbors. Now let's continue where I ended and validate that the configuration changes were applied in a programmatic way.
+Each of the three devices which are *Router1*, *Router2*, and *Nexus1*, have their own BGP AS and neighbor configurations on all interfaces except the management interfaces. In my previous blog post I validated the changes using Cisco YANG Suite with the build-in function to run RPCs (Remote Procedure Calls) to the devices in the web browser. This is not a very efficient way to validate the configuration changes and BGP neighbors. Now let's continue where I ended and validate that the configuration changes were applied in a programmatic way.
 
 {: style="text-align: justify" }
 You can find all files from the examples used in the previous and this post in my GitHub repository [netconf-example](https://github.com/daniel1820815/netconf-example){:target="_blank"}. If you face into any issues with the setup or if you found any errors please let me know and/or leave a comment using the GitHub issues.
@@ -41,18 +41,18 @@ First we do a short recap about the BGP neighbor states that we can understand t
 - Established
 
 {: style="text-align: justify" }
-We want to see the *Established* state, because in this state, the BGP session is established and BGP neighbors exchange routes via Update messages. For more details take a look at the sample chapter [BGP Fundamentals](https://www.ciscopress.com/articles/article.asp?p=2756480&seqNum=4) from the book [Troubleshooting BGP: A Practical Guide to Understanding and Troubleshooting BGP](https://www.ciscopress.com/store/troubleshooting-bgp-a-practical-guide-to-understanding-9781587144646?w_ptgrevartcl=BGP+Fundamentals_2756480) available at Cisco Press.
+We want to see the *Established* state, because in this state, the BGP session is established and BGP neighbors exchange routes via Update messages. For more details about BGP take a look at the sample chapter [BGP Fundamentals](https://www.ciscopress.com/articles/article.asp?p=2756480&seqNum=4) from the book [Troubleshooting BGP: A Practical Guide to Understanding and Troubleshooting BGP](https://www.ciscopress.com/store/troubleshooting-bgp-a-practical-guide-to-understanding-9781587144646?w_ptgrevartcl=BGP+Fundamentals_2756480) available at Cisco Press.
 
 ### Create a filter for IOS-XE using the Native YANG model
 
 {: style="text-align: justify" }
-Now we will use a RPC *get* request to check the BGP neighbors. We use [Cisco YANG Suite](https://developer.cisco.com/yangsuite/){:target="_blank"} to create the filters we will then use within our Python script, but let's first check using the built-in RPCs function. As mentioned in the previous post, YANG Suite provides a set of tools and plugins to learn, test, and adopt YANG programmable interfaces such as NETCONF, RESTCONF, gNMI and more. I am using the DevNet Expert Candidate Workstation VM on which Cisco YANG Suite is already installed and is available on <http://localhost:8480>. The YANG module sets for IOS-XE and NX-OS we will use now are already configured. For installation option please refer to the [Cisco YANG Suite documentation](https://developer.cisco.com/docs/yangsuite/){:target="_blank"}.
-
-{: style="text-align: justify" }
-In YANG Suite go to **Protocols –> NETCONF**, select *IOS-XE* on the **YANG Set** from the Dropdown menu, search and select the *Cisco-IOS-XE-native* module and load the modules. Then choose the NETCONF operation, ```<get>``` in this case, and select **Router1** as device. Before browsing through the YANG tree, click on the "YANG Tree -> Options" and choose *NETCONF XML (RPC parameters only)* from **Display as RPC(s) as** to show only the configuration payload parameters. We don't need the other XML overhead.
+Now we will use a RPC *get* request to check the BGP neighbors. With the help of [Cisco YANG Suite](https://developer.cisco.com/yangsuite/){:target="_blank"} again we will create the filters which we will then use within our Python script, but let's first check using the built-in RPCs function. As mentioned in the previous post, YANG Suite provides a set of tools and plugins to learn, test, and adopt YANG programmable interfaces such as NETCONF, RESTCONF, gNMI and more. I am using the DevNet Expert Candidate Workstation VM on which Cisco YANG Suite is already installed and is available on <http://localhost:8480>. The YANG module sets for IOS-XE and NX-OS we will use now are already configured. For installation option please refer to the [Cisco YANG Suite documentation](https://developer.cisco.com/docs/yangsuite/){:target="_blank"}.
 
 {: style="text-align: justify" }
 > Please note that I mentioned about creating the YANG Sets during the previous post. Check the [Getting Started](https://developer.cisco.com/docs/yangsuite/#!welcome-to-cisco-yang-suite/getting-started){:target="_blank"} section from the documentation. Create Device profiles and download the supported YANG models from the devices or upload YANG model files from your workstation or from public [YANG Github repository](https://github.com/YangModels/yang){:target="_blank"} at the Setup menu on the right. After that you can create YANG module sets for IOS-XE and NX-OS with the supported modules you need.
+
+{: style="text-align: justify" }
+In YANG Suite go to **Protocols –> NETCONF**, select *IOS-XE* on the **YANG Set** from the Dropdown menu, search and select the *Cisco-IOS-XE-native* module and load the modules. Then choose the NETCONF operation, ```<get>``` in this case, and select **Router1** as device. Before browsing through the YANG tree, click on the "YANG Tree -> Options" and choose *NETCONF XML (RPC parameters only)* from **Display as RPC(s) as** to show only the configuration payload parameters. We don't need the other XML overhead.
 
 {: style="text-align: justify" }
 Browse the YANG tree and look for the **router** container. Expand it and move on to the **ios-bgp:bgp** list element which also needs to be expanded. Then you will find the **ios-bgp:neighbor** list element. Click the checkbox in the value column and then generate the filter using the **Build RPC** button. The filter should look like screenshot 2 below.
@@ -67,7 +67,7 @@ Next click the **Run RPC(s)** button to use the filter. A new browser tab will b
 *Screenshot 3: BGP Neighbors reply.*
 
 {: style="text-align: justify" }
-Looks good, right? The BGP neighbors are there. But wait, the output tells us that the configuration we pushed via NETCONF was applied to the device, but it does not tell us if it is also working and forming BGP neighbors. We used the get operation to request configuration data and not the operational data. This is similar to a ```show run | section bgp``` command. It returns the configuration data from the device.
+Looks good, right? The BGP neighbors are there. But wait, the output tells us that the configuration we pushed via NETCONF was applied to the device, but it does not tell us if it is also working and forming BGP neighbors. We used the get operation to request configuration data and not the operational data. This is similar to a ```show run``` command. It returns only the configuration data from the device.
 
 ```none
 Router1# show run | section bgp
@@ -93,13 +93,13 @@ Run the RPC using the **Run RPC(s)** button. Are you now overwhelmed about the r
 *Screenshot 5: BGP operational neighbors full reply.*
 
 {: style="text-align: justify" }
-Let's tweak the filter to minimize the data from the RPC reply as much as possible. For this expand the neighbor list element and click into the **neighbor-id** field and the **session-state** field in the value column, but leave both empty.
+Let's tweak the filter to minimize the data from the RPC reply as much as possible. For this expand the neighbor list element and click into the **neighbor-id** field and the **session-state** field in the value column, but leave both empty as show in screenshot 6. Clear the RPC field again and build a new RPC filter.
 
 ![BGP ops neighbors filter](/images/netconf_native_bgp_neighbor_ops_filter.png "BGP ops neighbors filter")
 *Screenshot 6: BGP operational neighbors filter on neighbor id and session-state.*
 
 {: style="text-align: justify" }
-Clear the RPC field again and build a new RPC filter as shown in screenshot 6 above. Run the RPC again and we will get more effective reply data back as you see from screenshot 7 below.
+Run the RPC again and we will get more effective reply data back as you can see from screenshot 7 below.
 
 ![BGP ops neighbors reply](/images/netconf_native_bgp_neighbor_ops_reply.png "BGP ops neighbors reply")
 *Screenshot 7: BGP operational neighbors reply with neighbor id and session-state.*
@@ -131,19 +131,21 @@ Like we did for the configuration part during the previous post, choose *NX-OS* 
 *Screenshot 8: BGP operational neighbors filter on neighbor address and session-state.*
 
 {: style="text-align: justify" }
-The key **name** *default* for the **network-instance** was added automatically, so in case you need to use another one you have to specify it. Run the RPC using the **Run RPC(s)** button.
+The key **name** with the value *default* for the **network-instance** was added automatically, so in case you need to use another one you have to specify it. Run the RPC using the **Run RPC(s)** button.
 
 ![BGP ops neighbors reply](/images/netconf_openconfig_bgp_neighbor_ops_reply_nxos.png "BGP ops neighbors reply")
 *Screenshot 9: BGP operational neighbors reply on NX-OS.*
 
 {: style="text-align: justify" }
-Perfect! That looks very good. Now there is another cool thing I want to show you. Change the **Device** back to *Router1* and run the RPC again.
+Perfect! That looks very good. Now there is another cool thing I want to show you. Change the **Device** back to *Router1* and run the RPC again without any other changes.
 
 ![BGP ops neighbors reply](/images/netconf_openconfig_bgp_neighbor_ops_reply_iosxe.png "BGP ops neighbors reply")
 *Screenshot 10: BGP operational neighbors reply on IOS-XE.*
 
 {: style="text-align: justify" }
-Isn't it awesome? You got also the BGP neighbors for IOS-XE Router1! Obviously you can use the filter based on OpenConfig YANG models on all supported platforms, in this case on NX-OS and IOS-XE. The filter will be saved as XML file named *openconfig_bgp_neighbor_filter.xml* in the *filters* folder.
+Isn't it cool? You got also the BGP neighbors for IOS-XE Router1! Obviously you can use the filter based on OpenConfig YANG models on all supported platforms, in this case on NX-OS and IOS-XE. So with OpenConfig YANG models you could develop your filters and use it cross-platform. It is one important advantage as using OpenConfig YANG models to create filters.
+
+The filter will be saved as XML file named *openconfig_bgp_neighbor_filter.xml* in the *filters* folder.
 
 ```xml
 <filter>
@@ -177,7 +179,7 @@ We built the filters for the validations and saved the files. The next task is t
 ### Develop a Python script for validation
 
 {: style="text-align: justify" }
-On top of the Python script at example 4 we import the modules we need and define the list of **devices** using the IP addresses. The **manager** from [**ncclient**](https://ncclient.readthedocs.io/en/latest/){:target="_blank"} will be used for the connection via NETCONF as we already know from the previous post. The **etree** module from **lxml** will be used to serialize the response data to an encoded string representation of its XML tree and then we will be able to use the **xml.etree.ElementTree** module to browse through the XML data. More details will you find at the [The ElementTree XML API](https://docs.python.org/3/library/xml.etree.elementtree.html){:target="_blank"} documentation page which provides some easy understandable examples.
+On top of the Python script we import the modules we need and define the list of **devices** using the IP addresses as you can see at example 4. The **manager** from [**ncclient**](https://ncclient.readthedocs.io/en/latest/){:target="_blank"} will be used for the connection via NETCONF as we already know from the previous post. The **etree** module from **lxml** will be used to serialize the response data to an encoded string representation of its XML tree and then we will be able to use the **xml.etree.ElementTree** module to browse through the XML data. More details will you find at the [The ElementTree XML API](https://docs.python.org/3/library/xml.etree.elementtree.html){:target="_blank"} documentation page which provides some easy understandable examples.
 
 ```python
 '''Python script to validate configuration from XML payload via NETCONF'''
@@ -192,7 +194,7 @@ devices = ["192.168.255.51", "192.168.255.52", "192.168.255.53"]
 *Example 4: The top of the Python script.*
 
 {: style="text-align: justify" }
-In example 5 we have the **device_connect** function which is pretty straight forward. The function takes the **dev** variable which is the IP address from the device, uses the ncclient **manager** to connect to the device, and returns the connection back.
+In example 5 we have the **device_connect** function which is pretty straight forward. The function takes the **dev** variable which is the IP address from the devices, uses the ncclient **manager** to connect to the device, and returns the connection state back.
 
 ```python
 def device_connect(dev):
