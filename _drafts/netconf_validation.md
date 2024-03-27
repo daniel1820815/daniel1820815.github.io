@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Validating NETCONF XML Configuration"
+title: "Validate Configs using NETCONF + YANG"
 date: 2024-03-20 10:00:00 +0200
 categories: [Automation, Python]
 comments_id: 29
@@ -123,4 +123,20 @@ The filter we will use later in our Python script should look like the code exam
 
 text
 
+### Develop a Python script for validation
+
+text
+
+### Validate the BGP neighbors
+
+text
+
+### Closing words
+
 Thanks to Kirk Byers [IOS-XE and NETCONF Candidate Configuration Testing, Part1](https://pynet.twb-tech.com/blog/netconf/iosxe-candidate-cfg1.html){:target="_blank"} blog post, especially the section for *Grabbing the XML Configuration* was very helpful to get an idea to convert the XML reply data.
+
+{: style="text-align: justify" }
+I hope it was again easy to follow and to replicate on your own setup. Here are the links to the previous blog post [NETCONF XML Payload with YANG models](https://blog.kuhlcloud.de/automation/python/2024/02/22/netconf-xml.html){:target="_blank"} and the GitHub repository [netconf-example](https://github.com/daniel1820815/netconf-example){:target="_blank"} with all files again. Please let me know using Github issues if you faced into any issues with the setup or if you found any errors.
+
+{: style="text-align: justify" }
+Thank you for reading this blog post and following along until the end. Please leave a feedback in the comments!
