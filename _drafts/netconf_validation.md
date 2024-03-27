@@ -102,7 +102,7 @@ Clear the RPC field again and build a new RPC filter as shown in screenshot 6 ab
 *Screenshot 7: BGP operational neighbors reply with neighbor id and session-state.*
 
 {: style="text-align: justify" }
-The filter we will use later in our Python script should look like the code example below and it will force the RPC to filter on the devices BGP neighbors, but only returning the neighbor ID and the session state. It should make the reply more granular, more effective, and more consumable for us. The filter was saved as XML file named *native_bgp_neighbor_filter.xml* in the *filter* folder.
+The filter we will use later in our Python script should look like the code example below and it will force the RPC to filter on the devices BGP neighbors, but only returning the neighbor ID and the session state. It should make the reply more granular, more effective, and more consumable for us. The filter will be saved as XML file named *native_bgp_neighbor_filter.xml* in the *filters* folder.
 
 ```xml
 <filter xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
@@ -119,6 +119,8 @@ The filter we will use later in our Python script should look like the code exam
 
 *Example 2: BGP neighbor filter on neighbor id and session-state.*
 
+### Create a filter for NX-OS using the OpenConfig YANG model
 
+text
 
 Thanks to Kirk Byers [IOS-XE and NETCONF Candidate Configuration Testing, Part1](https://pynet.twb-tech.com/blog/netconf/iosxe-candidate-cfg1.html){:target="_blank"} blog post, especially the section for *Grabbing the XML Configuration* was very helpful to get an idea to convert the XML reply data.
