@@ -130,16 +130,19 @@ Like we did for the configuration part during the previous post, choose *NX-OS* 
 ![BGP ops neighbors filter](/images/netconf_openconfig_bgp_neighbor_ops_filter.png "BGP ops neighbors filter")
 *Screenshot 8: BGP operational neighbors filter on neighbor address and session-state.*
 
+{: style="text-align: justify" }
 The key **name** *default* for the **network-instance** was added automatically, so in case you need to use another one you have to specify it. Run the RPC using the **Run RPC(s)** button.
 
 ![BGP ops neighbors reply](/images/netconf_openconfig_bgp_neighbor_ops_reply_nxos.png "BGP ops neighbors reply")
 *Screenshot 9: BGP operational neighbors reply on NX-OS.*
 
+{: style="text-align: justify" }
 Perfect! That looks very good. Now there is another cool thing I want to show you. Change the **Device** back to *Router1* and run the RPC again.
 
 ![BGP ops neighbors reply](/images/netconf_openconfig_bgp_neighbor_ops_reply_iosxe.png "BGP ops neighbors reply")
 *Screenshot 10: BGP operational neighbors reply on IOS-XE.*
 
+{: style="text-align: justify" }
 Isn't it awesome? You got also the BGP neighbors for IOS-XE Router1! Obviously you can use the filter based on OpenConfig YANG models on all supported platforms, in this case on NX-OS and IOS-XE. The filter will be saved as XML file named *openconfig_bgp_neighbor_filter.xml* in the *filters* folder.
 
 ```xml
@@ -168,11 +171,112 @@ Isn't it awesome? You got also the BGP neighbors for IOS-XE Router1! Obviously y
 
 *Example 3: BGP neighbor filter based on OpenConfig YANG model.*
 
+{: style="text-align: justify" }
 We built the filters for the validations and saved the files. The next task is to develop a Python script for the validation in a programmatic way.
 
 ### Develop a Python script for validation
 
-text
+{: style="text-align: justify" }
+On top of the Python script at example 4 we import the modules we need and define the list of **devices** using the IP addresses. The **manager** from [**ncclient**](https://ncclient.readthedocs.io/en/latest/){:target="_blank"} will be used for the connection via NETCONF as we already know from the previous post. The **etree** module from **lxml** will be used to serialize the response data to an encoded string representation of its XML tree and then we will be able to use the **xml.etree.ElementTree** module to browse through the XML data. More details will you find at the [The ElementTree XML API](https://docs.python.org/3/library/xml.etree.elementtree.html){:target="_blank"} documentation page which provides some easy understandable examples.
+
+```python
+'''Python script to validate configuration from XML payload via NETCONF'''
+from ncclient import manager
+from lxml import etree
+import xml.etree.ElementTree as ET
+
+# List of devices
+devices = ["192.168.255.51", "192.168.255.52", "192.168.255.53"]
+```
+
+*Example 4: The top of the Python script.*
+
+{: style="text-align: justify" }
+The connect function is pretty straight forward...
+
+```python
+def device_connect(dev):
+    '''Function to connect to the devices'''
+
+    con = manager.connect(
+        host=dev,
+        username="expert",
+        password="1234QWer!",
+        hostkey_verify=False
+        )
+    return con
+```
+
+*Example 5:*
+
+{: style="text-align: justify" }
+the get BGP neighbors function...
+
+```python
+def get_bgp_neighbors(con, filter):
+    '''Function to get BGP neighbors based on filter and return data'''
+
+    # Get BGP neighbor state data
+    response = con.get(filter=filter)
+
+    # Convert response data to XML string
+    data = etree.tostring(
+        response.data_ele,
+        pretty_print=True
+        ).decode()
+    return data
+```
+
+*Example 6:*
+
+{: style="text-align: justify" }
+The first part of the main function starts with a loop iterating over the **devices** list and calling the **device_connect** function using the device IP address named **device** as variable. Then we need to determine which filter we want to use as variable named **yang_type**. In case of the NX-OS device with IP address *192.168.255.53* we use the filter from OpenConfig YANG models and for both IOS-XE devices we use the IOS-XE Native YANG model. For browsing through the XML data tree using the *ElementTree XML API* we also need to specify the correct URL path based on the YANG model which we will use later. Then we open the appropriate filter file and assign it to the **netconf_filter** variable.
+
+```python
+if __name__ == '__main__':
+
+    # Loop through the devices and connect to it
+    for device in devices:
+        connect = device_connect(device)
+
+        # Choose which filter and YANG model path to use
+        if device == "192.168.255.53":
+            yang_type = 'openconfig'
+            url = '{http://openconfig.net/yang/network-instance}'
+        else:
+            yang_type = 'native'
+            url = '{http://cisco.com/ns/yang/Cisco-IOS-XE-bgp-oper}'
+
+        # Open file for NETCONF filter
+        with open(f'filters/{yang_type}_bgp_neighbor_filter.xml') as file:
+            netconf_filter = file.read()
+```
+
+*Example 7: The main function part one.*
+
+{: style="text-align: justify" }
+The second part of the main function started with...
+
+```python
+        # Get XML data and read
+        xml_data = get_bgp_neighbors(connect, netconf_filter)
+        root = ET.fromstring(xml_data)
+
+        # Browse through the XML tree and print all neighbors with state
+        print(f'\nBGP neighbors for {device}:')
+        if device == "192.168.255.53":
+            for neighbor in root[0][0][1][0][2][0].iter(f'{url}neighbor'):
+                address = neighbor[0].text
+                state = neighbor[1][0].text
+                print(f'Neighbor {address} -> {state}')
+        else:
+            for neighbor in root[0][0].iter(f'{url}neighbor'):
+                address = neighbor[0].text
+                state = neighbor[1].text
+                print(f'Neighbor {address} -> {state}')
+```
+
+*Example 8: The main function part two.*
 
 ### Validate the BGP neighbors
 
